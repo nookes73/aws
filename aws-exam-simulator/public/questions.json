@@ -1,40 +1,28 @@
 {
   "questions": [
     {
-      "id": "q1",
-      "text": "Which AWS service is best suited for object storage of static assets?",
-      "choices": [
-        "Amazon EBS",
-        "Amazon S3",
-        "Amazon RDS",
-        "Amazon EFS"
+      "question_number": 1,
+      "question": "A company’s users access an application through Amazon Route 53 where the domain points to an Application Load Balancer (ALB). The company needs a backup static error page if the primary website is unavailable, while minimizing infrastructure overhead. What should the Solutions Architect configure?",
+      "options": [
+        "A. Amazon CloudFront distribution in front of the ALB",
+        "B. Route 53 active-passive failover to an S3 static website",
+        "C. Route 53 latency-based routing with ALB",
+        "D. Route 53 alias to ALB only"
       ],
-      "correctIndices": [1],
-      "explanation": "Amazon S3 is designed for object storage and is ideal for static assets."
+      "correct_answer": "B",
+      "explanation": "Use Route 53 failover routing with health checks. Primary = ALB. Secondary = S3 static site. When the ALB is unhealthy, Route 53 directs users to the S3 error page."
     },
     {
-      "id": "q2",
-      "text": "A workload requires millisecond latency for key-value access at massive scale. Which service?",
-      "choices": [
-        "Amazon Redshift",
-        "Amazon DynamoDB",
-        "Amazon Aurora",
-        "Amazon ElastiCache"
+      "question_number": 2,
+      "question": "Two applications need to communicate frequently with low latency and high throughput. Which EC2 placement group strategy should be used?",
+      "options": [
+        "A. Spread placement group",
+        "B. Cluster placement group",
+        "C. Partition placement group",
+        "D. Multiple AZ deployment"
       ],
-      "correctIndices": [1],
-      "explanation": "DynamoDB is a fully managed key-value NoSQL database designed for single-digit millisecond performance at any scale."
-    },
-    {
-      "id": "q3",
-      "text": "Which service can be used to distribute content globally with low latency?",
-      "choices": [
-        "Amazon CloudFront",
-        "AWS Direct Connect",
-        "Amazon Route 53",
-        "AWS Global Accelerator"
-      ],
-      "correctIndices": [0],
-      "explanation": "CloudFront is a CDN that caches content at edge locations for low-latency delivery."
+      "correct_answer": "B",
+      "explanation": "Cluster placement groups place EC2 instances close together within an AZ for maximum network performance (low latency, high throughput)."
     }
   ]
 }

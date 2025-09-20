@@ -82,17 +82,55 @@ function App() {
         const res = await fetch('/questions.json', { cache: 'no-store' })
         if (!res.ok) throw new Error(`Failed to load questions.json: ${res.status}`)
         const json = await res.json()
-        const questions = (json.questions ?? []).map((q: any, idx: number) => {
-          const id = String(q.id ?? idx)
-          const text = String(q.text ?? q.question ?? '')
-          const choices: string[] = Array.isArray(q.choices ?? q.options) ? (q.choices ?? q.options) : []
-          let correct: number[] = []
-          if (Array.isArray(q.correctIndices)) correct = q.correctIndices
-          else if (typeof q.correctIndex === 'number') correct = [q.correctIndex]
-          else if (typeof q.answerIndex === 'number') correct = [q.answerIndex]
-          else if (Array.isArray(q.answers)) correct = q.answers
-          return { id, text, choices, correctIndices: correct, explanation: q.explanation } as Question
-        })
+        const letterToIndex = (letter: string): number | null => {
+          const L = letter.trim().toUpperCase()
+          if (L.length === 0) return null
+          const code = L.charCodeAt(0) - 'A'.charCodeAt(0)
+          return code >= 0 && code < 26 ? code : null
+        }
+        const parseCorrectAnswer = (val: any, numChoices: number): number[] => {
+          if (Array.isArray(val)) {
+            // If provided as array of indices
+            const nums = val.map((v: any) => Number(v)).filter((n: number) => Number.isInteger(n) && n >= 0 && n < numChoices)
+            return Array.from(new Set(nums))
+          }
+          if (typeof val === 'number') {
+            return val >= 0 && val < numChoices ? [val] : []
+          }
+          if (typeof val === 'string') {
+            // Support formats like "A", "B", or "A, C", "A,C"
+            const parts = val.split(/[,/\\|\s]+/).map((p: string) => p.trim()).filter(Boolean)
+            const indices = parts
+              .map(p => letterToIndex(p))
+              .filter((n): n is number => n !== null && n >= 0 && n < numChoices)
+            return Array.from(new Set(indices))
+          }
+          return []
+        }
+
+        const normalizeChoice = (choice: any): string => {
+          const s = String(choice ?? '')
+          // Strip leading "A. ", "B. ", etc., if present
+          const match = s.match(/^\s*[A-Za-z]\s*\.\s*(.*)$/)
+          return match ? match[1] : s
+        }
+
+        const questions = (json.questions ?? [])
+          .map((q: any, idx: number) => {
+            const id = String(q.id ?? q.question_number ?? idx)
+            const text = String(q.text ?? q.question ?? '')
+            const rawChoices: any[] = Array.isArray(q.choices ?? q.options) ? (q.choices ?? q.options) : []
+            const choices: string[] = rawChoices.map(normalizeChoice)
+            let correct: number[] = []
+            if (Array.isArray(q.correctIndices)) correct = q.correctIndices
+            else if (typeof q.correctIndex === 'number') correct = [q.correctIndex]
+            else if (typeof q.answerIndex === 'number') correct = [q.answerIndex]
+            else if (Array.isArray(q.answers)) correct = q.answers
+            else if (typeof q.correct_answer !== 'undefined') correct = parseCorrectAnswer(q.correct_answer, choices.length)
+            else if (typeof q.correctAnswer !== 'undefined') correct = parseCorrectAnswer(q.correctAnswer, choices.length)
+            return { id, text, choices, correctIndices: correct, explanation: q.explanation } as Question
+          })
+          .filter((q: Question) => q.text && q.choices.length > 0 && q.correctIndices.length > 0)
         if (!cancelled) setData({ questions })
       } catch (e: any) {
         if (!cancelled) setError(e?.message ?? 'Failed to load questions')
