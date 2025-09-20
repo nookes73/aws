@@ -366,30 +366,63 @@ function App() {
 
   if (!session || session.ids.length === 0) {
     return (
-      <div className="container start-screen">
-        <div className="theme-toggle">
-          <button className="theme-btn" onClick={() => setDarkMode(d => !d)}>{darkMode ? '☀️' : '🌙'}</button>
-        </div>
-        <h2>AWS Solutions Architect Associate SAA-C03</h2>
-        <h3>Practice Exam Simulator</h3>
-        <div className="exam-info">
-          <h3>Exam Information</h3>
-          <div className="exam-details">
-            <p><strong>Duration:</strong> 130 minutes</p>
-            <p><strong>Questions:</strong> 65 questions (randomly selected {totalPoolCount ? `from ${totalPoolCount} question bank` : 'from question bank'})</p>
-            <p><strong>Passing Score:</strong> 720/1000 (72%)</p>
-            <p><strong>Question Types:</strong> Multiple choice</p>
-          </div>
-          <div className="domain-breakdown">
-            <div className="domain-item"><strong>Design Resilient Architectures</strong><p>30% (20 questions)</p></div>
-            <div className="domain-item"><strong>Design High-Performing Architectures</strong><p>26% (17 questions)</p></div>
-            <div className="domain-item"><strong>Design Secure Applications and Architectures</strong><p>24% (16 questions)</p></div>
-            <div className="domain-item"><strong>Design Cost-Optimized Architectures</strong><p>10% (7 questions)</p></div>
-            <div className="domain-item"><strong>Design Operationally Excellent Architectures</strong><p>10% (5 questions)</p></div>
-          </div>
-        </div>
-        <button
-          className="start-btn"
+      <div className="container">
+        <header className="main-header">
+          <h1 className="main-title">AWS Solutions Architect Associate SAA-C03</h1>
+          <h2 className="subtitle">Practice Exam Simulator</h2>
+        </header>
+
+        <main className="exam-info">
+          <section className="info-section">
+            <h3 className="section-title">Exam Information</h3>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="info-label">Duration:</span>
+                <span className="info-value">130 minutes</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Questions:</span>
+                <span className="info-value">65 questions (randomly selected {totalPoolCount ? `from ${totalPoolCount} question bank` : 'from question bank'})</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Passing Score:</span>
+                <span className="info-value">720/1000 (72%)</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Question Types:</span>
+                <span className="info-value">Multiple choice</span>
+              </div>
+            </div>
+          </section>
+
+          <section className="domains-section">
+            <div className="domains-grid">
+              <div className="domain-card">
+                <h4 className="domain-title">Design Resilient Architectures</h4>
+                <p className="domain-percentage">30% (20 questions)</p>
+              </div>
+              <div className="domain-card">
+                <h4 className="domain-title">Design High-Performing Architectures</h4>
+                <p className="domain-percentage">26% (17 questions)</p>
+              </div>
+              <div className="domain-card">
+                <h4 className="domain-title">Design Secure Applications and Architectures</h4>
+                <p className="domain-percentage">24% (16 questions)</p>
+              </div>
+              <div className="domain-card">
+                <h4 className="domain-title">Design Cost-Optimized Architectures</h4>
+                <p className="domain-percentage">10% (7 questions)</p>
+              </div>
+              <div className="domain-card">
+                <h4 className="domain-title">Design Operationally Excellent Architectures</h4>
+                <p className="domain-percentage">10% (5 questions)</p>
+              </div>
+            </div>
+          </section>
+
+          <div className="start-button-container">
+            <button
+              className="start-exam-btn"
           onClick={async () => {
             try {
               setStarting(true)
@@ -449,8 +482,10 @@ function App() {
             }
           }}
         >
-          {starting ? 'Starting…' : 'Start Exam'}
+          {starting ? 'Starting…' : 'Start Practice Exam'}
         </button>
+          </div>
+        </main>
       </div>
     )
   }
