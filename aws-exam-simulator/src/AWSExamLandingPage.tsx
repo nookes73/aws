@@ -22,6 +22,7 @@ interface ExamInfo {
 
 const AWSExamLandingPage: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+  const [poolCount, setPoolCount] = useState<number | null>(null);
   
   const handleStartExam = (): void => {
     alert('Starting AWS SAA-C03 Practice Exam...');
@@ -51,6 +52,63 @@ const AWSExamLandingPage: React.FC = () => {
       document.body.style.padding = '';
     };
   }, [isDarkMode]);
+
+  // Load dynamic question bank count (merged JSON + advanced text)
+  useEffect(() => {
+    let cancelled = false;
+    const normalizeChoice = (s: string): string => {
+      const m = s.match(/^\s*[A-Za-z]\s*[\).]\s*(.*)$/);
+      return (m ? m[1] : s).trim();
+    };
+    const load = async () => {
+      try {
+        const res = await fetch('/questions.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('failed questions.json');
+        const json = await res.json();
+        const rawList: Array<{ text?: unknown; question?: unknown; choices?: unknown[]; options?: unknown[] }> = Array.isArray(json?.questions) ? json.questions : [];
+        const jsonQs: { text: string; choices: string[] }[] = rawList.map((q) => ({
+          text: String((q?.text as string | undefined) ?? (q?.question as string | undefined) ?? '').trim(),
+          choices: (Array.isArray(q?.choices ?? q?.options) ? ((q?.choices ?? q?.options) as unknown[]) : []).map((c: unknown) => normalizeChoice(String(c ?? '')))
+        })).filter((q: { text: string; choices: string[] }) => q.text && q.choices.length > 0);
+        let advQs: { text: string; choices: string[] }[] = [];
+        try {
+          const resTxt = await fetch('/advanced-65.txt', { cache: 'no-store' });
+          if (resTxt.ok) {
+            const txt = await resTxt.text();
+            const lines = txt.split(/\r?\n/);
+            let qText: string[] = [];
+            let choices: string[] = [];
+            const push = () => {
+              if (qText.length && choices.length) {
+                advQs.push({ text: qText.join(' ').trim(), choices: choices.map(normalizeChoice) });
+              }
+              qText = [];
+              choices = [];
+            };
+            for (const raw of lines) {
+              const line = raw.trimEnd();
+              const qStart = line.match(/^Question\s+\d+/i);
+              if (qStart) { push(); continue; }
+              if (/^[A-Da-d][\).]/.test(line)) { choices.push(line); continue; }
+              if (/^Answer Key/i.test(line)) { push(); break; }
+              if (line) qText.push(line);
+            }
+            push();
+          }
+        } catch {}
+        const seen = new Set<string>();
+        const keyFor = (q: { text: string; choices: string[] }) => `${q.text.toLowerCase()}\u0000${q.choices.map(c => c.toLowerCase()).join('\u0001')}`;
+        let count = 0;
+        for (const q of jsonQs) { const k = keyFor(q); if (!seen.has(k)) { seen.add(k); count++; } }
+        for (const q of advQs) { const k = keyFor(q); if (!seen.has(k)) { seen.add(k); count++; } }
+        if (!cancelled) setPoolCount(count);
+      } catch {
+        if (!cancelled) setPoolCount(null);
+      }
+    };
+    load();
+    return () => { cancelled = true; };
+  }, []);
   
   const theme: { dark: Theme; light: Theme } = {
     dark: {
@@ -75,7 +133,7 @@ const AWSExamLandingPage: React.FC = () => {
 
   const examInfo: ExamInfo[] = [
     { label: 'Duration:', value: '130 minutes' },
-    { label: 'Questions:', value: '65 questions (randomly selected from 372 question bank)' },
+    { label: 'Questions:', value: `65 questions (randomly selected from ${poolCount ?? '…'} question bank)` },
     { label: 'Passing Score:', value: '720/1000 (72%)' },
     { label: 'Question Types:', value: 'Multiple choice' }
   ];

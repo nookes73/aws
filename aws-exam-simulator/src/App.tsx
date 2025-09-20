@@ -428,15 +428,42 @@ function App() {
       const q = questionsById.get(id)!
       const selected = selectedById[id] ?? []
       const correct = isCorrect(selected, q.correctIndices)
-      return { id, correct }
+      return { id, correct, selected }
     })
     const score = results.filter(r => r.correct).length
     return (
       <div className="container">
         <h1>Results</h1>
-        <p>
-          Score: {score} / {session.ids.length}
-        </p>
+        <p>Score: {score} / {session.ids.length}</p>
+        <div className="results-list">
+          {results.map(({ id, correct, selected }) => {
+            const q = questionsById.get(id)!
+            const correctIndices = q.correctIndices
+            return (
+              <div key={id} className={`result-item${correct ? ' correct' : ' incorrect'}`}>
+                <div className="result-question">{q.text}</div>
+                <ul className="result-choices">
+                  {q.choices.map((c, idx) => {
+                    const isUser = selected.includes(idx)
+                    const isRight = correctIndices.includes(idx)
+                    return (
+                      <li key={idx} className={`choice${isRight ? ' right' : ''}${isUser ? ' user' : ''}`}>
+                        {c}
+                        {isRight ? ' ✓' : ''}
+                        {isUser && !isRight ? ' (your choice)' : ''}
+                      </li>
+                    )
+                  })}
+                </ul>
+                {q.explanation && (
+                  <div className="result-explanation">
+                    <strong>Explanation:</strong> {q.explanation}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
         <button
           onClick={() => {
             const s = startNewSession(data.questions)
@@ -556,7 +583,20 @@ function App() {
           <button className="nav-btn" onClick={goNext}>Next</button>
         )}
         {session.index === session.ids.length - 1 && (
-          <button className="nav-btn" onClick={() => setShowResults(true)}>Finish</button>
+          <button
+            className="nav-btn"
+            onClick={() => {
+              // Enforce flagged must be answered before finish
+              const unansweredFlagged = session.ids.some(id => flaggedById[id] && (!selectedById[id] || selectedById[id].length === 0))
+              if (unansweredFlagged) {
+                alert('Please answer all flagged questions before submitting.')
+                return
+              }
+              setShowResults(true)
+            }}
+          >
+            Finish
+          </button>
         )}
       </div>
     </div>
