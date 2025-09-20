@@ -92,11 +92,12 @@ const AWSExamLandingPage = () => {
 
       {/* Main Container - Centered */}
       <div style={{
-        maxWidth: '1200px',
+        width: '96vw',
+        maxWidth: '1600px',
         margin: '0 auto',
         backgroundColor: currentTheme.containerBg,
         borderRadius: '12px',
-        padding: '2.5rem 3rem',
+        padding: '2rem 2rem',
         boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)',
         minHeight: 'calc(100vh - 4rem)'
       }}>
@@ -173,8 +174,9 @@ const AWSExamLandingPage = () => {
           <div style={{
             display: 'flex',
             flexWrap: 'nowrap',
-            gap: '1rem',
-            overflowX: 'auto',
+            gap: '16px',
+            justifyContent: 'space-between',
+            overflowX: 'visible',
             paddingBottom: '0.5rem'
           }}>
             {[
@@ -190,11 +192,12 @@ const AWSExamLandingPage = () => {
                   backgroundColor: currentTheme.cardBg,
                   border: `2px solid ${currentTheme.border}`,
                   borderRadius: '8px',
-                  padding: '1.25rem',
+                  padding: '1.1rem',
                   position: 'relative',
                   transition: 'all 0.3s ease',
                   cursor: 'default',
-                  minWidth: '230px'
+                  flex: '0 0 auto',
+                  width: 'calc((100% - 64px) / 5)'
                 }}
                 onMouseEnter={(e) => {
                   const target = e.currentTarget as HTMLDivElement;
