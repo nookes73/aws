@@ -102,7 +102,7 @@ const AWSExamLandingPage = () => {
       {/* Main Container - Centered */}
       <div style={{
         width: '100vw',
-        maxWidth: '2560px',
+        maxWidth: '4560px',
         margin: '0 auto',
         backgroundColor: currentTheme.containerBg,
         borderRadius: '12px',
