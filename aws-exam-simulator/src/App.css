@@ -28,6 +28,9 @@ html, body {
   gap: 16px;
 }
 
+.start-screen { justify-content: center; align-items: center; text-align: center; min-height: 100vh; }
+.question-content { flex: 1; }
+
 .header {
   position: sticky;
   top: 0;

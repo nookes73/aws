@@ -330,12 +330,27 @@ function App() {
 
   if (!session || session.ids.length === 0) {
     return (
-      <div className="container">
-        <h1>AWS Exam Simulator</h1>
-        <p>Total questions available (JSON set): {data.questions.length}</p>
-        
+      <div className="container start-screen">
+        <div className="theme-toggle">
+          <button className="theme-btn" onClick={() => setDarkMode(d => !d)}>{darkMode ? 'Light Mode' : 'Dark Mode'}</button>
+        </div>
+        <h2>AWS Solutions Architect Associate (SAA-C03) Practice Exam</h2>
+        <h3>Advanced Level • 65 Questions • 130 Minutes</h3>
+        <div className="exam-info">
+          <h3>About this exam</h3>
+          <div className="exam-details">
+            <p>Total questions available: {data.questions.length}</p>
+            <p>No repeats within a 65-question session. Questions may repeat across sessions.</p>
+          </div>
+          <div className="domain-breakdown">
+            <div className="domain-item"><strong>Resilient Architectures</strong> ~26%</div>
+            <div className="domain-item"><strong>High-Performing Architectures</strong> ~24%</div>
+            <div className="domain-item"><strong>Secure Architectures</strong> ~30%</div>
+            <div className="domain-item"><strong>Cost-Optimized Architectures</strong> ~20%</div>
+          </div>
+        </div>
         <button
-          className="primary"
+          className="start-btn"
           onClick={async () => {
             try {
               setStarting(true)
@@ -395,7 +410,7 @@ function App() {
             }
           }}
         >
-          {starting ? 'Starting…' : `Start ${datasetSource === 'json' ? Math.min(QUESTION_SET_SIZE, data.questions.length) : QUESTION_SET_SIZE}-question session`}
+          {starting ? 'Starting…' : 'Start Exam'}
         </button>
       </div>
     )
