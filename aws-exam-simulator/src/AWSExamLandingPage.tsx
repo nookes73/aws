@@ -106,19 +106,19 @@ const AWSExamLandingPage = () => {
 
       {/* Main Container - Centered */}
       <div style={{
-        maxWidth: '900px',
+        maxWidth: '1200px',
         margin: '0 auto',
         backgroundColor: currentTheme.containerBg,
         borderRadius: '12px',
-        padding: '3rem',
+        padding: '2.5rem 3rem',
         boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)',
         minHeight: 'calc(100vh - 4rem)'
       }}>
         
         {/* Header */}
-        <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <header style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <h1 style={{
-            fontSize: '2.5rem',
+            fontSize: '2.75rem',
             fontWeight: '700',
             color: currentTheme.text,
             marginBottom: '1rem',
@@ -140,8 +140,8 @@ const AWSExamLandingPage = () => {
         {/* Two-column content row */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: isNarrow ? '1fr' : '1fr 1fr',
-          gap: '2rem',
+          gridTemplateColumns: isNarrow ? '1fr' : '1.05fr 1.25fr',
+          gap: isNarrow ? '1.75rem' : '2.5rem',
           alignItems: 'start'
         }}>
           {/* Left: Exam Information */}
@@ -193,8 +193,8 @@ const AWSExamLandingPage = () => {
           <section>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '1.25rem',
+              gridTemplateColumns: isNarrow ? 'repeat(auto-fit, minmax(220px, 1fr))' : 'repeat(2, minmax(260px, 1fr))',
+              gap: isNarrow ? '1.25rem' : '1.5rem',
               marginBottom: '2rem'
             }}>
               {[
@@ -210,7 +210,7 @@ const AWSExamLandingPage = () => {
                     backgroundColor: currentTheme.cardBg,
                     border: `2px solid ${currentTheme.border}`,
                     borderRadius: '8px',
-                    padding: '1.25rem',
+                    padding: '1.4rem',
                     position: 'relative',
                     transition: 'all 0.3s ease',
                     cursor: 'default'
