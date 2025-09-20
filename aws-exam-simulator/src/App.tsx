@@ -14,7 +14,11 @@ type LoadedData = {
 }
 
 const QUESTION_SET_SIZE = 65
+const EXAM_DURATION_SECONDS = 130 * 60
 const STORAGE_KEY = 'quizSession.v1'
+const TIMER_KEY = 'quizTimer.v1'
+const FLAGS_KEY = 'quizFlags.v1'
+const THEME_KEY = 'quizTheme.v1'
 
 type SessionState = {
   ids: string[]
@@ -149,6 +153,10 @@ function App() {
   const [session, setSession] = useState<SessionState | null>(null)
   const [selectedById, setSelectedById] = useState<Record<string, number[]>>({})
   const [showResults, setShowResults] = useState(false)
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(EXAM_DURATION_SECONDS)
+  const [isPaused, setIsPaused] = useState<boolean>(false)
+  const [flaggedById, setFlaggedById] = useState<Record<string, boolean>>({})
+  const [darkMode, setDarkMode] = useState<boolean>(false)
   const [datasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
   const [starting, setStarting] = useState(false)
 
@@ -227,8 +235,65 @@ function App() {
     const existing = loadSession()
     if (existing && existing.ids.length > 0) {
       setSession(existing)
+      // Restore timer and flags
+      try {
+        const t = sessionStorage.getItem(TIMER_KEY)
+        if (t) {
+          const tv = JSON.parse(t) as { remainingSeconds: number, isPaused: boolean }
+          if (typeof tv.remainingSeconds === 'number') setRemainingSeconds(Math.max(0, tv.remainingSeconds))
+          if (typeof tv.isPaused === 'boolean') setIsPaused(tv.isPaused)
+        }
+        const f = sessionStorage.getItem(FLAGS_KEY)
+        if (f) {
+          const fv = JSON.parse(f) as Record<string, boolean>
+          setFlaggedById(fv || {})
+        }
+      } catch {}
     }
   }, [data])
+
+  // Theme init
+  useEffect(() => {
+    try {
+      const t = localStorage.getItem(THEME_KEY)
+      if (t) setDarkMode(t === 'dark')
+    } catch {}
+  }, [])
+
+  // Apply theme class
+  useEffect(() => {
+    const el = document.documentElement
+    if (darkMode) {
+      el.classList.add('dark')
+      try { localStorage.setItem(THEME_KEY, 'dark') } catch {}
+    } else {
+      el.classList.remove('dark')
+      try { localStorage.setItem(THEME_KEY, 'light') } catch {}
+    }
+  }, [darkMode])
+
+  // Timer ticking
+  useEffect(() => {
+    if (showResults) return
+    if (!session || session.ids.length === 0) return
+    if (isPaused) return
+    if (remainingSeconds <= 0) return
+    const id = window.setInterval(() => {
+      setRemainingSeconds(prev => {
+        const next = Math.max(0, prev - 1)
+        try { sessionStorage.setItem(TIMER_KEY, JSON.stringify({ remainingSeconds: next, isPaused })) } catch {}
+        return next
+      })
+    }, 1000)
+    return () => window.clearInterval(id)
+  }, [session, isPaused, showResults, remainingSeconds])
+
+  // Auto-finish when time runs out
+  useEffect(() => {
+    if (!showResults && remainingSeconds === 0 && session) {
+      setShowResults(true)
+    }
+  }, [remainingSeconds, showResults, session])
 
   const questionsById = useMemo(() => {
     const map = new Map<string, Question>()
@@ -316,6 +381,13 @@ function App() {
               setSession(s)
               setSelectedById({})
               setShowResults(false)
+              setRemainingSeconds(EXAM_DURATION_SECONDS)
+              setIsPaused(false)
+              setFlaggedById({})
+              try {
+                sessionStorage.setItem(TIMER_KEY, JSON.stringify({ remainingSeconds: EXAM_DURATION_SECONDS, isPaused: false }))
+                sessionStorage.setItem(FLAGS_KEY, JSON.stringify({}))
+              } catch {}
             } catch (e: any) {
               setError(e?.message ?? 'Failed to start session')
             } finally {
@@ -331,8 +403,8 @@ function App() {
 
   const currentId = session.index < session.ids.length ? session.ids[session.index] : null
   const currentQuestion = currentId ? questionsById.get(currentId) ?? null : null
-  const remaining = session.ids.length - session.index
-  const answeredCount = Object.keys(selectedById).length
+  // const remaining = session.ids.length - session.index
+  // const answeredCount = Object.keys(selectedById).length
 
   if (showResults || !currentQuestion) {
     const results = session.ids.map(id => {
@@ -395,17 +467,38 @@ function App() {
     setSession(updated)
   }
 
-  const isAnswered = selected.length > 0
+  // const isAnswered = selected.length > 0
   const isMulti = (currentQuestion.correctIndices?.length ?? 0) > 1
 
   return (
     <div className="container">
       <header className="header">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <strong>Question {session.index + 1}</strong> / {session.ids.length}
+          <button
+            onClick={() => {
+              if (!currentQuestion) return
+              setFlaggedById(prev => {
+                const next = { ...prev, [currentQuestion.id]: !prev[currentQuestion.id] }
+                try { sessionStorage.setItem(FLAGS_KEY, JSON.stringify(next)) } catch {}
+                return next
+              })
+            }}
+            title="Flag for review"
+          >
+            {currentQuestion && flaggedById[currentQuestion.id] ? 'Unflag' : 'Flag'}
+          </button>
         </div>
-        <div>
-          Remaining: {remaining}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>{formatTime(remainingSeconds)}</span>
+          <button onClick={() => {
+            setIsPaused(p => {
+              const np = !p
+              try { sessionStorage.setItem(TIMER_KEY, JSON.stringify({ remainingSeconds, isPaused: np })) } catch {}
+              return np
+            })
+          }}>{isPaused ? 'Resume' : 'Pause'}</button>
+          <button onClick={() => setDarkMode(d => !d)}>{darkMode ? 'Light' : 'Dark'}</button>
         </div>
       </header>
 
@@ -441,3 +534,11 @@ function App() {
 }
 
 export default App
+
+function formatTime(totalSeconds: number): string {
+  const m = Math.floor(totalSeconds / 60)
+  const s = totalSeconds % 60
+  const mm = String(m).padStart(2, '0')
+  const ss = String(s).padStart(2, '0')
+  return `${mm}:${ss}`
+}
