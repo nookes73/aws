@@ -484,13 +484,14 @@ function App() {
                 return next
               })
             }}
+            className={currentQuestion && flaggedById[currentQuestion.id] ? 'flag-btn active' : 'flag-btn'}
             title="Flag for review"
           >
-            {currentQuestion && flaggedById[currentQuestion.id] ? 'Unflag' : 'Flag'}
+            {currentQuestion && flaggedById[currentQuestion.id] ? 'Flagged' : 'Flag'}
           </button>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{formatTime(remainingSeconds)}</span>
+          <span className="chip">⏱ {formatTime(remainingSeconds)}</span>
           <button onClick={() => {
             setIsPaused(p => {
               const np = !p
