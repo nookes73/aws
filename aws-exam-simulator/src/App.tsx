@@ -149,7 +149,7 @@ function App() {
   const [session, setSession] = useState<SessionState | null>(null)
   const [selectedById, setSelectedById] = useState<Record<string, number[]>>({})
   const [showResults, setShowResults] = useState(false)
-  const [datasetSource, setDatasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
+  const [datasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
   const [starting, setStarting] = useState(false)
 
   useEffect(() => {
@@ -268,14 +268,7 @@ function App() {
       <div className="container">
         <h1>AWS Exam Simulator</h1>
         <p>Total questions available (JSON set): {data.questions.length}</p>
-        <label style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <span>Dataset:</span>
-          <select value={datasetSource} onChange={e => setDatasetSource(e.target.value as any)}>
-            <option value="merged">Merged (JSON + Advanced 65)</option>
-            <option value="json">Full JSON dataset (questions.json)</option>
-            <option value="advancedTxt">Advanced 65 (advanced-65.txt)</option>
-          </select>
-        </label>
+        
         <button
           className="primary"
           onClick={async () => {
