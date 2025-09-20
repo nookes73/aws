@@ -1,0 +1,40 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Which AWS service is best suited for object storage of static assets?",
+      "choices": [
+        "Amazon EBS",
+        "Amazon S3",
+        "Amazon RDS",
+        "Amazon EFS"
+      ],
+      "correctIndices": [1],
+      "explanation": "Amazon S3 is designed for object storage and is ideal for static assets."
+    },
+    {
+      "id": "q2",
+      "text": "A workload requires millisecond latency for key-value access at massive scale. Which service?",
+      "choices": [
+        "Amazon Redshift",
+        "Amazon DynamoDB",
+        "Amazon Aurora",
+        "Amazon ElastiCache"
+      ],
+      "correctIndices": [1],
+      "explanation": "DynamoDB is a fully managed key-value NoSQL database designed for single-digit millisecond performance at any scale."
+    },
+    {
+      "id": "q3",
+      "text": "Which service can be used to distribute content globally with low latency?",
+      "choices": [
+        "Amazon CloudFront",
+        "AWS Direct Connect",
+        "Amazon Route 53",
+        "AWS Global Accelerator"
+      ],
+      "correctIndices": [0],
+      "explanation": "CloudFront is a CDN that caches content at edge locations for low-latency delivery."
+    }
+  ]
+}
