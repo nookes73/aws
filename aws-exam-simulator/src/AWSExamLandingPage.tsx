@@ -105,10 +105,9 @@ const AWSExamLandingPage = () => {
         maxWidth: '2560px',
         margin: '0 auto',
         backgroundColor: currentTheme.containerBg,
-        borderRadius: '0',
+        borderRadius: '12px',
         padding: '1rem',
         boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)',
-        maxHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start'
