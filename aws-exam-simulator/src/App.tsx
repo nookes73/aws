@@ -157,6 +157,7 @@ function App() {
   const [isPaused, setIsPaused] = useState<boolean>(false)
   const [flaggedById, setFlaggedById] = useState<Record<string, boolean>>({})
   const [darkMode, setDarkMode] = useState<boolean>(false)
+  const [totalPoolCount, setTotalPoolCount] = useState<number | null>(null)
   const [datasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
   const [starting, setStarting] = useState(false)
 
@@ -252,12 +253,45 @@ function App() {
     }
   }, [data])
 
+  // Compute total pool size (merged) for start-screen display
+  useEffect(() => {
+    const compute = async () => {
+      if (!data?.questions || data.questions.length === 0) return
+      try {
+        const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
+        if (!res.ok) { setTotalPoolCount(data.questions.length); return }
+        const txt = await res.text()
+        const adv = parseAdvancedTxt(txt)
+        const seen = new Set<string>()
+        const makeKey = (q: Question) => {
+          const text = q.text.trim().toLowerCase()
+          const choices = q.choices.map(c => c.trim().toLowerCase()).join('\u0001')
+          return `${text}\u0000${choices}`
+        }
+        let count = 0
+        for (const q of data.questions) {
+          const key = makeKey(q)
+          if (!seen.has(key)) { seen.add(key); count++ }
+        }
+        for (const q of adv) {
+          const key = makeKey(q)
+          if (!seen.has(key)) { seen.add(key); count++ }
+        }
+        setTotalPoolCount(count)
+      } catch {
+        setTotalPoolCount(data.questions.length)
+      }
+    }
+    compute()
+  }, [data])
+
   // Theme init
   useEffect(() => {
     try {
       const t = localStorage.getItem(THEME_KEY)
       if (t) setDarkMode(t === 'dark')
-    } catch {}
+      else setDarkMode(true)
+    } catch { setDarkMode(true) }
   }, [])
 
   // Apply theme class
@@ -332,21 +366,24 @@ function App() {
     return (
       <div className="container start-screen">
         <div className="theme-toggle">
-          <button className="theme-btn" onClick={() => setDarkMode(d => !d)}>{darkMode ? 'Light Mode' : 'Dark Mode'}</button>
+          <button className="theme-btn" onClick={() => setDarkMode(d => !d)}>{darkMode ? '☀️' : '🌙'}</button>
         </div>
-        <h2>AWS Solutions Architect Associate (SAA-C03) Practice Exam</h2>
-        <h3>Advanced Level • 65 Questions • 130 Minutes</h3>
+        <h2>AWS Solutions Architect Associate SAA-C03</h2>
+        <h3>Practice Exam Simulator</h3>
         <div className="exam-info">
-          <h3>About this exam</h3>
+          <h3>Exam Information</h3>
           <div className="exam-details">
-            <p>Total questions available: {data.questions.length}</p>
-            <p>No repeats within a 65-question session. Questions may repeat across sessions.</p>
+            <p><strong>Duration:</strong> 130 minutes</p>
+            <p><strong>Questions:</strong> 65 questions (randomly selected {totalPoolCount ? `from ${totalPoolCount} question bank` : 'from question bank'})</p>
+            <p><strong>Passing Score:</strong> 720/1000 (72%)</p>
+            <p><strong>Question Types:</strong> Multiple choice</p>
           </div>
           <div className="domain-breakdown">
-            <div className="domain-item"><strong>Resilient Architectures</strong> ~26%</div>
-            <div className="domain-item"><strong>High-Performing Architectures</strong> ~24%</div>
-            <div className="domain-item"><strong>Secure Architectures</strong> ~30%</div>
-            <div className="domain-item"><strong>Cost-Optimized Architectures</strong> ~20%</div>
+            <div className="domain-item"><strong>Design Resilient Architectures</strong><p>30% (20 questions)</p></div>
+            <div className="domain-item"><strong>Design High-Performing Architectures</strong><p>26% (17 questions)</p></div>
+            <div className="domain-item"><strong>Design Secure Applications and Architectures</strong><p>24% (16 questions)</p></div>
+            <div className="domain-item"><strong>Design Cost-Optimized Architectures</strong><p>10% (7 questions)</p></div>
+            <div className="domain-item"><strong>Design Operationally Excellent Architectures</strong><p>10% (5 questions)</p></div>
           </div>
         </div>
         <button
