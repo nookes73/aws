@@ -430,10 +430,10 @@ function App() {
         <button onClick={goPrev} disabled={session.index === 0}>Previous</button>
         <div className="spacer" />
         {session.index < session.ids.length - 1 && (
-          <button onClick={goNext} disabled={!isAnswered} className="primary">Next</button>
+          <button onClick={goNext} className="primary">Next</button>
         )}
         {session.index === session.ids.length - 1 && (
-          <button onClick={() => setShowResults(true)} disabled={answeredCount < session.ids.length} className="primary">Finish</button>
+          <button onClick={() => setShowResults(true)} className="primary">Finish</button>
         )}
       </footer>
     </div>
