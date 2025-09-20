@@ -1,91 +1,110 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const AWSExamLandingPage = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
-  
+
   const handleStartExam = () => {
     alert('Starting AWS SAA-C03 Practice Exam...');
   };
-  
+
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
-  
+
+  // Apply theme to entire document body
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.style.backgroundColor = '#1a1a1a';
+      document.body.style.margin = '0';
+      document.body.style.padding = '0';
+    } else {
+      document.body.style.backgroundColor = '#f5f5f5';
+      document.body.style.margin = '0';
+      document.body.style.padding = '0';
+    }
+    return () => {
+      document.body.style.backgroundColor = '';
+      document.body.style.margin = '';
+      document.body.style.padding = '';
+    };
+  }, [isDarkMode]);
+
   const theme = {
     dark: {
       bg: '#1a1a1a',
+      containerBg: '#2d2d2d',
       text: '#ffffff',
       textSecondary: '#cccccc',
-      cardBg: '#2d2d2d',
-      border: '#404040',
+      cardBg: '#404040',
+      border: '#666666',
       accent: '#ff9800'
     },
     light: {
-      bg: '#ffffff',
+      bg: '#f5f5f5',
+      containerBg: '#ffffff',
       text: '#1a1a1a',
       textSecondary: '#666666',
-      cardBg: '#f5f5f5',
+      cardBg: '#f8f9fa',
       border: '#e0e0e0',
       accent: '#ff9800'
     }
-  };
-  
+  } as const;
+
   const currentTheme = isDarkMode ? theme.dark : theme.light;
 
   return (
     <div style={{
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       backgroundColor: currentTheme.bg,
-      color: currentTheme.text,
       minHeight: '100vh',
-      padding: '2rem 1rem',
-      lineHeight: '1.6',
-      transition: 'all 0.3s ease'
+      padding: '2rem',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
+      {/* Dark Mode Toggle - Top Right */}
       <div style={{
-        maxWidth: '1000px',
+        position: 'fixed',
+        top: '2rem',
+        right: '2rem',
+        zIndex: 1000
+      }}>
+        <button
+          onClick={toggleDarkMode}
+          style={{
+            backgroundColor: currentTheme.accent,
+            color: '#000000',
+            border: 'none',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: '600',
+            fontSize: '0.9rem',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 2px 8px rgba(255, 152, 0, 0.3)'
+          }}
+        >
+          {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+        </button>
+      </div>
+
+      {/* Main Container - Centered */}
+      <div style={{
+        maxWidth: '900px',
         margin: '0 auto',
-        padding: '2rem 0'
+        backgroundColor: currentTheme.containerBg,
+        borderRadius: '12px',
+        padding: '3rem',
+        boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)',
+        minHeight: 'calc(100vh - 4rem)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
       }}>
         
-        {/* DARK MODE TOGGLE BUTTON */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'flex-end', 
-          marginBottom: '2rem' 
-        }}>
-          <button
-            onClick={toggleDarkMode}
-            style={{
-              background: currentTheme.accent,
-              color: '#000000',
-              border: 'none',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontWeight: '500',
-              fontSize: '0.9rem',
-              transition: 'all 0.3s ease',
-              boxShadow: `0 2px 8px ${currentTheme.accent}30`
-            }}
-            onMouseEnter={(e) => {
-              (e.target as HTMLButtonElement).style.transform = 'translateY(-1px)';
-              (e.target as HTMLButtonElement).style.boxShadow = `0 4px 12px ${currentTheme.accent}40`;
-            }}
-            onMouseLeave={(e) => {
-              (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
-              (e.target as HTMLButtonElement).style.boxShadow = `0 2px 8px ${currentTheme.accent}30`;
-            }}
-          >
-            {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-        </div>
-        {/* HEADER SECTION */}
-        <header style={{ textAlign: 'center', marginBottom: '4rem' }}>
+        {/* Header */}
+        <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1 style={{
             fontSize: '2.5rem',
             fontWeight: '700',
-            color: '#ffffff',
+            color: currentTheme.text,
             marginBottom: '1rem',
             lineHeight: '1.2',
             margin: '0 0 1rem 0'
@@ -102,7 +121,7 @@ const AWSExamLandingPage = () => {
           </h2>
         </header>
 
-        {/* EXAM INFORMATION SECTION */}
+        {/* Exam Information Section */}
         <section style={{ marginBottom: '3rem' }}>
           <h3 style={{
             fontSize: '1.75rem',
@@ -129,7 +148,7 @@ const AWSExamLandingPage = () => {
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
                 padding: '1rem 0',
-                borderBottom: index === array.length - 1 ? 'none' : '1px solid #333'
+                borderBottom: index === array.length - 1 ? 'none' : `1px solid ${currentTheme.border}`
               }}>
                 <span style={{
                   fontWeight: '600',
@@ -151,13 +170,13 @@ const AWSExamLandingPage = () => {
           </div>
         </section>
 
-        {/* DOMAIN CARDS SECTION */}
-        <section style={{ margin: '3rem 0' }}>
+        {/* Domain Cards - Single Row Layout like screenshot */}
+        <section style={{ marginBottom: '3rem' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '1.5rem',
-            margin: '2rem 0'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '1.25rem',
+            marginBottom: '2rem'
           }}>
             {[
               { title: 'Design Resilient Architectures', percentage: '30% (20 questions)' },
@@ -172,7 +191,7 @@ const AWSExamLandingPage = () => {
                   backgroundColor: currentTheme.cardBg,
                   border: `2px solid ${currentTheme.border}`,
                   borderRadius: '8px',
-                  padding: '1.75rem',
+                  padding: '1.5rem',
                   position: 'relative',
                   transition: 'all 0.3s ease',
                   cursor: 'default'
@@ -181,7 +200,7 @@ const AWSExamLandingPage = () => {
                   const target = e.currentTarget as HTMLDivElement;
                   target.style.borderColor = currentTheme.accent;
                   target.style.transform = 'translateY(-2px)';
-                  target.style.boxShadow = `0 8px 25px ${currentTheme.accent}33`;
+                  target.style.boxShadow = `0 8px 20px ${currentTheme.accent}33`;
                 }}
                 onMouseLeave={(e) => {
                   const target = e.currentTarget as HTMLDivElement;
@@ -202,7 +221,7 @@ const AWSExamLandingPage = () => {
                 }}></div>
                 
                 <h4 style={{
-                  fontSize: '1.1rem',
+                  fontSize: '1rem',
                   fontWeight: '600',
                   color: currentTheme.text,
                   marginBottom: '0.75rem',
@@ -212,7 +231,7 @@ const AWSExamLandingPage = () => {
                   {domain.title}
                 </h4>
                 <p style={{
-                  fontSize: '1rem',
+                  fontSize: '0.9rem',
                   color: currentTheme.accent,
                   fontWeight: '500',
                   margin: '0'
@@ -224,8 +243,8 @@ const AWSExamLandingPage = () => {
           </div>
         </section>
 
-        {/* START BUTTON */}
-        <section style={{ textAlign: 'center', marginTop: '3rem' }}>
+        {/* Start Button */}
+        <section style={{ textAlign: 'center' }}>
           <button
             onClick={handleStartExam}
             style={{
