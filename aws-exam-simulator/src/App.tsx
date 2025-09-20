@@ -299,9 +299,11 @@ function App() {
     const el = document.documentElement
     if (darkMode) {
       el.classList.add('dark')
+      try { document.body.classList.add('dark') } catch {}
       try { localStorage.setItem(THEME_KEY, 'dark') } catch {}
     } else {
       el.classList.remove('dark')
+      try { document.body.classList.remove('dark') } catch {}
       try { localStorage.setItem(THEME_KEY, 'light') } catch {}
     }
   }, [darkMode])
