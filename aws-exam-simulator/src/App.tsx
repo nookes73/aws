@@ -149,7 +149,7 @@ function App() {
   const [session, setSession] = useState<SessionState | null>(null)
   const [selectedById, setSelectedById] = useState<Record<string, number[]>>({})
   const [showResults, setShowResults] = useState(false)
-  const [datasetSource, setDatasetSource] = useState<'json' | 'advancedTxt'>('json')
+  const [datasetSource, setDatasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
   const [starting, setStarting] = useState(false)
 
   useEffect(() => {
@@ -271,6 +271,7 @@ function App() {
         <label style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           <span>Dataset:</span>
           <select value={datasetSource} onChange={e => setDatasetSource(e.target.value as any)}>
+            <option value="merged">Merged (JSON + Advanced 65)</option>
             <option value="json">Full JSON dataset (questions.json)</option>
             <option value="advancedTxt">Advanced 65 (advanced-65.txt)</option>
           </select>
@@ -283,11 +284,39 @@ function App() {
               let questions: Question[] = []
               if (datasetSource === 'json') {
                 questions = data.questions
-              } else {
+              } else if (datasetSource === 'advancedTxt') {
                 const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
                 if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
                 const txt = await res.text()
                 questions = parseAdvancedTxt(txt)
+              } else {
+                // merged
+                const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
+                if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
+                const txt = await res.text()
+                const adv = parseAdvancedTxt(txt)
+                const seen = new Set<string>()
+                const makeKey = (q: Question) => {
+                  const text = q.text.trim().toLowerCase()
+                  const choices = q.choices.map(c => c.trim().toLowerCase()).join('\u0001')
+                  return `${text}\u0000${choices}`
+                }
+                const merged: Question[] = []
+                for (const q of data.questions) {
+                  const key = makeKey(q)
+                  if (!seen.has(key)) {
+                    seen.add(key)
+                    merged.push(q)
+                  }
+                }
+                for (const q of adv) {
+                  const key = makeKey(q)
+                  if (!seen.has(key)) {
+                    seen.add(key)
+                    merged.push(q)
+                  }
+                }
+                questions = merged
               }
               const s = startNewSession(questions)
               setData({ questions })
