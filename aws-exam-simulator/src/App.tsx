@@ -66,6 +66,82 @@ function isCorrect(selected: number[], correct: number[]): boolean {
   return true
 }
 
+function parseAdvancedTxt(input: string): Question[] {
+  const lines = input.split(/\r?\n/)
+  const questions: Question[] = []
+  let qTextLines: string[] = []
+  let choices: string[] = []
+  let qIndex = 0
+  let inAnswerKey = false
+  const answerMap = new Map<number, string>()
+
+  const pushQuestionIfAny = () => {
+    if (qTextLines.length === 0 || choices.length === 0) return
+    const id = `adv-${qIndex}`
+    const text = qTextLines.join(' ').trim()
+    const normChoices = choices.map(c => c.replace(/^\s*[A-D]\)\s*/, '').trim())
+    const letter = answerMap.get(qIndex)
+    let correctIndices: number[] = []
+    if (letter) {
+      const letters = letter.split(/[,/\\|\s]+/).map(s => s.trim()).filter(Boolean)
+      const set = new Set<number>()
+      for (const L of letters) {
+        const idx = L.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0)
+        if (idx >= 0 && idx < normChoices.length) set.add(idx)
+      }
+      correctIndices = Array.from(set)
+    }
+    if (text && normChoices.length > 0 && correctIndices.length > 0) {
+      questions.push({ id, text, choices: normChoices, correctIndices })
+    }
+  }
+
+  for (const raw of lines) {
+    const line = raw.trimEnd()
+    if (/^Answer Key/i.test(line)) {
+      // start answer key section
+      inAnswerKey = true
+      // finalize last question before answer key
+      pushQuestionIfAny()
+      qTextLines = []
+      choices = []
+      continue
+    }
+    if (inAnswerKey) {
+      // Format examples: "1. A) ..." or "1. A) ..."; capture the letter after the number.
+      const m = line.match(/^(\d+)\s*\.\s*([A-Da-d])/)
+      if (m) {
+        const num = parseInt(m[1], 10)
+        const letter = m[2].toUpperCase()
+        answerMap.set(num, letter)
+      }
+      continue
+    }
+
+    const qStart = line.match(/^Question\s+(\d+)/i)
+    if (qStart) {
+      // push previous
+      pushQuestionIfAny()
+      qIndex = parseInt(qStart[1], 10)
+      qTextLines = []
+      choices = []
+      continue
+    }
+    const choiceMatch = line.match(/^[A-Da-d]\)/)
+    if (choiceMatch) {
+      choices.push(line)
+      continue
+    }
+    if (line.length > 0) {
+      qTextLines.push(line)
+    }
+  }
+  // finalize
+  pushQuestionIfAny()
+
+  return questions
+}
+
 function App() {
   const [data, setData] = useState<LoadedData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -73,6 +149,8 @@ function App() {
   const [session, setSession] = useState<SessionState | null>(null)
   const [selectedById, setSelectedById] = useState<Record<string, number[]>>({})
   const [showResults, setShowResults] = useState(false)
+  const [datasetSource, setDatasetSource] = useState<'json' | 'advancedTxt'>('json')
+  const [starting, setStarting] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -189,17 +267,41 @@ function App() {
     return (
       <div className="container">
         <h1>AWS Exam Simulator</h1>
-        <p>Total questions available: {data.questions.length}</p>
+        <p>Total questions available (JSON set): {data.questions.length}</p>
+        <label style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <span>Dataset:</span>
+          <select value={datasetSource} onChange={e => setDatasetSource(e.target.value as any)}>
+            <option value="json">Full JSON dataset (questions.json)</option>
+            <option value="advancedTxt">Advanced 65 (advanced-65.txt)</option>
+          </select>
+        </label>
         <button
           className="primary"
-          onClick={() => {
-            const s = startNewSession(data.questions)
-            setSession(s)
-            setSelectedById({})
-            setShowResults(false)
+          onClick={async () => {
+            try {
+              setStarting(true)
+              let questions: Question[] = []
+              if (datasetSource === 'json') {
+                questions = data.questions
+              } else {
+                const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
+                if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
+                const txt = await res.text()
+                questions = parseAdvancedTxt(txt)
+              }
+              const s = startNewSession(questions)
+              setData({ questions })
+              setSession(s)
+              setSelectedById({})
+              setShowResults(false)
+            } catch (e: any) {
+              setError(e?.message ?? 'Failed to start session')
+            } finally {
+              setStarting(false)
+            }
           }}
         >
-          Start {Math.min(QUESTION_SET_SIZE, data.questions.length)}-question session
+          {starting ? 'Starting…' : `Start ${datasetSource === 'json' ? Math.min(QUESTION_SET_SIZE, data.questions.length) : QUESTION_SET_SIZE}-question session`}
         </button>
       </div>
     )

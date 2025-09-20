@@ -1,0 +1,902 @@
+AWS Solutions Architect Associate (SAA-C03) Practice Exam
+ 65 Questions - Advanced Level
+ Question 1
+ A financial services company needs to implement a disaster recovery solution for their critical application
+ running on EC2 instances across multiple Availability Zones. The RTO requirement is 4 hours and RPO is 1
+ hour. The application uses RDS MySQL with automated backups enabled. Which disaster recovery
+ strategy provides the most cost-effective solution while meeting the requirements?
+ A) Implement a warm standby in another region with cross-region RDS read replicas and AMI copying
+ B) Use pilot light approach with RDS snapshots copied to another region and launch templates
+ C) Deploy active-active configuration across two regions with Route 53 health checks
+ D) Implement backup and restore using S3 cross-region replication for data and AMI snapshots
+ Question 2
+ A media company processes video files uploaded to S3. The processing workflow involves multiple
+ Lambda functions, ECS tasks, and SQS queues. Processing can take 15-45 minutes per file. The company
+ wants to ensure fault tolerance and automatic retry with exponential backoff. Which AWS service would
+ best orchestrate this workflow?
+ A) AWS Step Functions with Standard Workflows
+ B) Amazon EventBridge with custom retry logic
+ C) AWS Batch with job queues and retry attempts
+ D) Amazon Simple Workflow Service (SWF)
+ Question 3
+ An e-commerce application experiences traffic spikes during flash sales, with normal traffic of 1,000 RPS
+ scaling to 50,000 RPS within minutes. The application uses Application Load Balancer, Auto Scaling
+ Groups, and RDS Aurora MySQL. During spikes, the database becomes the bottleneck. What is the most
+ effective solution to handle these traffic patterns?
+ A) Enable Aurora Auto Scaling for read replicas and implement connection pooling with RDS Proxy
+ B) Migrate to DynamoDB with On-Demand billing and DAX caching
+ C) Implement ElastiCache Redis cluster with write-through caching strategy
+ D) Use Aurora Serverless v2 with automatic scaling capabilities
+Question 4
+ A healthcare organization must comply with HIPAA and needs to store patient data with the following
+ requirements: data at rest encryption, data in transit encryption, audit logging of all access, and
+ geographic data residency in the US. The solution should minimize operational overhead. Which
+ combination of services meets these requirements?
+ A) S3 with SSE-KMS, CloudTrail, VPC endpoints, and S3 bucket policies restricting to US regions
+ B) EFS with encryption, AWS Config, PrivateLink, and cross-region replication disabled
+ C) RDS with TDE, CloudWatch Logs, SSL connections, and multi-region deployment
+ D) DynamoDB with encryption at rest, CloudTrail, VPC endpoints, and global tables disabled
+ Question 5
+ A company runs a microservices architecture where services need to communicate with each other
+ asynchronously. Messages must be processed exactly once, and the system should handle message
+ ordering within each service partition. Dead letter queues should be implemented for failed messages.
+ Which messaging solution best fits these requirements?
+ A) Amazon SQS FIFO queues with message deduplication and dead letter queues
+ B) Amazon SNS with SQS FIFO subscribers and retry policies
+ C) Amazon Kinesis Data Streams with exactly-once processing semantics
+ D) Amazon MSK (Managed Streaming for Apache Kafka) with idempotent producers
+ Question 6
+ A global company wants to deploy a web application that serves users from multiple continents with sub
+100ms latency. The application consists of static content, dynamic API calls, and user session data. The
+ backend uses Lambda functions and DynamoDB. What architecture provides the best performance?
+ A) CloudFront with edge locations, API Gateway regional endpoints, Lambda@Edge, and DynamoDB 
+Global Tables
+ B) Multiple ALBs in different regions, Route 53 latency-based routing, Lambda functions, and cross-region 
+DynamoDB replication
+ C) CloudFront with origin failover, API Gateway edge-optimized endpoints, Lambda functions, and 
+DynamoDB with eventual consistency
+ D) AWS Global Accelerator, regional API Gateway endpoints, Lambda functions, and DynamoDB with 
+strong consistency
+Question 7
+ A data analytics company processes log files stored in S3. The processing involves extracting,
+ transforming, and loading data into a data warehouse for analysis. Files arrive continuously throughout
+ the day in various formats (JSON, CSV, Parquet). The solution should be serverless and cost-effective.
+ Which approach is most suitable?
+ A) S3 Event Notifications trigger Lambda functions that process files and load data into Redshift using 
+COPY command
+ B) S3 Event Notifications trigger Step Functions workflow orchestrating Glue jobs and Redshift Spectrum 
+queries
+ C) Use AWS Glue crawlers to catalog data, Glue ETL jobs for processing, and Athena for querying
+ D) EventBridge rules trigger ECS Fargate tasks that process files and load data into RDS PostgreSQL
+ Question 8
+ A financial institution needs to implement a secure API that handles sensitive transactions. The API should
+ authenticate users using corporate SAML identity provider, authorize based on fine-grained permissions,
+ implement rate limiting, and log all requests for compliance. Which solution provides the most
+ comprehensive security?
+ A) API Gateway with SAML-based custom authorizer, usage plans for throttling, and CloudTrail logging
+ B) Application Load Balancer with SAML authentication, Lambda authorizer functions, and WAF rate 
+limiting
+ C) API Gateway with Cognito User Pools federated with SAML, resource-based policies, usage plans, and 
+X-Ray tracing
+ D) CloudFront with Lambda@Edge for authentication, API Gateway with IAM authorization, and 
+CloudWatch logging
+ Question 9
+ A mobile gaming company experiences unpredictable traffic patterns with sudden spikes during game
+ launches or viral events. The backend uses containers for game logic, real-time leaderboards, and player
+ matching. The infrastructure should auto-scale rapidly and cost-effectively. What container orchestration
+ strategy is most appropriate?
+ A) ECS with Fargate, Application Auto Scaling, and CloudWatch custom metrics for scaling triggers
+ B) EKS with Cluster Autoscaler, Horizontal Pod Autoscaler, and Vertical Pod Autoscaler
+ C) ECS with EC2 instances, target tracking scaling policies, and scheduled scaling actions
+ D) Lambda functions with provisioned concurrency and API Gateway caching
+Question 10
+ A manufacturing company collects IoT sensor data from factory equipment. Data arrives at 10,000
+ messages per second with each message being 1KB. The system needs real-time analytics, historical data
+ storage for 7 years, and alerting on anomalies. Data older than 30 days should be stored cost-effectively.
+ Which architecture handles these requirements?
+ A) Kinesis Data Streams → Kinesis Analytics for real-time processing → S3 with lifecycle policies → 
+CloudWatch alarms
+ B) IoT Core → Kinesis Data Firehose → S3 with Intelligent Tiering → Lambda for anomaly detection
+ C) Direct Connect → SQS → Lambda processing → DynamoDB with TTL → SNS for alerts
+ D) Kinesis Data Streams → Lambda for processing → TimeStream for time-series data → CloudWatch 
+anomaly detection
+ Question 11
+ A software company needs to implement CI/CD pipeline for a containerized application. The pipeline
+ should support blue-green deployments, automatic rollbacks on failure, security scanning, and multi
+region deployments. The solution should integrate with existing Git repositories and provide detailed
+ deployment visibility. Which combination of services is most appropriate?
+ A) CodePipeline with CodeBuild, ECR vulnerability scanning, ECS blue-green deployments, and X-Ray 
+tracing
+ B) Jenkins on EC2 with CodeDeploy, Security Hub integration, EKS rolling updates, and CloudWatch 
+dashboards
+ C) GitLab CI/CD with CodeBuild integration, Inspector assessments, Lambda alias deployments, and 
+CloudTrail logging
+ D) CodePipeline with third-party actions, ECR image scanning, CodeDeploy with ECS, and Systems 
+Manager for visibility
+ Question 12
+ An online learning platform streams video content to students worldwide. Videos are stored in multiple
+ resolutions and formats. The platform needs to optimize costs while ensuring low latency and high
+ availability. Content should be cached at edge locations with intelligent routing. Which content delivery
+ strategy is optimal?
+ A) S3 with Transfer Acceleration, CloudFront with custom origin failover, and Lambda@Edge for content 
+optimization
+ B) Multiple S3 buckets in different regions, CloudFront with origin groups, and Route 53 geolocation 
+routing
+ C) EFS with regional replication, CloudFront with S3 origins, and Global Accelerator for improved 
+performance
+ D) S3 with Cross-Region Replication, multiple CloudFront distributions, and Route 53 latency-based 
+routing
+ Question 13
+ A social media application stores user-generated content including images, videos, and metadata. The
+ application needs to support millions of concurrent users with features like content recommendation,
+ real-time notifications, and analytics. Data consistency requirements vary by feature. Which database
+ strategy best supports these requirements?
+ A) DynamoDB for user profiles and posts, ElastiCache for sessions, OpenSearch for content discovery, and 
+Kinesis for analytics
+ B) Aurora PostgreSQL with read replicas, Redis for caching, Elasticsearch for search, and SQS for 
+notifications
+ C) MongoDB on EC2 with sharding, Memcached for caching, CloudSearch for indexing, and SNS for 
+messaging
+ D) RDS MySQL with Multi-AZ, DAX for caching, Kendra for search capabilities, and EventBridge for event 
+processing
+ Question 14
+ A financial services company processes batch jobs that analyze market data every night. Jobs must
+ complete within a 4-hour window and process terabytes of data. The compute requirements vary
+ significantly based on market conditions. Failed jobs should retry automatically with different resource
+ configurations. Which compute solution optimizes for both cost and reliability?
+ A) AWS Batch with Spot instances, multiple job queues with different instance types, and automatic retry 
+policies
+ B) EMR clusters with Spot instances, Step Functions for job orchestration, and CloudWatch for monitoring
+ C) ECS with Fargate Spot, Application Auto Scaling, and Lambda for job coordination
+ D) EC2 Spot Fleet with diversified instance types, SQS for job queuing, and Systems Manager for 
+automation
+ Question 15
+ A healthcare organization needs to share large medical imaging files (up to 2GB each) with partner
+ hospitals securely. Files should be accessible for 7 days after sharing, with audit trails of all access. The
+ solution should integrate with the existing SAML identity provider and support direct uploads from
+ medical devices. Which architecture meets these requirements?
+A) S3 with presigned URLs, Cognito identity pools for device authentication, CloudTrail for auditing, and 
+lifecycle policies
+ B) Transfer Family SFTP with Lambda authorizer, S3 for storage, GuardDuty for monitoring, and object
+level logging
+ C) Direct upload to S3 via API Gateway with custom authorizer, temporary credentials via STS, and 
+detailed access logging
+ D) EFS with access points, IAM roles for cross-account access, AWS Config for compliance, and VPC Flow 
+Logs
+ Question 16
+ A retail company wants to implement a recommendation engine that analyzes customer behavior in real
+time and provides personalized product suggestions. The system processes clickstream data, purchase
+ history, and inventory information. Recommendations should be available within 100ms of a user request.
+ Which architecture provides real-time personalization?
+ A) Kinesis Data Streams for clickstream, DynamoDB for user profiles, SageMaker for ML inference, and API 
+Gateway with caching
+ B) MSK for event streaming, Redshift for data warehousing, SageMaker batch transform, and ElastiCache 
+for serving recommendations
+ C) EventBridge for event processing, Aurora for transactional data, Lambda for feature engineering, and 
+CloudFront for caching
+ D) Kinesis Analytics for stream processing, Neptune for graph relationships, SageMaker endpoints, and 
+DAX for low-latency access
+ Question 17
+ A company runs a legacy monolithic application that cannot be easily containerized or refactored. The
+ application requires specific OS configurations and licensed software. It needs high availability across
+ multiple AZs and automatic failover capabilities. Database connections and file systems must persist
+ across failovers. Which deployment strategy is most suitable?
+ A) EC2 instances with Auto Scaling Groups, ELB health checks, EBS volumes with snapshots, and RDS with 
+Multi-AZ
+ B) Single large EC2 instance with CloudWatch monitoring, EBS with provisioned IOPS, and manual failover 
+procedures
+ C) EC2 instances with warm standby approach, Route 53 health checks, EFS for shared storage, and 
+Aurora clusters
+ D) Dedicated hosts with placement groups, multiple ENIs for failover, EBS Multi-Attach, and Oracle RAC 
+configuration
+Question 18
+ A startup is building a serverless image processing application. Users upload images that are
+ automatically resized, compressed, and watermarked. The processing time varies from 5 seconds to 5
+ minutes depending on image size and complexity. The solution should handle concurrent uploads
+ efficiently and provide processing status updates. Which architecture is most cost-effective?
+ A) S3 upload → Lambda (15 min timeout) → SQS for queuing → Lambda for processing → SNS for 
+notifications
+ B) API Gateway → Lambda for upload coordination → Step Functions workflow → ECS Fargate tasks → 
+SQS for status updates
+ C) S3 upload → SQS → Lambda for small images → Step Functions for complex processing → DynamoDB 
+for status tracking
+ D) Direct S3 upload → EventBridge → Batch jobs → Lambda for completion handling → WebSocket API 
+for real-time updates
+ Question 19
+ A multinational corporation needs to implement a centralized logging solution for applications running
+ across multiple AWS accounts and regions. Logs should be searchable, retained for different periods
+ based on compliance requirements, and accessible to security teams for incident response. The solution
+ should minimize cross-region data transfer costs. Which logging architecture is most efficient?
+ A) CloudWatch Logs in each account → cross-account log destinations → central S3 bucket → Athena for 
+querying
+ B) Fluent Bit agents → Kinesis Data Firehose → S3 with prefixes → OpenSearch for indexing and searching
+ C) CloudWatch Logs → Kinesis Data Streams → Lambda for processing → ElasticSearch cluster → Kibana 
+dashboards
+ D) Application-level logging → Direct S3 uploads → Lifecycle policies → Redshift Spectrum for analytics
+ Question 20
+ A gaming company operates a multiplayer online game with players worldwide. The game requires low
+latency communication between players, real-time leaderboards, and session persistence. Player sessions
+ can last several hours and must survive individual server failures. Which architecture ensures the best
+ player experience?
+ A) Global Accelerator → ALB → ECS with service mesh → ElastiCache clusters → DynamoDB Global Tables
+ B) CloudFront → API Gateway WebSocket → Lambda functions → DAX caching → Aurora Global Database
+ C) Route 53 latency routing → GameLift fleets → Redis Cluster Mode → RDS with read replicas across 
+regions
+D) Multiple ALBs in regions → Auto Scaling Groups → Memcached → DynamoDB with cross-region 
+replication
+ Question 21
+ A financial institution needs to process millions of transactions daily with strict ACID compliance and real
+time fraud detection. The system must maintain consistent performance during peak hours and provide
+ detailed audit trails. Transaction processing should complete within 200ms. Which database configuration
+ meets these performance and compliance requirements?
+ A) Aurora PostgreSQL with optimized read replicas, Connection pooling via RDS Proxy, and Enhanced 
+Monitoring
+ B) DynamoDB with transactions API, DAX for microsecond latency, and DynamoDB Streams for audit 
+logging
+ C) RDS PostgreSQL with Multi-AZ, Provisioned IOPS SSD, connection pooling, and automated backups
+ D) Redshift with concurrency scaling, result caching, and workload management queues
+ Question 22
+ A media company stores petabytes of video content that is accessed with different frequency patterns.
+ Newly uploaded content is accessed frequently for the first 30 days, occasionally for the next 90 days, and
+ rarely thereafter but must remain instantly accessible. Archive content older than 2 years needs only
+ overnight retrieval. Which S3 storage strategy optimizes costs?
+ A) S3 Standard → S3 Standard-IA (30 days) → S3 One Zone-IA (120 days) → S3 Glacier Instant Retrieval (2 
+years) → S3 Glacier Deep Archive
+ B) S3 Standard → S3 Intelligent-Tiering with all access tiers enabled and archive configurations
+ C) S3 Standard → S3 Standard-IA (30 days) → S3 Glacier Flexible Retrieval (120 days) → S3 Glacier Deep 
+Archive (2 years)
+ D) S3 Standard with lifecycle policies based on object tags and access patterns analysis
+ Question 23
+ A SaaS company provides analytics dashboards to customers who need to query their own data isolation.
+ Each customer has hundreds of gigabytes of time-series data. Queries are complex analytical workloads
+ that should complete within 30 seconds. The solution should support thousands of customers cost
+effectively. Which data architecture handles multi-tenancy efficiently?
+ A) Separate RDS instances per customer with connection pooling and read replicas for query 
+performance
+ B) Single Redshift cluster with workload management queues and row-level security for tenant isolation
+C) DynamoDB with partition keys including tenant ID, GSIs for different query patterns, and on-demand 
+billing
+ D) Individual S3 buckets per tenant with Athena for querying and workgroups for access control
+ Question 24
+ An IoT company collects sensor data from devices in remote locations with intermittent connectivity.
+ Devices should queue data locally when offline and synchronize when connectivity resumes. The backend
+ needs to handle out-of-order data and detect anomalies in real-time. Which edge-to-cloud architecture
+ handles these requirements?
+ A) AWS IoT Greengrass for edge processing → IoT Core → Kinesis Data Streams → Lambda for anomaly 
+detection
+ B) Local SQLite databases → AWS DataSync → S3 → Glue for ETL → CloudWatch anomaly detection 
+models
+ C) Edge Lambda functions → SQS FIFO queues → Step Functions → TimeStream for time-series storage
+ D) Local message brokers → IoT Device Management → Kinesis Data Firehose → OpenSearch for real
+time analytics
+ Question 25
+ A company migrates from on-premises Oracle database to AWS. The database contains sensitive
+ customer data and requires zero downtime during migration. The application uses complex stored
+ procedures and triggers. After migration, the database should support read scaling and cross-region
+ disaster recovery. Which migration strategy minimizes risk and downtime?
+ A) AWS SCT for schema conversion → DMS with CDC → Aurora PostgreSQL with compatibility features → 
+Aurora Global Database
+ B) Oracle GoldenGate → RDS Oracle with Multi-AZ → Cross-region automated backups → Read replicas
+ C) AWS SCT → DMS → RDS PostgreSQL with logical replication → Cross-region replica setup
+ D) Native Oracle export/import → EC2-hosted Oracle → EBS snapshots for DR → Oracle Data Guard
+ Question 26
+ A news organization publishes articles that experience viral traffic spikes unpredictably. During normal
+ times, traffic is 1,000 requests/minute, but can spike to 100,000 requests/minute within minutes. The
+ content management system uses a traditional LAMP stack. Which modernization approach handles
+ traffic elasticity most effectively?
+ A) Containerize application → ECS with Application Auto Scaling → ALB → RDS with Aurora Auto Scaling 
+→ ElastiCache
+B) Keep current architecture → Auto Scaling Groups with predictive scaling → CloudFront CDN → RDS 
+read replicas
+ C) Serverless approach → API Gateway → Lambda functions → DynamoDB with on-demand billing → 
+CloudFront
+ D) Microservices on EKS → HPA and VPA → Ingress controller → Aurora Serverless v2 → Redis cluster
+ Question 27
+ A healthcare provider processes medical images that require GPU acceleration for AI-based analysis. Each
+ analysis job takes 10-60 minutes and requires specialized software licenses. Jobs arrive sporadically
+ throughout the day with urgent cases needing priority processing. Which compute solution optimizes for
+ performance and cost?
+ A) Batch with GPU instance types, Spot instances for cost optimization, and job queues with different 
+priorities
+ B) SageMaker Processing jobs with GPU instances, automatic scaling, and priority-based job scheduling
+ C) ECS tasks with GPU-enabled EC2 instances, Application Auto Scaling, and SQS with message priorities
+ D) Lambda functions with container images, provisioned concurrency for urgent cases, and Step 
+Functions for orchestration
+ Question 28
+ A financial services company needs real-time fraud detection for credit card transactions. The system
+ processes 50,000 transactions per second and must decide within 50ms whether to approve or decline
+ each transaction. The ML model considers transaction history, merchant patterns, and user behavior.
+ Which architecture meets the latency requirements?
+ A) Kinesis Data Streams → Lambda functions → SageMaker endpoints with auto-scaling → DynamoDB for 
+decisions
+ B) API Gateway → Lambda → DynamoDB for feature lookup → SageMaker real-time inference → 
+Response caching
+ C) Direct integration → In-memory Redis for features → SageMaker multi-model endpoints → ElastiCache 
+for caching
+ D) Kinesis Analytics for stream processing → SageMaker inference pipelines → DAX for microsecond 
+responses
+ Question 29
+ A multinational company must comply with data residency requirements where EU customer data cannot
+ leave EU regions, US data stays in US, and Asian data remains in Asia. The application serves global users
+with a single interface. Cross-region latency for non-data operations should be minimized. Which
+ architecture ensures compliance while optimizing performance?
+ A) Route 53 geolocation routing → Regional API Gateways → Lambda functions → DynamoDB Global 
+Tables with regional data filtering
+ B) CloudFront with geo-restriction → Multiple ALBs → Regional applications → Separate RDS instances 
+per region
+ C) Single global application → API Gateway with request routing based on user location → Regional 
+Lambda functions and databases
+ D) Regional deployments → Cross-region VPC peering → Shared services in each region → Data 
+encrypted at rest and in transit
+ Question 30
+ A company runs machine learning training jobs that process large datasets (100GB-1TB). Training times
+ vary from 2 hours to 2 days depending on model complexity. The jobs should use the most cost-effective
+ compute resources while ensuring data scientists can access results immediately upon completion. Which
+ training infrastructure is optimal?
+ A) SageMaker Training with managed Spot instances, S3 for datasets, automatic model deployment to 
+endpoints
+ B) Batch jobs with Spot instances, EFS for shared datasets, Lambda for completion notifications and result 
+processing
+ C) EKS with Spot node groups, persistent volumes for data, Kubernetes jobs with node affinity for GPU 
+workloads
+ D) EMR clusters with Spot instances, HDFS for distributed storage, Step Functions for workflow 
+orchestration
+ Question 31
+ A e-commerce platform implements a microservices architecture where order processing involves
+ multiple services: inventory, payment, shipping, and notifications. Each service must complete successfully
+ or the entire transaction should rollback. Services may experience temporary failures and need retry logic.
+ Which pattern ensures transaction integrity?
+ A) Step Functions Express Workflows with error handling, retry configurations, and compensation 
+transactions
+ B) SQS FIFO queues with DLQ, Lambda functions for each service, and DynamoDB transactions for state 
+management
+ C) EventBridge with custom event patterns, Lambda functions with exponential backoff, and manual 
+rollback procedures
+D) Step Functions Standard Workflows with try-catch-finally blocks, service integration patterns, and 
+automatic rollbacks
+ Question 32
+ A social media application stores user posts, comments, and media files. The application supports
+ complex queries like "find all posts by friends in the last week with specific hashtags" and "show mutual
+ friends and their recent activities." The database should scale horizontally and support real-time updates.
+ Which database solution handles these social graph requirements?
+ A) DynamoDB with carefully designed partition keys, GSIs for different access patterns, and DynamoDB 
+Streams for real-time updates
+ B) Neptune graph database for relationships, DynamoDB for posts/comments, ElastiCache for frequently 
+accessed data
+ C) Aurora MySQL with read replicas, full-text search capabilities, and connection pooling for concurrent 
+access
+ D) OpenSearch for posts with complex queries, RDS for user data, Redis for session management and 
+real-time features
+ Question 33
+ A video streaming service needs to handle 1 million concurrent viewers during live events. The service
+ should automatically scale based on viewer count, maintain consistent video quality, and provide real
+time analytics on viewing patterns. Content delivery should optimize for global audience with minimal
+ buffering. Which architecture supports large-scale live streaming?
+ A) MediaLive for encoding → MediaPackage for packaging → CloudFront for global delivery → Kinesis for 
+real-time analytics
+ B) EC2 instances with streaming software → Auto Scaling → Global Accelerator → S3 for content storage 
+→ CloudWatch for metrics
+ C) MediaConvert for processing → S3 for storage → CloudFront with multiple origins → Lambda for 
+analytics processing
+ D) Third-party CDN integration → API Gateway for control plane → Lambda for scaling logic → 
+DynamoDB for viewer data
+ Question 34
+ A company processes financial data that must be encrypted at all times and keys rotated every 90 days.
+ Different data types require different encryption keys, and access should be logged and auditable. The
+solution must integrate with existing IAM policies and support automatic key rotation. Which encryption
+ strategy meets these requirements?
+ A) KMS with customer-managed keys, automatic rotation enabled, separate keys per data type, and 
+CloudTrail for audit logs
+ B) CloudHSM cluster for key management, application-level encryption, manual key rotation procedures, 
+and custom logging
+ C) S3 SSE-C with client-managed keys, application-managed rotation, separate encryption contexts, and 
+access logging
+ D) Parameter Store SecureString with KMS integration, Lambda functions for rotation, IAM policies for 
+access control
+ Question 35
+ A gaming company wants to implement real-time multiplayer features including player matching, game
+ state synchronization, and voice chat. The system should support rooms of up to 100 players with sub
+50ms latency globally. Player sessions should seamlessly handle network disconnections and
+ reconnections. Which real-time architecture is most suitable?
+ A) GameLift for game session management, API Gateway WebSocket for real-time communication, 
+DynamoDB for game state
+ B) IoT Core for device connections, Lambda functions for game logic, ElastiCache for session state, SQS 
+for message queuing
+ C) Custom WebSocket servers on EC2 with Auto Scaling, Redis Cluster for state, Route 53 for global load 
+balancing
+ D) AppSync with real-time subscriptions, Lambda resolvers for game logic, DynamoDB for persistent data
+ Question 36
+ A financial institution implements a data lake to consolidate data from multiple sources including
+ databases, APIs, and streaming data. Different teams need different levels of access to the data, and all
+ access must be auditable. The solution should support both batch and stream processing while
+ optimizing storage costs. Which data lake architecture provides comprehensive governance?
+ A) S3 data lake with Lake Formation for governance, Glue for cataloging, Athena for querying, and Kinesis 
+for streaming
+ B) S3 with bucket policies, EMR for processing, Redshift Spectrum for queries, MSK for streaming data 
+ingestion
+ C) Data lake on EFS, Lambda for data processing, RDS for metadata, API Gateway for controlled access
+ D) Redshift as data warehouse, S3 for unstructured data, Glue for ETL, QuickSight for analytics and access 
+control
+Question 37
+ A company migrates a legacy application that uses shared file storage for configuration files and
+ temporary data processing. Multiple application instances need concurrent read/write access to shared
+ files. The storage should provide POSIX compliance, scale automatically, and integrate with existing
+ backup procedures. Which storage solution maintains application compatibility?
+ A) EFS with General Purpose performance mode, automatic scaling, and AWS Backup integration
+ B) FSx for Lustre with S3 integration for high-performance computing workloads and shared access
+ C) S3 with FUSE mounting, lifecycle policies for cost optimization, and cross-region replication for backup
+ D) EBS Multi-Attach volumes with cluster file system, manual scaling, and EBS snapshots for backup
+ Question 38
+ An organization implements a hybrid cloud solution where sensitive workloads remain on-premises while
+ leveraging AWS for data processing and analytics. Data transfer should be secure, reliable, and cost
+effective. The solution needs to handle network interruptions gracefully and provide bandwidth throttling
+ during business hours. Which hybrid connectivity approach is optimal?
+ A) AWS Direct Connect with VIF redundancy, VPN backup connection, and DataSync for data transfer with 
+scheduling
+ B) Site-to-Site VPN with multiple tunnels, Storage Gateway for hybrid storage, and bandwidth 
+management policies
+ C) Direct Connect Gateway with multiple connections, PrivateLink for service access, and scheduled data 
+replication
+ D) AWS Outposts for on-premises AWS services, dedicated network connections, and native AWS service 
+integration
+ Question 39
+ A mobile application serves millions of users globally with features requiring real-time synchronization of
+ user preferences, offline capability, and conflict resolution when multiple devices sync simultaneously. The
+ backend should handle sporadic connectivity and minimize battery usage on mobile devices. Which
+ mobile backend architecture optimizes for these requirements?
+ A) Cognito for authentication, AppSync for GraphQL API with offline sync, DynamoDB for storage, and 
+automatic conflict resolution
+ B) API Gateway with Cognito authorizer, Lambda functions for business logic, S3 for file storage, and 
+custom conflict resolution
+ C) Mobile SDK with local SQLite, periodic sync to RDS via API Gateway, manual conflict resolution, and 
+push notifications
+ D) IoT Core for device connectivity, MQTT for messaging, DynamoDB for state management, and Lambda 
+for conflict resolution
+ Question 40
+ A company provides SaaS analytics platform where customers upload datasets and run complex queries.
+ Each customer's data must remain isolated, queries should complete within minutes, and the platform
+ should handle varying workload demands cost-effectively. Customer billing should reflect actual resource
+ consumption. Which multi-tenant analytics architecture is most suitable?
+ A) Redshift with workload management, separate schemas per tenant, concurrency scaling, and usage
+based billing integration
+ B) Athena with separate S3 buckets per tenant, workgroups for access control, pay-per-query pricing 
+model
+ C) EMR clusters per tenant, S3 for data storage, auto-termination after jobs, and detailed cost allocation 
+tags
+ D) Dedicated RDS instances per customer, connection pooling, read replicas for analytics, and reserved 
+instance planning
+ Question 41
+ A logistics company tracks delivery vehicles in real-time and needs to provide customers with accurate
+ ETAs, optimize routes dynamically, and detect anomalies like unauthorized stops or route deviations. The
+ system processes location updates every 30 seconds from 10,000 vehicles. Which architecture handles
+ real-time location processing efficiently?
+ A) IoT Core for vehicle connectivity, Kinesis Analytics for stream processing, Lambda for ETA calculations, 
+SNS for alerts
+ B) API Gateway for location updates, DynamoDB for current positions, Lambda for route optimization, 
+CloudWatch for anomaly detection
+ C) Kinesis Data Streams for ingestion, Lambda for processing, ElastiCache for current state, Step Functions 
+for workflow orchestration
+ D) Direct database updates via API, RDS for location history, scheduled Lambda for route optimization, 
+CloudWatch Events for alerting
+ Question 42
+ A healthcare organization needs to process and analyze medical images (MRI, CT scans) that are several
+ gigabytes each. Processing includes AI-based diagnosis, image enhancement, and 3D reconstruction.
+Results must be available to doctors within 15 minutes of upload. The system should handle varying
+ processing loads and integrate with existing PACS systems. Which medical imaging architecture meets
+ these requirements?
+ A) S3 for image storage, Batch jobs with GPU instances for processing, SageMaker for AI inference, API 
+integration for PACS
+ B) EFS for shared storage, ECS tasks with GPU support, Lambda for orchestration, RDS for metadata and 
+results
+ C) Direct upload to processing servers, EC2 with GPU instances, manual scaling, database integration for 
+results
+ D) S3 upload triggers, Step Functions workflow, Fargate tasks with GPU, DynamoDB for tracking, SNS for 
+notifications
+ Question 43
+ A financial trading firm needs ultra-low latency market data processing where every microsecond matters.
+ The system processes millions of market events per second, maintains order books, and executes
+ algorithmic trading strategies. Network and processing latency must be minimized while ensuring data
+ consistency. Which architecture optimizes for ultra-low latency?
+ A) Dedicated hosts with SR-IOV networking, custom applications with kernel bypass, in-memory 
+databases, and co-location with exchanges
+ B) Lambda functions with provisioned concurrency, DynamoDB with eventually consistent reads, API 
+Gateway with caching
+ C) ECS with Fargate, Application Load Balancer, ElastiCache clusters, and CloudFront for content delivery
+ D) Kinesis Data Streams, Lambda for processing, Aurora with optimized read replicas, and Route 53 
+latency-based routing
+ Question 44
+ A company implements a document management system where users upload various file formats (PDF,
+ Word, Excel, images). The system should extract text for search, generate thumbnails, convert formats,
+ and apply OCR to images. Processing time varies significantly by document type and size. Which
+ document processing pipeline is most efficient?
+ A) S3 upload → Lambda for routing → Step Functions workflow → specialized services (Textract, 
+Rekognition) → search indexing
+ B) API Gateway upload → SQS queuing → EC2 processing instances → multiple processing tools → 
+database storage
+ C) Direct S3 upload → Event notifications → Lambda functions → third-party APIs for processing → result 
+aggregation
+D) Web upload → immediate processing → synchronous API responses → file system storage → 
+scheduled indexing
+ Question 45
+ An e-learning platform delivers video courses to students with adaptive bitrate streaming based on
+ network conditions. Content should be protected against piracy, accessible offline for mobile apps, and
+ provide detailed analytics on viewing patterns. The platform serves students globally with varying internet
+ speeds. Which video delivery architecture balances security and performance?
+ A) MediaConvert for encoding, S3 for storage, CloudFront with signed URLs and DRM, offline download 
+capabilities
+ B) Third-party encoding service, S3 storage, CloudFront distribution, basic authentication, and download 
+restrictions
+ C) On-premises encoding, direct server delivery, custom DRM implementation, and local CDN 
+deployment
+ D) MediaLive for live content, MediaPackage for packaging, CloudFront with token authentication, and 
+mobile SDK integration
+ Question 46
+ A startup builds a social networking application that needs to handle viral content distribution. Posts can
+ suddenly receive millions of interactions (likes, comments, shares) within minutes. The system should
+ maintain real-time feed updates for followers while ensuring data consistency and preventing system
+ overload. Which architecture handles viral traffic patterns?
+ A) DynamoDB with on-demand billing, DynamoDB Streams, Lambda for fan-out processing, and SQS for 
+buffering
+ B) RDS with read replicas, ElastiCache for hot data, background job processing, and connection pooling
+ C) Cassandra on EC2, Kafka for event streaming, microservices architecture, and horizontal scaling
+ D) Aurora with Auto Scaling, EventBridge for event processing, Step Functions for workflows, and API 
+Gateway throttling
+ Question 47
+ A manufacturing company implements predictive maintenance for industrial equipment. IoT sensors
+ collect vibration, temperature, and pressure data every second. The ML model should detect anomalies
+ that indicate potential failures 2-4 weeks in advance. The system processes data from 50,000 sensors
+ across multiple factories. Which IoT analytics architecture enables predictive maintenance?
+A) IoT Core → Kinesis Data Streams → Kinesis Analytics → SageMaker for anomaly detection → SNS alerts
+ B) IoT Greengrass for edge processing → IoT Core → TimeStream for time-series data → SageMaker batch 
+processing
+ C) Direct sensor connectivity → DynamoDB → scheduled Lambda processing → CloudWatch anomaly 
+detection
+ D) IoT Device Management → S3 data lake → EMR for batch processing → QuickSight for visualization
+ Question 48
+ A financial services company needs to implement real-time risk management across trading portfolios.
+ The system should calculate risk metrics in real-time as trades execute, trigger alerts when limits are
+ exceeded, and provide regulatory reporting. Trade data includes positions, market prices, and risk factors
+ updated continuously. Which real-time risk architecture is most appropriate?
+ A) Kinesis Data Streams for trade feeds → Lambda for risk calculations → DynamoDB for positions → 
+CloudWatch for alerting
+ B) MSK for trade messaging → Kafka Streams processing → Redis for real-time state → custom alerting 
+system
+ C) API Gateway for trade input → synchronous Lambda processing → RDS for persistent storage → SNS 
+for notifications
+ D) SQS for trade queuing → ECS tasks for processing → Aurora for portfolio data → EventBridge for 
+regulatory events
+ Question 49
+ A company migrates a monolithic ERP system to AWS while maintaining integration with on-premises
+ systems during transition. The migration should minimize downtime, support gradual component
+ migration, and maintain data consistency between environments. Legacy systems cannot be modified
+ during migration. Which migration strategy ensures business continuity?
+ A) Database replication to AWS, API Gateway for service routing, gradual service migration, and hybrid 
+connectivity
+ B) Lift-and-shift entire system, establish VPN connectivity, replicate data post-migration, and update 
+integrations
+ C) Strangler Fig pattern with API Gateway, DMS for database sync, Lambda for transformation, and 
+gradual cutover
+ D) Container migration to ECS, service mesh for communication, shared databases, and feature flags for 
+rollback
+ Question 50
+A media company provides live streaming platform for content creators. The platform should support
+ multiple concurrent streams per creator, real-time chat, viewer analytics, and content moderation. Stream
+ quality should adapt based on viewer devices and network conditions. Which live streaming architecture
+ supports these features?
+ A) MediaLive for encoding → MediaPackage → CloudFront → real-time chat via WebSocket API → 
+content moderation APIs
+ B) EC2 streaming servers → Auto Scaling Groups → CloudFront → SQS for chat → manual content review
+ C) Third-party streaming service integration → API Gateway → Lambda functions → DynamoDB for chat 
+→ AI content moderation
+ D) Kinesis Video Streams → MediaConvert → S3 → delayed processing → batch content analysis
+ Question 51
+ A healthcare provider implements telemedicine platform requiring secure video consultations, electronic
+ health record integration, prescription management, and compliance with HIPAA regulations. Patient data
+ must be encrypted at rest and in transit with detailed audit trails. Which telemedicine architecture ensures
+ security and compliance?
+ A) Amazon Chime SDK for video, encrypted RDS for EHR data, KMS for key management, CloudTrail for 
+auditing
+ B) WebRTC on EC2, EFS for file storage, IAM for access control, CloudWatch for monitoring
+ C) Third-party video service, S3 for document storage, Lambda for processing, Config for compliance 
+checking
+ D) Custom video solution, on-premises database integration, VPN connectivity, manual audit procedures
+ Question 52
+ A logistics company optimizes delivery routes in real-time considering traffic conditions, vehicle capacity,
+ delivery priorities, and driver schedules. The system should recalculate routes when new orders arrive or
+ conditions change. Processing should complete within seconds to maintain operational efficiency. Which
+ optimization architecture handles dynamic route planning?
+ A) Lambda functions triggered by events, DynamoDB for current state, external APIs for traffic data, SQS 
+for job queuing
+ B) ECS containers with optimization algorithms, ElastiCache for caching, scheduled processing, 
+CloudWatch Events
+ C) Batch jobs for route optimization, S3 for data storage, manual trigger processes, email notifications
+ D) SageMaker endpoints for ML-based optimization, API Gateway for requests, real-time inference, SNS 
+for updates
+Question 53
+ A company builds a data analytics platform processing customer behavior data from multiple
+ touchpoints (web, mobile, in-store, call center). Analysis should provide real-time personalization and
+ generate batch reports for business intelligence. Different data sources have varying schemas and update
+ frequencies. Which unified analytics architecture handles diverse data sources?
+ A) Kinesis for streaming data, S3 data lake with partitioning, Glue for ETL, Athena and Redshift for 
+analytics
+ B) Direct database connections, Lambda for data transformation, DynamoDB for aggregated data, 
+QuickSight for visualization
+ C) API Gateway for data ingestion, SQS for buffering, EC2 for processing, RDS for analytical queries
+ D) EventBridge for event routing, Step Functions for workflows, Aurora for OLTP, separate OLAP system
+ Question 54
+ A financial institution implements fraud detection that analyzes transaction patterns, merchant behavior,
+ and user activity in real-time. The system should learn from new fraud patterns continuously and adjust
+ detection algorithms automatically. False positives should be minimized to avoid blocking legitimate
+ transactions. Which adaptive fraud detection architecture is most effective?
+ A) Kinesis Analytics for streaming analysis, SageMaker for ML models with automatic retraining, feature 
+store for data
+ B) Lambda functions for rule-based detection, DynamoDB for transaction history, manual model updates
+ C) Real-time database queries, statistical analysis, threshold-based alerting, human review processes
+ D) Batch processing of transactions, historical analysis, periodic model training, delayed fraud detection
+ Question 55
+ A gaming company launches a battle royale game expecting millions of concurrent players worldwide.
+ The game requires real-time player matching, game state synchronization, anti-cheat systems, and global
+ leaderboards. Player sessions should maintain sub-100ms latency globally with seamless server switching.
+ Which gaming architecture supports massive multiplayer requirements?
+ A) GameLift global fleet management, DynamoDB Global Tables, API Gateway WebSocket, CloudFront for 
+assets
+ B) Custom game servers on EC2, Auto Scaling Groups, Redis clusters, Route 53 for global distribution
+ C) Container-based game servers on EKS, service mesh for communication, MongoDB for game data
+ D) Serverless game logic with Lambda, real-time updates via AppSync, S3 for game assets, Cognito for 
+players
+Question 56
+ A company implements a content moderation system for user-generated content including text, images,
+ and videos. The system should detect inappropriate content using AI services, allow human review for
+ edge cases, and provide appeal processes for users. Content should be processed within minutes of
+ upload with high accuracy. Which content moderation pipeline is most comprehensive?
+ A) S3 upload triggers → Lambda orchestration → Rekognition, Textract, Comprehend → human review
+ workflow → user notifications B) API Gateway upload → immediate processing → third-party moderation
+ APIs → database storage → email notifications
+ C) Direct upload to processing servers → manual content review → approval workflows → content
+ publishing D) Batch processing approach → scheduled analysis → bulk operations → delayed content
+ availability
+ Question 57
+ A healthcare organization implements a clinical decision support system that analyzes patient data,
+ medical history, and current symptoms to suggest diagnoses and treatments. The system should
+ integrate with existing EMR systems, provide evidence-based recommendations, and maintain patient
+ privacy. Response time should be under 5 seconds for critical decisions. Which clinical support
+ architecture meets these requirements?
+ A) API integration with EMR systems, Lambda for clinical logic, medical knowledge base in DynamoDB, 
+encryption throughout
+ B) Direct database access, on-premises processing, manual integration procedures, local data storage
+ C) Real-time EMR feeds, SageMaker for medical AI models, secure data processing, FHIR-compliant APIs
+ D) Batch data processing, overnight analysis, scheduled report generation, email-based communication
+ Question 58
+ A company provides IoT platform for smart city applications including traffic management, environmental
+ monitoring, and public safety. The platform should handle millions of sensors, provide real-time
+ dashboards, enable predictive analytics, and support multiple city clients with data isolation. Which smart
+ city IoT architecture scales effectively?
+ A) IoT Core with device registry, Kinesis for data ingestion, multi-tenant DynamoDB design, QuickSight 
+embedded analytics
+ B) Custom MQTT brokers, direct database writes, separate infrastructure per city, manual scaling 
+procedures
+ C) API Gateway for sensor data, Lambda processing, shared databases, basic web dashboards
+ D) On-premises IoT gateways, VPN connectivity, centralized processing, scheduled batch updates
+Question 59
+ A financial trading firm implements algorithmic trading system that executes trades based on market
+ conditions, technical indicators, and risk parameters. The system should process market data in real-time,
+ execute trades within milliseconds, and maintain detailed audit logs for regulatory compliance. Which
+ high-frequency trading architecture optimizes for speed and compliance?
+ A) Kinesis Data Streams, Lambda with provisioned concurrency, DynamoDB accelerator, comprehensive 
+CloudTrail logging
+ B) Direct market data feeds, EC2 with enhanced networking, in-memory processing, custom audit systems
+ C) API Gateway for market data, standard Lambda functions, RDS for storage, basic CloudWatch 
+monitoring
+ D) Batch processing of market data, scheduled trading decisions, delayed execution, simplified logging
+ Question 60
+ A company migrates legacy mainframe applications to AWS while maintaining integration with existing
+ systems. The migration should preserve business logic, maintain data integrity, and minimize disruption
+ to operations. Some applications use proprietary protocols and data formats. Which mainframe migration
+ strategy reduces risk and complexity?
+ A) Application modernization using containers, API Gateway for integration, DMS for data migration, 
+gradual cutover
+ B) Rehost applications on large EC2 instances, direct network connectivity, manual data synchronization
+ C) Complete rewrite using cloud-native services, immediate cutover, data transformation during 
+migration
+ D) Hybrid approach with AWS Mainframe Modernization, step-by-step component migration, parallel 
+operation
+ Question 61
+ A media company provides podcast hosting platform with features including audio transcription, content
+ search, analytics, and monetization tools. The platform should handle large audio files, provide fast
+ streaming globally, and generate automated show notes. Which podcast platform architecture supports
+ these multimedia requirements?
+ A) S3 for audio storage, MediaConvert for processing, Transcribe for transcription, CloudFront for global 
+delivery
+ B) EFS for shared storage, EC2 for processing, third-party transcription services, basic CDN integration
+ C) Local file servers, manual audio processing, external transcription vendors, direct streaming delivery
+D) DynamoDB for metadata, Lambda for processing, custom transcription algorithms, regional 
+distribution
+ Question 62
+ A company implements supply chain management system tracking products from manufacturing
+ through delivery. The system should provide real-time visibility, detect anomalies like delays or damage,
+ and enable predictive demand planning. Data comes from IoT sensors, RFID readers, and partner systems.
+ Which supply chain architecture provides end-to-end visibility?
+ A) IoT Core for sensors, API Gateway for partner integration, DynamoDB for tracking data, analytics with 
+ML services
+ B) Direct database connections, manual data entry, spreadsheet-based tracking, email notifications
+ C) Custom protocols for each data source, separate processing systems, manual correlation, periodic 
+reporting
+ D) File-based data exchange, batch processing, delayed updates, static reporting dashboards
+ Question 63
+ A fintech company provides mobile payment solution requiring real-time transaction processing, fraud
+ detection, regulatory compliance, and multi-currency support. The system should handle payment
+ failures gracefully and provide instant notifications to users. Transaction data must be encrypted and
+ auditable. Which payment processing architecture ensures security and reliability?
+ A) API Gateway with rate limiting, Lambda for processing, encrypted DynamoDB, SNS for notifications, 
+comprehensive auditing
+ B) Direct server processing, database storage, basic encryption, email notifications, manual audit 
+procedures
+ C) Third-party payment processor integration, minimal custom logic, standard security measures, delayed 
+processing
+ D) Batch payment processing, overnight settlement, basic fraud checks, next-day notifications
+ Question 64
+ A company builds AI-powered customer service platform with chatbots, voice recognition, sentiment
+ analysis, and human handoff capabilities. The system should learn from interactions, improve responses
+ over time, and handle multiple communication channels. Customer conversations must remain private
+ and secure. Which conversational AI architecture provides comprehensive customer support?
+ A) Lex for chatbots, Polly for voice, Comprehend for sentiment, Connect for human handoff, encrypted 
+data storage
+B) Custom chatbot logic, basic voice processing, manual sentiment assessment, traditional call center 
+integration
+ C) Third-party AI services, limited customization, standard security measures, separate channel handling
+ D) Rule-based responses, no voice capabilities, basic text analysis, manual escalation procedures
+ Question 65
+ A healthcare network implements population health management system analyzing patient data across
+ multiple hospitals to identify disease trends, predict outbreaks, and optimize resource allocation. The
+ system must comply with HIPAA, handle sensitive medical data, and provide real-time alerts for public
+ health officials. Which population health architecture balances analytics capabilities with privacy
+ requirements?
+ A) Lake Formation for governance, Glue for ETL, de-identified data processing, ML services for predictive 
+analytics, secure APIs
+ B) Direct database access, basic analytics tools, minimal data protection, manual reporting processes
+ C) Centralized data warehouse, standard SQL queries, encryption at rest, scheduled batch processing
+ D) Separate analysis per hospital, manual data sharing, limited cross-institutional insights, basic alerting
+ Answer Key
+ 1. A) Implement a warm standby in another region with cross-region RDS read replicas and AMI
+ copying
+ 2. A) AWS Step Functions with Standard Workflows
+ 3. A) Enable Aurora Auto Scaling for read replicas and implement connection pooling with RDS Proxy
+ 4. A) S3 with SSE-KMS, CloudTrail, VPC endpoints, and S3 bucket policies restricting to US regions
+ 5. A) Amazon SQS FIFO queues with message deduplication and dead letter queues
+ 6. A) CloudFront with edge locations, API Gateway regional endpoints, Lambda@Edge, and DynamoDB
+ Global Tables
+ 7. C) Use AWS Glue crawlers to catalog data, Glue ETL jobs for processing, and Athena for querying
+ 8. C) API Gateway with Cognito User Pools federated with SAML, resource-based policies, usage plans,
+ and X-Ray tracing
+ 9. A) ECS with Fargate, Application Auto Scaling, and CloudWatch custom metrics for scaling triggers
+ 10. A) Kinesis Data Streams → Kinesis Analytics for real-time processing → S3 with lifecycle policies →
+ CloudWatch alarms
+ 11. A) CodePipeline with CodeBuild, ECR vulnerability scanning, ECS blue-green deployments, and X-Ray
+ tracing
+12. A) S3 with Transfer Acceleration, CloudFront with custom origin failover, and Lambda@Edge for
+ content optimization
+ 13. A) DynamoDB for user profiles and posts, ElastiCache for sessions, OpenSearch for content discovery,
+ and Kinesis for analytics
+ 14. A) AWS Batch with Spot instances, multiple job queues with different instance types, and automatic
+ retry policies
+ 15. A) S3 with presigned URLs, Cognito identity pools for device authentication, CloudTrail for auditing,
+ and lifecycle policies
+ 16. A) Kinesis Data Streams for clickstream, DynamoDB for user profiles, SageMaker for ML inference,
+ and API Gateway with caching
+ 17. A) EC2 instances with Auto Scaling Groups, ELB health checks, EBS volumes with snapshots, and RDS
+ with Multi-AZ
+ 18. C) S3 upload → SQS → Lambda for small images → Step Functions for complex processing →
+ DynamoDB for status tracking
+ 19. B) Fluent Bit agents → Kinesis Data Firehose → S3 with prefixes → OpenSearch for indexing and
+ searching
+ 20. A) Global Accelerator → ALB → ECS with service mesh → ElastiCache clusters → DynamoDB Global
+ Tables
+ 21. A) Aurora PostgreSQL with optimized read replicas, Connection pooling via RDS Proxy, and Enhanced
+ Monitoring
+ 22. B) S3 Standard → S3 Intelligent-Tiering with all access tiers enabled and archive configurations
+ 23. D) Individual S3 buckets per tenant with Athena for querying and workgroups for access control
+ 24. A) AWS IoT Greengrass for edge processing → IoT Core → Kinesis Data Streams → Lambda for
+ anomaly detection
+ 25. A) AWS SCT for schema conversion → DMS with CDC → Aurora PostgreSQL with compatibility
+ features → Aurora Global Database
+ 26. C) Serverless approach → API Gateway → Lambda functions → DynamoDB with on-demand billing →
+ CloudFront
+ 27. A) Batch with GPU instance types, Spot instances for cost optimization, and job queues with different
+ priorities
+ 28. C) Direct integration → In-memory Redis for features → SageMaker multi-model endpoints →
+ ElastiCache for caching
+ 29. A) Route 53 geolocation routing → Regional API Gateways → Lambda functions → DynamoDB Global
+ Tables with regional data filtering
+ 30. A) SageMaker Training with managed Spot instances, S3 for datasets, automatic model deployment
+ to endpoints
+31. D) Step Functions Standard Workflows with try-catch-finally blocks, service integration patterns, and
+ automatic rollbacks
+ 32. B) Neptune graph database for relationships, DynamoDB for posts/comments, ElastiCache for
+ frequently accessed data
+ 33. A) MediaLive for encoding → MediaPackage for packaging → CloudFront for global delivery →
+ Kinesis for real-time analytics
+ 34. A) KMS with customer-managed keys, automatic rotation enabled, separate keys per data type, and
+ CloudTrail for audit logs
+ 35. A) GameLift for game session management, API Gateway WebSocket for real-time communication,
+ DynamoDB for game state
+ 36. A) S3 data lake with Lake Formation for governance, Glue for cataloging, Athena for querying, and
+ Kinesis for streaming
+ 37. A) EFS with General Purpose performance mode, automatic scaling, and AWS Backup integration
+ 38. A) AWS Direct Connect with VIF redundancy, VPN backup connection, and DataSync for data transfer
+ with scheduling
+ 39. A) Cognito for authentication, AppSync for GraphQL API with offline sync, DynamoDB for storage,
+ and automatic conflict resolution
+ 40. B) Athena with separate S3 buckets per tenant, workgroups for access control, pay-per-query pricing
+ model
+ 41. A) IoT Core for vehicle connectivity, Kinesis Analytics for stream processing, Lambda for ETA
+ calculations, SNS for alerts
+ 42. A) S3 for image storage, Batch jobs with GPU instances for processing, SageMaker for AI inference,
+ API integration for PACS
+ 43. A) Dedicated hosts with SR-IOV networking, custom applications with kernel bypass, in-memory
+ databases, and co-location with exchanges
+ 44. A) S3 upload → Lambda for routing → Step Functions workflow → specialized services (Textract,
+ Rekognition) → search indexing
+ 45. A) MediaConvert for encoding, S3 for storage, CloudFront with signed URLs and DRM, offline
+ download capabilities
+ 46. A) DynamoDB with on-demand billing, DynamoDB Streams, Lambda for fan-out processing, and SQS
+ for buffering
+ 47. A) IoT Core → Kinesis Data Streams → Kinesis Analytics → SageMaker for anomaly detection → SNS
+ alerts
+ 48. A) Kinesis Data Streams for trade feeds → Lambda for risk calculations → DynamoDB for positions →
+ CloudWatch for alerting
+49. C) Strangler Fig pattern with API Gateway, DMS for database sync, Lambda for transformation, and
+ gradual cutover
+ 50. A) MediaLive for encoding → MediaPackage → CloudFront → real-time chat via WebSocket API →
+ content moderation APIs
+ 51. A) Amazon Chime SDK for video, encrypted RDS for EHR data, KMS for key management, CloudTrail
+ for auditing
+ 52. A) Lambda functions triggered by events, DynamoDB for current state, external APIs for traffic data,
+ SQS for job queuing
+ 53. A) Kinesis for streaming data, S3 data lake with partitioning, Glue for ETL, Athena and Redshift for
+ analytics
+ 54. A) Kinesis Analytics for streaming analysis, SageMaker for ML models with automatic retraining,
+ feature store for data
+ 55. A) GameLift global fleet management, DynamoDB Global Tables, API Gateway WebSocket,
+ CloudFront for assets
+ 56. A) S3 upload triggers → Lambda orchestration → Rekognition, Textract, Comprehend → human
+ review workflow → user notifications
+ 57. C) Real-time EMR feeds, SageMaker for medical AI models, secure data processing, FHIR-compliant
+ APIs
+ 58. A) IoT Core with device registry, Kinesis for data ingestion, multi-tenant DynamoDB design,
+ QuickSight embedded analytics
+ 59. B) Direct market data feeds, EC2 with enhanced networking, in-memory processing, custom audit
+ systems
+ 60. D) Hybrid approach with AWS Mainframe Modernization, step-by-step component migration, parallel
+ operation
+ 61. A) S3 for audio storage, MediaConvert for processing, Transcribe for transcription, CloudFront for
+ global delivery
+ 62. A) IoT Core for sensors, API Gateway for partner integration, DynamoDB for tracking data, analytics
+ with ML services
+ 63. A) API Gateway with rate limiting, Lambda for processing, encrypted DynamoDB, SNS for
+ notifications, comprehensive auditing
+ 64. A) Lex for chatbots, Polly for voice, Comprehend for sentiment, Connect for human handoff,
+ encrypted data storage
+ 65. A) Lake Formation for governance, Glue for ETL, de-identified data processing, ML services for
+ predictive analytics, secure APIs
+ Exam Tips
+Time Management
+ Allocate approximately 2 minutes per question
+ Flag difficult questions and return to them
+ Don't spend too much time on any single question
+ Question Analysis Strategy
+ 1. Read the scenario carefully - Identify key requirements, constraints, and business needs
+ 2. Identify keywords - Look for terms like "cost-effective," "high availability," "real-time," "compliance"
+ 3. Eliminate obviously wrong answers first
+ 4. Consider AWS best practices and Well-Architected Framework principles
+ 5. Choose the most comprehensive solution that meets all requirements
+ Key Focus Areas for SAA-C03
+ Design Resilient Architectures (26% of exam)
+ Design High-Performing Architectures (24% of exam)
+ Design Secure Applications and Architectures (30% of exam)
+ Design Cost-Optimized Architectures (20% of exam)
+ Common Trap Patterns
+ Over-engineering - Avoid unnecessarily complex solutions
+ Under-engineering - Ensure solution meets all stated requirements
+ Cost vs Performance trade-offs - Balance based on scenario priorities
+ Security requirements - Never compromise on security for other benefits
+ Good luck with your SAA-C03 exam!
