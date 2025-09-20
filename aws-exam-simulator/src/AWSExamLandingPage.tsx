@@ -66,7 +66,7 @@ const AWSExamLandingPage = () => {
     <div style={{
       backgroundColor: currentTheme.bg,
       minHeight: '100vh',
-      padding: '0 2rem',
+      padding: '0',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       display: 'flex',
       alignItems: 'center',
@@ -101,14 +101,14 @@ const AWSExamLandingPage = () => {
 
       {/* Main Container - Centered */}
       <div style={{
-        width: '96vw',
-        maxWidth: '1600px',
+        width: '100vw',
+        maxWidth: '100vw',
         margin: '0',
         backgroundColor: currentTheme.containerBg,
-        borderRadius: '12px',
-        padding: '1.75rem 2rem',
+        borderRadius: '0',
+        padding: '1rem',
         boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)',
-        maxHeight: 'calc(100vh - 2rem)',
+        maxHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start'
@@ -187,7 +187,7 @@ const AWSExamLandingPage = () => {
             display: 'flex',
             flexWrap: 'nowrap',
             gap: '16px',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             overflowX: 'visible',
             paddingBottom: '0.5rem'
           }}>
@@ -208,8 +208,8 @@ const AWSExamLandingPage = () => {
                   position: 'relative',
                   transition: 'all 0.3s ease',
                   cursor: 'default',
-                  flex: '0 0 auto',
-                  width: 'calc((100% - 64px) / 5)'
+                  flex: '0 0 280px',
+                  width: '280px'
                 }}
                 onMouseEnter={(e) => {
                   const target = e.currentTarget as HTMLDivElement;
