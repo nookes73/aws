@@ -424,57 +424,207 @@ function App() {
   // const answeredCount = Object.keys(selectedById).length
 
   if (showResults || !currentQuestion) {
-    const results = session.ids.map(id => {
+    const results = session.ids.map((id, idx) => {
       const q = questionsById.get(id)!
       const selected = selectedById[id] ?? []
       const correct = isCorrect(selected, q.correctIndices)
-      return { id, correct, selected }
+      return { id, index: idx + 1, q, selected, correct }
     })
-    const score = results.filter(r => r.correct).length
+    const total = session.ids.length
+    const correctAnswers = results.filter(r => r.correct).length
+    const finalScorePct = Math.round((correctAnswers / total) * 100)
+    const timeTakenMin = Math.floor((EXAM_DURATION_SECONDS - remainingSeconds) / 60)
+    const questionsFlagged = session.ids.reduce((acc, id) => acc + (flaggedById[id] ? 1 : 0), 0)
+    const passed = finalScorePct >= 72
+
+    type ColorTheme = {
+      bg: string; text: string; textSecondary: string; cardBg: string; border: string; accent: string;
+      success: string; error: string; warning: string;
+    }
+    const theme: { dark: ColorTheme; light: ColorTheme } = {
+      dark: {
+        bg: '#1a1a1a',
+        text: '#ffffff',
+        textSecondary: '#cccccc',
+        cardBg: '#2d2d2d',
+        border: '#404040',
+        accent: '#ff9800',
+        success: '#4caf50',
+        error: '#f44336',
+        warning: '#ff9800',
+      },
+      light: {
+        bg: '#f5f5f5',
+        text: '#1a1a1a',
+        textSecondary: '#666666',
+        cardBg: '#ffffff',
+        border: '#e0e0e0',
+        accent: '#ff9800',
+        success: '#4caf50',
+        error: '#f44336',
+        warning: '#ff9800',
+      }
+    }
+    const currentTheme = darkMode ? theme.dark : theme.light
+
+    const getScoreColor = (score: number): string => {
+      if (score >= 72) return currentTheme.success
+      if (score >= 50) return currentTheme.warning
+      return currentTheme.error
+    }
+    const scoreMessage = passed
+      ? { title: 'Congratulations! You Passed', subtitle: 'Great job! You have successfully passed the AWS SAA-C03 exam.', color: currentTheme.success }
+      : { title: 'Unfortunately, You Did Not Pass', subtitle: 'You need 72% to pass. Keep studying and try again!', color: currentTheme.error }
+
     return (
-      <div className="container">
-        <h1>Results</h1>
-        <p>Score: {score} / {session.ids.length}</p>
-        <div className="results-list">
-          {results.map(({ id, correct, selected }) => {
-            const q = questionsById.get(id)!
-            const correctIndices = q.correctIndices
-            return (
-              <div key={id} className={`result-item${correct ? ' correct' : ' incorrect'}`}>
-                <div className="result-question">{q.text}</div>
-                <ul className="result-choices">
-                  {q.choices.map((c, idx) => {
-                    const isUser = selected.includes(idx)
-                    const isRight = correctIndices.includes(idx)
+      <div style={{
+        backgroundColor: currentTheme.bg,
+        color: currentTheme.text,
+        minHeight: '100vh',
+        margin: 0,
+        padding: 0,
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      }}>
+        {/* Dark Mode Toggle */}
+        <div style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 1000 }}>
+          <button
+            onClick={() => setDarkMode(d => !d)}
+            style={{
+              backgroundColor: currentTheme.accent,
+              color: '#000000',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              fontWeight: 500,
+              fontSize: '0.8rem',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
+        </div>
+
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
+          {/* Header */}
+          <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 700, color: currentTheme.text, margin: '0 0 2rem 0' }}>Exam Results</h1>
+
+            {/* Score Section */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: scoreMessage.color, marginBottom: '1rem' }}>{scoreMessage.title}</h2>
+              <p style={{ fontSize: '1rem', color: currentTheme.textSecondary, marginBottom: '2rem', maxWidth: '400px' }}>{scoreMessage.subtitle}</p>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
+                <div style={{
+                  width: '150px', height: '150px', borderRadius: '50%', backgroundColor: getScoreColor(finalScorePct),
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontWeight: 'bold'
+                }}>
+                  <div style={{ fontSize: '2.5rem', lineHeight: 1 }}>{finalScorePct}%</div>
+                  <div style={{ fontSize: '1rem' }}>{correctAnswers}/{total}</div>
+                </div>
+
+                <div style={{ backgroundColor: currentTheme.cardBg, border: `1px solid ${currentTheme.border}`, borderRadius: 8, padding: '1.5rem', minWidth: 300 }}>
+                  <div style={{ marginBottom: '0.75rem' }}>
+                    <span style={{ fontWeight: 600 }}>Final Score:</span>{' '}
+                    <span style={{ color: currentTheme.textSecondary }}>
+                      {finalScorePct} / 100 ({correctAnswers}/{total})
+                    </span>
+                  </div>
+                  <div style={{ marginBottom: '0.75rem' }}>
+                    <span style={{ fontWeight: 600 }}>Time Taken:</span>{' '}
+                    <span style={{ color: currentTheme.textSecondary }}>{timeTakenMin} minutes</span>
+                  </div>
+                  <div style={{ marginBottom: '0.75rem' }}>
+                    <span style={{ fontWeight: 600 }}>Questions Answered:</span>{' '}
+                    <span style={{ color: currentTheme.textSecondary }}>{correctAnswers}/{total}</span>
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: 600 }}>Questions Flagged:</span>{' '}
+                    <span style={{ color: currentTheme.textSecondary }}>{questionsFlagged}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Question Review Section */}
+          <section>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 600, textAlign: 'center', marginBottom: '2rem', color: currentTheme.text }}>
+              Question Review with Explanations
+            </h2>
+
+            {results.map(({ id, index, q, selected, correct }) => (
+              <div key={id} style={{ backgroundColor: currentTheme.cardBg, border: `1px solid ${currentTheme.border}`, borderRadius: 8, padding: '1.5rem', marginBottom: '2rem' }}>
+                {/* Question Header */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: currentTheme.text, margin: 0 }}>Question {index}</h3>
+                  <span style={{ backgroundColor: correct ? currentTheme.success : currentTheme.error, color: '#ffffff', padding: '0.25rem 0.75rem', borderRadius: 12, fontSize: '0.8rem', fontWeight: 500 }}>
+                    {correct ? '✓ Correct' : '✗ Incorrect'}
+                  </span>
+                </div>
+
+                {/* Question Text */}
+                <p style={{ fontSize: '1rem', color: currentTheme.text, marginBottom: '1.5rem', lineHeight: 1.5 }}>{q.text}</p>
+
+                {/* Answer Options */}
+                <div style={{ marginBottom: '1.5rem' }}>
+                  {q.choices.map((option, optionIndex) => {
+                    const isRight = q.correctIndices.includes(optionIndex)
+                    const isUser = selected.includes(optionIndex)
+                    let backgroundColor = currentTheme.cardBg
+                    let borderColor = currentTheme.border
+                    if (isRight) { backgroundColor = `${currentTheme.success}20`; borderColor = currentTheme.success }
+                    else if (isUser && !isRight) { backgroundColor = `${currentTheme.error}20`; borderColor = currentTheme.error }
                     return (
-                      <li key={idx} className={`choice${isRight ? ' right' : ''}${isUser ? ' user' : ''}`}>
-                        {c}
-                        {isRight ? ' ✓' : ''}
-                        {isUser && !isRight ? ' (your choice)' : ''}
-                      </li>
+                      <div key={optionIndex} style={{ backgroundColor, border: `2px solid ${borderColor}`, borderRadius: 6, padding: '1rem', marginBottom: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ color: currentTheme.text }}>{option}</span>
+                        {isRight && <span style={{ color: currentTheme.success, fontWeight: 'bold', fontSize: '1.2rem' }}>✓</span>}
+                        {isUser && !isRight && <span style={{ color: currentTheme.error, fontWeight: 'bold', fontSize: '1.2rem' }}>✗ Incorrect</span>}
+                      </div>
                     )
                   })}
-                </ul>
+                </div>
+
+                {/* Explanation */}
                 {q.explanation && (
-                  <div className="result-explanation">
-                    <strong>Explanation:</strong> {q.explanation}
+                  <div style={{ backgroundColor: `${currentTheme.accent}15`, border: `1px solid ${currentTheme.accent}50`, borderRadius: 6, padding: '1rem' }}>
+                    <div style={{ fontWeight: 600, color: currentTheme.accent, marginBottom: '0.5rem' }}>Explanation:</div>
+                    <p style={{ color: currentTheme.text, margin: 0, lineHeight: 1.5 }}>{q.explanation}</p>
                   </div>
                 )}
               </div>
-            )
-          })}
+            ))}
+          </section>
+
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '3rem' }}>
+            <button
+              onClick={() => {
+                const s = startNewSession(data.questions)
+                setSession(s)
+                setSelectedById({})
+                setShowResults(false)
+                setRemainingSeconds(EXAM_DURATION_SECONDS)
+                setIsPaused(false)
+              }}
+              style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '1rem 2rem', fontSize: '1rem', fontWeight: 600, borderRadius: 6, cursor: 'pointer', transition: 'all 0.3s ease' }}
+            >
+              Try Again
+            </button>
+            <button
+              onClick={() => {
+                // Back to landing
+                sessionStorage.removeItem(STORAGE_KEY)
+                setSession({ ids: [], index: 0 })
+                setShowResults(false)
+              }}
+              style={{ backgroundColor: 'transparent', color: currentTheme.text, border: `2px solid ${currentTheme.border}`, padding: '1rem 2rem', fontSize: '1rem', fontWeight: 600, borderRadius: 6, cursor: 'pointer', transition: 'all 0.3s ease' }}
+            >
+              Back to Home
+            </button>
+          </div>
         </div>
-        <button
-          onClick={() => {
-            const s = startNewSession(data.questions)
-            setSession(s)
-            setSelectedById({})
-            setShowResults(false)
-          }}
-          className="primary"
-        >
-          Start New Session
-        </button>
       </div>
     )
   }
