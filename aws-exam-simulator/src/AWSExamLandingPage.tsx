@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 const AWSExamLandingPage = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isNarrow, setIsNarrow] = useState(false);
 
   const handleStartExam = () => {
     alert('Starting AWS SAA-C03 Practice Exam...');
@@ -28,6 +29,24 @@ const AWSExamLandingPage = () => {
       document.body.style.padding = '';
     };
   }, [isDarkMode]);
+
+  // Track viewport for responsive layout
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 900px)');
+    const update = (e: MediaQueryListEvent | MediaQueryList) => {
+      // For initial call, e can be the MediaQueryList itself
+      const matches = 'matches' in e ? e.matches : (e as MediaQueryList).matches;
+      setIsNarrow(matches);
+    };
+    // Initial
+    update(mq);
+    // Listen
+    mq.addEventListener('change', update as (ev: Event) => void);
+    return () => {
+      mq.removeEventListener('change', update as (ev: Event) => void);
+    };
+  }, []);
 
   const theme = {
     dark: {
@@ -93,10 +112,7 @@ const AWSExamLandingPage = () => {
         borderRadius: '12px',
         padding: '3rem',
         boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)',
-        minHeight: 'calc(100vh - 4rem)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center'
+        minHeight: 'calc(100vh - 4rem)'
       }}>
         
         {/* Header */}
@@ -121,166 +137,167 @@ const AWSExamLandingPage = () => {
           </h2>
         </header>
 
-        {/* Exam Information Section */}
-        <section style={{ marginBottom: '3rem' }}>
-          <h3 style={{
-            fontSize: '1.75rem',
-            fontWeight: '600',
-            textAlign: 'center',
-            marginBottom: '2rem',
-            color: currentTheme.text
-          }}>
-            Exam Information
-          </h3>
-          
-          <div style={{
-            maxWidth: '600px',
-            margin: '0 auto'
-          }}>
-            {[
-              { label: 'Duration:', value: '130 minutes' },
-              { label: 'Questions:', value: '65 questions (randomly selected from 372 question bank)' },
-              { label: 'Passing Score:', value: '720/1000 (72%)' },
-              { label: 'Question Types:', value: 'Multiple choice' }
-            ].map((item, index, array) => (
-              <div key={index} style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                padding: '1rem 0',
-                borderBottom: index === array.length - 1 ? 'none' : `1px solid ${currentTheme.border}`
-              }}>
-                <span style={{
-                  fontWeight: '600',
-                  color: currentTheme.text,
-                  flexShrink: 0,
-                  marginRight: '2rem'
+        {/* Two-column content row */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isNarrow ? '1fr' : '1fr 1fr',
+          gap: '2rem',
+          alignItems: 'start'
+        }}>
+          {/* Left: Exam Information */}
+          <section>
+            <h3 style={{
+              fontSize: '1.75rem',
+              fontWeight: '600',
+              textAlign: isNarrow ? 'center' : 'left',
+              marginBottom: '2rem',
+              color: currentTheme.text
+            }}>
+              Exam Information
+            </h3>
+            <div style={{ maxWidth: '600px', margin: isNarrow ? '0 auto' : '0' }}>
+              {[
+                { label: 'Duration:', value: '130 minutes' },
+                { label: 'Questions:', value: '65 questions (randomly selected from 372 question bank)' },
+                { label: 'Passing Score:', value: '720/1000 (72%)' },
+                { label: 'Question Types:', value: 'Multiple choice' }
+              ].map((item, index, array) => (
+                <div key={index} style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  padding: '1rem 0',
+                  borderBottom: index === array.length - 1 ? 'none' : `1px solid ${currentTheme.border}`
                 }}>
-                  {item.label}
-                </span>
-                <span style={{
-                  color: currentTheme.textSecondary,
-                  textAlign: 'right',
-                  flex: 1
-                }}>
-                  {item.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
+                  <span style={{
+                    fontWeight: '600',
+                    color: currentTheme.text,
+                    flexShrink: 0,
+                    marginRight: '2rem'
+                  }}>
+                    {item.label}
+                  </span>
+                  <span style={{
+                    color: currentTheme.textSecondary,
+                    textAlign: 'right',
+                    flex: 1
+                  }}>
+                    {item.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        {/* Domain Cards - Single Row Layout like screenshot */}
-        <section style={{ marginBottom: '3rem' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '1.25rem',
-            marginBottom: '2rem'
-          }}>
-            {[
-              { title: 'Design Resilient Architectures', percentage: '30% (20 questions)' },
-              { title: 'Design High-Performing Architectures', percentage: '26% (17 questions)' },
-              { title: 'Design Secure Applications and Architectures', percentage: '24% (16 questions)' },
-              { title: 'Design Cost-Optimized Architectures', percentage: '10% (7 questions)' },
-              { title: 'Design Operationally Excellent Architectures', percentage: '10% (5 questions)' }
-            ].map((domain, index) => (
-              <div
-                key={index}
+          {/* Right: Domain Cards and Start */}
+          <section>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '1.25rem',
+              marginBottom: '2rem'
+            }}>
+              {[
+                { title: 'Design Resilient Architectures', percentage: '30% (20 questions)' },
+                { title: 'Design High-Performing Architectures', percentage: '26% (17 questions)' },
+                { title: 'Design Secure Applications and Architectures', percentage: '24% (16 questions)' },
+                { title: 'Design Cost-Optimized Architectures', percentage: '10% (7 questions)' },
+                { title: 'Design Operationally Excellent Architectures', percentage: '10% (5 questions)' }
+              ].map((domain, index) => (
+                <div
+                  key={index}
+                  style={{
+                    backgroundColor: currentTheme.cardBg,
+                    border: `2px solid ${currentTheme.border}`,
+                    borderRadius: '8px',
+                    padding: '1.25rem',
+                    position: 'relative',
+                    transition: 'all 0.3s ease',
+                    cursor: 'default'
+                  }}
+                  onMouseEnter={(e) => {
+                    const target = e.currentTarget as HTMLDivElement;
+                    target.style.borderColor = currentTheme.accent;
+                    target.style.transform = 'translateY(-2px)';
+                    target.style.boxShadow = `0 8px 20px ${currentTheme.accent}33`;
+                  }}
+                  onMouseLeave={(e) => {
+                    const target = e.currentTarget as HTMLDivElement;
+                    target.style.borderColor = currentTheme.border;
+                    target.style.transform = 'translateY(0)';
+                    target.style.boxShadow = 'none';
+                  }}
+                >
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '3px',
+                    background: `linear-gradient(90deg, ${currentTheme.accent}, #e68900)`,
+                    borderRadius: '8px 8px 0 0'
+                  }}></div>
+                  <h4 style={{
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    color: currentTheme.text,
+                    marginBottom: '0.6rem',
+                    lineHeight: '1.4',
+                    margin: '0 0 0.6rem 0'
+                  }}>
+                    {domain.title}
+                  </h4>
+                  <p style={{
+                    fontSize: '0.9rem',
+                    color: currentTheme.accent,
+                    fontWeight: '500',
+                    margin: '0'
+                  }}>
+                    {domain.percentage}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <button
+                onClick={handleStartExam}
                 style={{
-                  backgroundColor: currentTheme.cardBg,
-                  border: `2px solid ${currentTheme.border}`,
+                  background: `linear-gradient(135deg, ${currentTheme.accent}, #e68900)`,
+                  color: '#000000',
+                  border: 'none',
+                  padding: '1.1rem 2.5rem',
+                  fontSize: '1.05rem',
+                  fontWeight: '600',
                   borderRadius: '8px',
-                  padding: '1.5rem',
-                  position: 'relative',
-                  transition: 'all 0.3s ease',
-                  cursor: 'default'
+                  cursor: 'pointer',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  boxShadow: `0 4px 15px ${currentTheme.accent}50`,
+                  transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  const target = e.currentTarget as HTMLDivElement;
-                  target.style.borderColor = currentTheme.accent;
+                  const target = e.currentTarget as HTMLButtonElement;
+                  target.style.background = 'linear-gradient(135deg, #e68900, #cc7700)';
                   target.style.transform = 'translateY(-2px)';
-                  target.style.boxShadow = `0 8px 20px ${currentTheme.accent}33`;
+                  target.style.boxShadow = `0 6px 20px ${currentTheme.accent}66`;
                 }}
                 onMouseLeave={(e) => {
-                  const target = e.currentTarget as HTMLDivElement;
-                  target.style.borderColor = currentTheme.border;
+                  const target = e.currentTarget as HTMLButtonElement;
+                  target.style.background = `linear-gradient(135deg, ${currentTheme.accent}, #e68900)`;
                   target.style.transform = 'translateY(0)';
-                  target.style.boxShadow = 'none';
+                  target.style.boxShadow = `0 4px 15px ${currentTheme.accent}50`;
+                }}
+                onMouseDown={(e) => {
+                  const target = e.currentTarget as HTMLButtonElement;
+                  target.style.transform = 'translateY(0)';
                 }}
               >
-                {/* Orange accent bar */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '3px',
-                  background: `linear-gradient(90deg, ${currentTheme.accent}, #e68900)`,
-                  borderRadius: '8px 8px 0 0'
-                }}></div>
-                
-                <h4 style={{
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  color: currentTheme.text,
-                  marginBottom: '0.75rem',
-                  lineHeight: '1.4',
-                  margin: '0 0 0.75rem 0'
-                }}>
-                  {domain.title}
-                </h4>
-                <p style={{
-                  fontSize: '0.9rem',
-                  color: currentTheme.accent,
-                  fontWeight: '500',
-                  margin: '0'
-                }}>
-                  {domain.percentage}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Start Button */}
-        <section style={{ textAlign: 'center' }}>
-          <button
-            onClick={handleStartExam}
-            style={{
-              background: `linear-gradient(135deg, ${currentTheme.accent}, #e68900)`,
-              color: '#000000',
-              border: 'none',
-              padding: '1.25rem 3rem',
-              fontSize: '1.1rem',
-              fontWeight: '600',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-              boxShadow: `0 4px 15px ${currentTheme.accent}50`,
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              const target = e.currentTarget as HTMLButtonElement;
-              target.style.background = 'linear-gradient(135deg, #e68900, #cc7700)';
-              target.style.transform = 'translateY(-2px)';
-              target.style.boxShadow = `0 6px 20px ${currentTheme.accent}66`;
-            }}
-            onMouseLeave={(e) => {
-              const target = e.currentTarget as HTMLButtonElement;
-              target.style.background = `linear-gradient(135deg, ${currentTheme.accent}, #e68900)`;
-              target.style.transform = 'translateY(0)';
-              target.style.boxShadow = `0 4px 15px ${currentTheme.accent}50`;
-            }}
-            onMouseDown={(e) => {
-              const target = e.currentTarget as HTMLButtonElement;
-              target.style.transform = 'translateY(0)';
-            }}
-          >
-            Start Practice Exam
-          </button>
-        </section>
+                Start Practice Exam
+              </button>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );
