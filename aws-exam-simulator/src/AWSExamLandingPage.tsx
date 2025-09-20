@@ -101,16 +101,18 @@ const AWSExamLandingPage = () => {
 
       {/* Main Container - Centered */}
       <div style={{
-        width: '100vw',
-        maxWidth: '4560px',
-        margin: '0 auto',
+        width: '1321.61px',
+        height: '512.123px',
+        margin: '30px',
         backgroundColor: currentTheme.containerBg,
-        borderRadius: '12px',
-        padding: '1rem',
+        border: 0,
+        borderRadius: '0',
+        padding: '30px',
         boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        boxSizing: 'content-box'
       }}>
         
         {/* Header */}
