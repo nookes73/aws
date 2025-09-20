@@ -102,7 +102,7 @@ const AWSExamLandingPage = () => {
       {/* Main Container - Centered */}
       <div style={{
         width: '100vw',
-        maxWidth: '1800px',
+        maxWidth: '2200px',
         margin: '0 auto',
         backgroundColor: currentTheme.containerBg,
         borderRadius: '0',
@@ -185,8 +185,8 @@ const AWSExamLandingPage = () => {
         <section style={{ marginTop: '0.5rem', marginBottom: '1.5rem' }}>
           <div style={{
             display: 'flex',
-            flexWrap: 'wrap',
-            gap: '16px',
+            flexWrap: 'nowrap',
+            gap: '12px',
             justifyContent: 'center',
             overflowX: 'visible',
             paddingBottom: '0.5rem'
