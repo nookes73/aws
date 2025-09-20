@@ -470,11 +470,37 @@ function App() {
   // const isAnswered = selected.length > 0
   const isMulti = (currentQuestion.correctIndices?.length ?? 0) > 1
 
+  const timerClass = `timer${remainingSeconds <= 300 ? ' warning' : ''}`
   return (
     <div className="container">
       <header className="header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <strong>Question {session.index + 1}</strong> / {session.ids.length}
+        <div className="header-left">
+          <h1>AWS Solutions Architect Associate (SAA-C03) Practice Exam</h1>
+          <p>65 Questions • 130 minutes</p>
+        </div>
+        <div className="timer-controls">
+          <div className={timerClass}>{formatTime(remainingSeconds)}</div>
+          <button
+            className={`pause-btn${isPaused ? ' paused' : ''}`}
+            onClick={() => {
+              setIsPaused(p => {
+                const np = !p
+                try { sessionStorage.setItem(TIMER_KEY, JSON.stringify({ remainingSeconds, isPaused: np })) } catch {}
+                return np
+              })
+            }}
+          >
+            {isPaused ? 'Resume' : 'Pause'}
+          </button>
+          <button className="theme-btn" onClick={() => setDarkMode(d => !d)}>{darkMode ? 'Light' : 'Dark'}</button>
+        </div>
+      </header>
+
+      <div className="question-content">
+        <div className="question-header">
+          <div className="question-info">
+            <h3>Question {session.index + 1} / {session.ids.length}</h3>
+          </div>
           <button
             onClick={() => {
               if (!currentQuestion) return
@@ -484,52 +510,38 @@ function App() {
                 return next
               })
             }}
-            className={currentQuestion && flaggedById[currentQuestion.id] ? 'flag-btn active' : 'flag-btn'}
+            className={`flag-btn${currentQuestion && flaggedById[currentQuestion.id] ? ' flagged' : ''}`}
             title="Flag for review"
           >
             {currentQuestion && flaggedById[currentQuestion.id] ? 'Flagged' : 'Flag'}
           </button>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span className="chip">⏱ {formatTime(remainingSeconds)}</span>
-          <button onClick={() => {
-            setIsPaused(p => {
-              const np = !p
-              try { sessionStorage.setItem(TIMER_KEY, JSON.stringify({ remainingSeconds, isPaused: np })) } catch {}
-              return np
-            })
-          }}>{isPaused ? 'Resume' : 'Pause'}</button>
-          <button onClick={() => setDarkMode(d => !d)}>{darkMode ? 'Light' : 'Dark'}</button>
-        </div>
-      </header>
-
-      <div className="question">
-        <h2>{currentQuestion.text}</h2>
-        <div className="choices">
+        <div className="question-text">{currentQuestion.text}</div>
+        <div className="options">
           {currentQuestion.choices.map((choice, idx) => (
-            <label key={idx} className={selected.includes(idx) ? 'choice selected' : 'choice'}>
+            <label key={idx} className={`option${selected.includes(idx) ? ' selected' : ''}`}>
               <input
                 type={isMulti ? 'checkbox' : 'radio'}
                 name={`q-${currentQuestion.id}`}
                 checked={selected.includes(idx)}
                 onChange={() => toggleChoice(idx)}
               />
-              <span>{choice}</span>
+              <div className="option-text">{choice}</div>
             </label>
           ))}
         </div>
       </div>
 
-      <footer className="footer">
-        <button onClick={goPrev} disabled={session.index === 0}>Previous</button>
+      <div className="question-navigation">
+        <button className="nav-btn" onClick={goPrev} disabled={session.index === 0}>Previous</button>
         <div className="spacer" />
         {session.index < session.ids.length - 1 && (
-          <button onClick={goNext} className="primary">Next</button>
+          <button className="nav-btn" onClick={goNext}>Next</button>
         )}
         {session.index === session.ids.length - 1 && (
-          <button onClick={() => setShowResults(true)} className="primary">Finish</button>
+          <button className="nav-btn" onClick={() => setShowResults(true)}>Finish</button>
         )}
-      </footer>
+      </div>
     </div>
   )
 }
