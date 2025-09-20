@@ -24,10 +24,15 @@ const AWSExamLandingPage = () => {
       document.body.style.margin = '0';
       document.body.style.padding = '0';
     }
+    // Disable scrolling for full-window centered layout
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.backgroundColor = '';
       document.body.style.margin = '';
       document.body.style.padding = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
     };
   }, [isDarkMode]);
 
@@ -61,8 +66,12 @@ const AWSExamLandingPage = () => {
     <div style={{
       backgroundColor: currentTheme.bg,
       minHeight: '100vh',
-      padding: '2rem',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      padding: '0 2rem',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden'
     }}>
       {/* Dark Mode Toggle - Top Right */}
       <div style={{
@@ -94,16 +103,19 @@ const AWSExamLandingPage = () => {
       <div style={{
         width: '96vw',
         maxWidth: '1600px',
-        margin: '0 auto',
+        margin: '0',
         backgroundColor: currentTheme.containerBg,
         borderRadius: '12px',
-        padding: '2rem 2rem',
+        padding: '1.75rem 2rem',
         boxShadow: isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)',
-        minHeight: 'calc(100vh - 4rem)'
+        maxHeight: 'calc(100vh - 2rem)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start'
       }}>
         
         {/* Header */}
-        <header style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <header style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h1 style={{
             fontSize: '2.75rem',
             fontWeight: '700',
@@ -125,7 +137,7 @@ const AWSExamLandingPage = () => {
         </header>
 
         {/* Exam Information */}
-        <section>
+        <section style={{ marginBottom: '1.25rem' }}>
           <h3 style={{
             fontSize: '1.75rem',
             fontWeight: '600',
@@ -170,7 +182,7 @@ const AWSExamLandingPage = () => {
         </section>
 
         {/* Domain cards in a single horizontal line below exam info */}
-        <section style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+        <section style={{ marginTop: '0.5rem', marginBottom: '1.5rem' }}>
           <div style={{
             display: 'flex',
             flexWrap: 'nowrap',
