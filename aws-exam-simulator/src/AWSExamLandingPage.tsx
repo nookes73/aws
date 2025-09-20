@@ -102,8 +102,8 @@ const AWSExamLandingPage = () => {
       {/* Main Container - Centered */}
       <div style={{
         width: '100vw',
-        maxWidth: '100vw',
-        margin: '0',
+        maxWidth: '1800px',
+        margin: '0 auto',
         backgroundColor: currentTheme.containerBg,
         borderRadius: '0',
         padding: '1rem',
@@ -185,7 +185,7 @@ const AWSExamLandingPage = () => {
         <section style={{ marginTop: '0.5rem', marginBottom: '1.5rem' }}>
           <div style={{
             display: 'flex',
-            flexWrap: 'nowrap',
+            flexWrap: 'wrap',
             gap: '16px',
             justifyContent: 'center',
             overflowX: 'visible',
@@ -208,8 +208,7 @@ const AWSExamLandingPage = () => {
                   position: 'relative',
                   transition: 'all 0.3s ease',
                   cursor: 'default',
-                  flex: '0 0 280px',
-                  width: '280px'
+                  flex: '0 0 auto'
                 }}
                 onMouseEnter={(e) => {
                   const target = e.currentTarget as HTMLDivElement;
