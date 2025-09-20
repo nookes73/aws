@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import AWSExamLandingPage from './AWSExamLandingPage'
 import './App.css'
 
 type Question = {
@@ -157,9 +158,88 @@ function App() {
   const [isPaused, setIsPaused] = useState<boolean>(false)
   const [flaggedById, setFlaggedById] = useState<Record<string, boolean>>({})
   const [darkMode, setDarkMode] = useState<boolean>(false)
-  const [totalPoolCount, setTotalPoolCount] = useState<number | null>(null)
+  // const [totalPoolCount, setTotalPoolCount] = useState<number | null>(null)
   const [datasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
-  const [starting, setStarting] = useState(false)
+  // const [starting, setStarting] = useState(false)
+
+  // Whether to show the landing page component
+  const showLanding = !session || session.ids.length === 0
+
+  // Shared start logic (merged dataset by default)
+  const startExamFlow = async () => {
+    try {
+      let questions: Question[] = []
+      if (datasetSource === 'json') {
+        questions = data!.questions
+      } else if (datasetSource === 'advancedTxt') {
+        const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
+        if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
+        const txt = await res.text()
+        questions = parseAdvancedTxt(txt)
+      } else {
+        // merged
+        const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
+        if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
+        const txt = await res.text()
+        const adv = parseAdvancedTxt(txt)
+        const seen = new Set<string>()
+        const makeKey = (q: Question) => {
+          const text = q.text.trim().toLowerCase()
+          const choices = q.choices.map(c => c.trim().toLowerCase()).join('\u0001')
+          return `${text}\u0000${choices}`
+        }
+        const merged: Question[] = []
+        for (const q of data!.questions) {
+          const key = makeKey(q)
+          if (!seen.has(key)) {
+            seen.add(key)
+            merged.push(q)
+          }
+        }
+        for (const q of adv) {
+          const key = makeKey(q)
+          if (!seen.has(key)) {
+            seen.add(key)
+            merged.push(q)
+          }
+        }
+        questions = merged
+      }
+      const s = startNewSession(questions)
+      setData({ questions })
+      setSession(s)
+      setSelectedById({})
+      setShowResults(false)
+      setRemainingSeconds(EXAM_DURATION_SECONDS)
+      setIsPaused(false)
+      setFlaggedById({})
+      try {
+        sessionStorage.setItem(TIMER_KEY, JSON.stringify({ remainingSeconds: EXAM_DURATION_SECONDS, isPaused: false }))
+        sessionStorage.setItem(FLAGS_KEY, JSON.stringify({}))
+      } catch {}
+    } catch (e: any) {
+      setError(e?.message ?? 'Failed to start session')
+    } finally {
+    }
+  }
+
+  // Intercept alert from landing page to trigger start flow without modifying component
+  useEffect(() => {
+    if (!showLanding) return
+    const originalAlert = window.alert
+    window.alert = (message?: any) => {
+      const text = typeof message === 'string' ? message : String(message)
+      if (text && text.includes('Starting AWS SAA-C03 Practice Exam')) {
+        // Trigger the actual start logic
+        void startExamFlow()
+        return
+      }
+      originalAlert(message)
+    }
+    return () => {
+      window.alert = originalAlert
+    }
+  }, [showLanding, datasetSource, data])
 
   useEffect(() => {
     let cancelled = false
@@ -253,37 +333,7 @@ function App() {
     }
   }, [data])
 
-  // Compute total pool size (merged) for start-screen display
-  useEffect(() => {
-    const compute = async () => {
-      if (!data?.questions || data.questions.length === 0) return
-      try {
-        const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
-        if (!res.ok) { setTotalPoolCount(data.questions.length); return }
-        const txt = await res.text()
-        const adv = parseAdvancedTxt(txt)
-        const seen = new Set<string>()
-        const makeKey = (q: Question) => {
-          const text = q.text.trim().toLowerCase()
-          const choices = q.choices.map(c => c.trim().toLowerCase()).join('\u0001')
-          return `${text}\u0000${choices}`
-        }
-        let count = 0
-        for (const q of data.questions) {
-          const key = makeKey(q)
-          if (!seen.has(key)) { seen.add(key); count++ }
-        }
-        for (const q of adv) {
-          const key = makeKey(q)
-          if (!seen.has(key)) { seen.add(key); count++ }
-        }
-        setTotalPoolCount(count)
-      } catch {
-        setTotalPoolCount(data.questions.length)
-      }
-    }
-    compute()
-  }, [data])
+  // Removed total pool size computation; landing page handles display
 
   // Theme init
   useEffect(() => {
@@ -364,130 +414,8 @@ function App() {
     )
   }
 
-  if (!session || session.ids.length === 0) {
-    return (
-      <div className="container">
-        <header className="main-header">
-          <h1 className="main-title">AWS Solutions Architect Associate SAA-C03</h1>
-          <h2 className="subtitle">Practice Exam Simulator</h2>
-        </header>
-
-        <main className="exam-info">
-          <section className="info-section">
-            <h3 className="section-title">Exam Information</h3>
-            <div className="info-grid">
-              <div className="info-item">
-                <span className="info-label">Duration:</span>
-                <span className="info-value">130 minutes</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Questions:</span>
-                <span className="info-value">65 questions (randomly selected {totalPoolCount ? `from ${totalPoolCount} question bank` : 'from question bank'})</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Passing Score:</span>
-                <span className="info-value">720/1000 (72%)</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Question Types:</span>
-                <span className="info-value">Multiple choice</span>
-              </div>
-            </div>
-          </section>
-
-          <section className="domains-section">
-            <div className="domains-grid">
-              <div className="domain-card">
-                <h4 className="domain-title">Design Resilient Architectures</h4>
-                <p className="domain-percentage">30% (20 questions)</p>
-              </div>
-              <div className="domain-card">
-                <h4 className="domain-title">Design High-Performing Architectures</h4>
-                <p className="domain-percentage">26% (17 questions)</p>
-              </div>
-              <div className="domain-card">
-                <h4 className="domain-title">Design Secure Applications and Architectures</h4>
-                <p className="domain-percentage">24% (16 questions)</p>
-              </div>
-              <div className="domain-card">
-                <h4 className="domain-title">Design Cost-Optimized Architectures</h4>
-                <p className="domain-percentage">10% (7 questions)</p>
-              </div>
-              <div className="domain-card">
-                <h4 className="domain-title">Design Operationally Excellent Architectures</h4>
-                <p className="domain-percentage">10% (5 questions)</p>
-              </div>
-            </div>
-          </section>
-
-          <div className="start-button-container">
-            <button
-              className="start-exam-btn"
-          onClick={async () => {
-            try {
-              setStarting(true)
-              let questions: Question[] = []
-              if (datasetSource === 'json') {
-                questions = data.questions
-              } else if (datasetSource === 'advancedTxt') {
-                const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
-                if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
-                const txt = await res.text()
-                questions = parseAdvancedTxt(txt)
-              } else {
-                // merged
-                const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
-                if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
-                const txt = await res.text()
-                const adv = parseAdvancedTxt(txt)
-                const seen = new Set<string>()
-                const makeKey = (q: Question) => {
-                  const text = q.text.trim().toLowerCase()
-                  const choices = q.choices.map(c => c.trim().toLowerCase()).join('\u0001')
-                  return `${text}\u0000${choices}`
-                }
-                const merged: Question[] = []
-                for (const q of data.questions) {
-                  const key = makeKey(q)
-                  if (!seen.has(key)) {
-                    seen.add(key)
-                    merged.push(q)
-                  }
-                }
-                for (const q of adv) {
-                  const key = makeKey(q)
-                  if (!seen.has(key)) {
-                    seen.add(key)
-                    merged.push(q)
-                  }
-                }
-                questions = merged
-              }
-              const s = startNewSession(questions)
-              setData({ questions })
-              setSession(s)
-              setSelectedById({})
-              setShowResults(false)
-              setRemainingSeconds(EXAM_DURATION_SECONDS)
-              setIsPaused(false)
-              setFlaggedById({})
-              try {
-                sessionStorage.setItem(TIMER_KEY, JSON.stringify({ remainingSeconds: EXAM_DURATION_SECONDS, isPaused: false }))
-                sessionStorage.setItem(FLAGS_KEY, JSON.stringify({}))
-              } catch {}
-            } catch (e: any) {
-              setError(e?.message ?? 'Failed to start session')
-            } finally {
-              setStarting(false)
-            }
-          }}
-        >
-          {starting ? 'Starting…' : 'Start Practice Exam'}
-        </button>
-          </div>
-        </main>
-      </div>
-    )
+  if (showLanding) {
+    return <AWSExamLandingPage />
   }
 
   const currentId = session.index < session.ids.length ? session.ids[session.index] : null
