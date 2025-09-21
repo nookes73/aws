@@ -160,17 +160,19 @@ function App() {
   const [darkMode, setDarkMode] = useState<boolean>(false)
   const [autoRead, setAutoRead] = useState<boolean>(false)
   const [debug, setDebug] = useState<string>('ready')
+  const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [datasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
   const [starting, setStarting] = useState(false)
 
   // Whether to show the landing page component
-  const showLanding = !session || session.ids.length === 0
+  const showLanding = !hasStarted && (!session || session.ids.length === 0)
 
   // Shared start logic (merged dataset by default)
   const startExamFlow = async () => {
     try {
       setStarting(true)
       setDebug('start:begin')
+      setHasStarted(true)
       let questions: Question[] = []
       // Ensure base JSON questions are available
       let baseQuestions: Question[] = data?.questions ?? []
@@ -440,11 +442,6 @@ function App() {
     return map
   }, [data])
 
-  // Always show landing when no active session, even if data not yet loaded
-  if (showLanding) {
-    return <AWSExamLandingPage onStart={startExamFlow} starting={starting} />
-  }
-
   if (error) {
     return (
       <div className="container">
@@ -453,7 +450,20 @@ function App() {
       </div>
     )
   }
-  // Allow progressing even if data is late; start flow will load
+  // Always show landing when no active session, even if data not yet loaded
+  if (showLanding) {
+    return <AWSExamLandingPage onStart={startExamFlow} starting={starting} />
+  }
+
+  // If session or data is not ready yet, show a brief preparing state
+  if (!session || !data) {
+    return (
+      <div className="container">
+        <h1>AWS Exam Simulator</h1>
+        <p>Preparing exam…</p>
+      </div>
+    )
+  }
 
   const currentId = session.index < session.ids.length ? session.ids[session.index] : null
   const currentQuestion = currentId ? questionsById.get(currentId) ?? null : null
@@ -688,7 +698,7 @@ function App() {
 
   const goNext = () => {
     const nextIndex = session.index + 1
-    const updated: SessionState = { ...session, index: nextIndex }
+    const updated: SessionState = { ids: session.ids, index: nextIndex }
     saveSession(updated)
     setSession(updated)
     if (nextIndex >= session.ids.length) {
@@ -698,7 +708,7 @@ function App() {
 
   const goPrev = () => {
     const prevIndex = Math.max(0, session.index - 1)
-    const updated: SessionState = { ...session, index: prevIndex }
+    const updated: SessionState = { ids: session.ids, index: prevIndex }
     saveSession(updated)
     setSession(updated)
   }
@@ -845,7 +855,7 @@ function App() {
           const className = `question-num${current ? ' current' : ''}${answered ? ' answered' : ''}${flagged ? ' flagged' : ''}`
           return (
             <button key={id} className={className} onClick={() => {
-              const updated: SessionState = { ...session, index: idx }
+              const updated: SessionState = { ids: session.ids, index: idx }
               saveSession(updated)
               setSession(updated)
             }}>
