@@ -158,6 +158,7 @@ function App() {
   const [isPaused, setIsPaused] = useState<boolean>(false)
   const [flaggedById, setFlaggedById] = useState<Record<string, boolean>>({})
   const [darkMode, setDarkMode] = useState<boolean>(false)
+  const [autoRead, setAutoRead] = useState<boolean>(false)
   // const [totalPoolCount, setTotalPoolCount] = useState<number | null>(null)
   const [datasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
   // const [starting, setStarting] = useState(false)
@@ -665,6 +666,37 @@ function App() {
   const isMulti = (currentQuestion.correctIndices?.length ?? 0) > 1
 
   const timerClass = `timer${remainingSeconds <= 300 ? ' warning' : ''}`
+
+  // Voice-over helpers using Web Speech API
+  const stopSpeech = () => {
+    try { window.speechSynthesis.cancel() } catch {}
+  }
+  const speakCurrent = () => {
+    try {
+      if (!currentQuestion) return
+      const labelFor = (i: number) => String.fromCharCode('A'.charCodeAt(0) + i)
+      const lines: string[] = []
+      lines.push(`Question ${session.index + 1}. ${currentQuestion.text}`)
+      currentQuestion.choices.forEach((c, idx) => lines.push(`${labelFor(idx)}. ${c}`))
+      const utter = new SpeechSynthesisUtterance(lines.join('. '))
+      utter.rate = 1
+      utter.pitch = 1
+      utter.lang = 'en-US'
+      stopSpeech()
+      window.speechSynthesis.speak(utter)
+    } catch {}
+  }
+
+  useEffect(() => {
+    if (!currentQuestion) return
+    if (!autoRead) return
+    if (isPaused) return
+    speakCurrent()
+    // stop on cleanup when question changes
+    return () => { stopSpeech() }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentId, autoRead, isPaused])
+
   return (
     <div className="container">
       <header className="header">
@@ -687,6 +719,17 @@ function App() {
             {isPaused ? 'Resume' : 'Pause'}
           </button>
           <button className="theme-btn" onClick={() => setDarkMode(d => !d)}>{darkMode ? 'Light' : 'Dark'}</button>
+          <button className="theme-btn" onClick={speakCurrent}>Speak</button>
+          <button className="theme-btn" onClick={stopSpeech}>Stop</button>
+          <label className="chip" style={{ cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={autoRead}
+              onChange={(e) => setAutoRead(e.target.checked)}
+              style={{ marginRight: 6 }}
+            />
+            Auto read
+          </label>
         </div>
       </header>
 
@@ -748,6 +791,26 @@ function App() {
             Finish
           </button>
         )}
+      </div>
+
+      {/* Numbered navigation grid */}
+      <div className="question-grid">
+        {session.ids.map((id, idx) => {
+          const number = idx + 1
+          const answered = (selectedById[id]?.length ?? 0) > 0
+          const flagged = !!flaggedById[id]
+          const current = session.index === idx
+          const className = `question-num${current ? ' current' : ''}${answered ? ' answered' : ''}${flagged ? ' flagged' : ''}`
+          return (
+            <button key={id} className={className} onClick={() => {
+              const updated: SessionState = { ...session, index: idx }
+              saveSession(updated)
+              setSession(updated)
+            }}>
+              {number}
+            </button>
+          )
+        })}
       </div>
     </div>
   )
