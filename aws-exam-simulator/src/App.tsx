@@ -159,6 +159,7 @@ function App() {
   const [flaggedById, setFlaggedById] = useState<Record<string, boolean>>({})
   const [darkMode, setDarkMode] = useState<boolean>(false)
   const [autoRead, setAutoRead] = useState<boolean>(false)
+  const [debug, setDebug] = useState<string>('ready')
   const [datasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
   const [starting, setStarting] = useState(false)
 
@@ -169,6 +170,7 @@ function App() {
   const startExamFlow = async () => {
     try {
       setStarting(true)
+      setDebug('start:begin')
       let questions: Question[] = []
       // Ensure base JSON questions are available
       let baseQuestions: Question[] = data?.questions ?? []
@@ -215,6 +217,7 @@ function App() {
             })
             .filter((q: Question) => q.text && q.choices.length > 0 && q.correctIndices.length > 0)
         }
+        setDebug(`start:loaded_json:${baseQuestions.length}`)
       }
       if (datasetSource === 'json') {
         questions = baseQuestions
@@ -230,6 +233,7 @@ function App() {
         } catch {
           questions = baseQuestions
         }
+        setDebug(`start:adv_or_base:${questions.length}`)
       } else {
         // merged
         let adv: Question[] = []
@@ -262,8 +266,10 @@ function App() {
           }
         }
         questions = merged
+        setDebug(`start:merged:${questions.length}`)
       }
       const s = startNewSession(questions)
+      setDebug(`start:session:${s.ids.length}`)
       setData({ questions })
       setSession(s)
       setSelectedById({})
@@ -734,6 +740,7 @@ function App() {
 
   return (
     <div className="container">
+      <div style={{ position: 'fixed', bottom: 8, left: 8, fontSize: 12, opacity: 0.6 }}>{debug}</div>
       <header className="header">
         <div className="header-left">
           <h1>AWS Solutions Architect Associate (SAA-C03) Practice Exam</h1>
