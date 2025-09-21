@@ -470,7 +470,7 @@ function App() {
   // const remaining = session.ids.length - session.index
   // const answeredCount = Object.keys(selectedById).length
 
-  if (showResults || !currentQuestion) {
+  if (showResults) {
     const results = session.ids.map((id, idx) => {
       const q = questionsById.get(id)!
       const selected = selectedById[id] ?? []
@@ -677,6 +677,15 @@ function App() {
             </button>
           </div>
         </div>
+      </div>
+    )
+  }
+  // If current question isn't ready yet, show a brief preparing state
+  if (!currentQuestion) {
+    return (
+      <div className="container">
+        <h1>AWS Exam Simulator</h1>
+        <p>Preparing questions…</p>
       </div>
     )
   }
