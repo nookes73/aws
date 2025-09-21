@@ -159,9 +159,8 @@ function App() {
   const [flaggedById, setFlaggedById] = useState<Record<string, boolean>>({})
   const [darkMode, setDarkMode] = useState<boolean>(false)
   const [autoRead, setAutoRead] = useState<boolean>(false)
-  // const [totalPoolCount, setTotalPoolCount] = useState<number | null>(null)
   const [datasetSource] = useState<'json' | 'advancedTxt' | 'merged'>('merged')
-  // const [starting, setStarting] = useState(false)
+  const [starting, setStarting] = useState(false)
 
   // Whether to show the landing page component
   const showLanding = !session || session.ids.length === 0
@@ -169,6 +168,7 @@ function App() {
   // Shared start logic (merged dataset by default)
   const startExamFlow = async () => {
     try {
+      setStarting(true)
       let questions: Question[] = []
       // Ensure base JSON questions are available
       let baseQuestions: Question[] = data?.questions ?? []
@@ -276,8 +276,11 @@ function App() {
         sessionStorage.setItem(FLAGS_KEY, JSON.stringify({}))
       } catch {}
     } catch (e: any) {
-      setError(e?.message ?? 'Failed to start session')
+      const msg = e?.message ?? 'Failed to start session'
+      setError(msg)
+      try { alert(msg) } catch {}
     } finally {
+      setStarting(false)
     }
   }
 
@@ -431,7 +434,11 @@ function App() {
     return map
   }, [data])
 
-  // Show landing even while loading to avoid flicker
+  // Always show landing when no active session, even if data not yet loaded
+  if (showLanding) {
+    return <AWSExamLandingPage onStart={startExamFlow} starting={starting} />
+  }
+
   if (error) {
     return (
       <div className="container">
@@ -440,18 +447,7 @@ function App() {
       </div>
     )
   }
-  if (!data || data.questions.length === 0) {
-    return (
-      <div className="container">
-        <h1>AWS Exam Simulator</h1>
-        <p>No questions found. Add questions to public/questions.json.</p>
-      </div>
-    )
-  }
-
-  if (showLanding) {
-    return <AWSExamLandingPage onStart={startExamFlow} />
-  }
+  // Allow progressing even if data is late; start flow will load
 
   const currentId = session.index < session.ids.length ? session.ids[session.index] : null
   const currentQuestion = currentId ? questionsById.get(currentId) ?? null : null
@@ -636,7 +632,12 @@ function App() {
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '3rem' }}>
             <button
               onClick={() => {
-                const s = startNewSession(data.questions)
+                const base = data?.questions ?? []
+                if (base.length === 0) {
+                  alert('Questions not loaded yet. Please try again in a second.')
+                  return
+                }
+                const s = startNewSession(base)
                 setSession(s)
                 setSelectedById({})
                 setShowResults(false)
