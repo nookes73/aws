@@ -20,14 +20,16 @@ interface ExamInfo {
   value: string;
 }
 
-const AWSExamLandingPage: React.FC = () => {
+const AWSExamLandingPage: React.FC<{ onStart?: () => void }> = ({ onStart }) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const [poolCount, setPoolCount] = useState<number | null>(null);
   
   const handleStartExam = (): void => {
+    if (onStart) {
+      onStart();
+      return;
+    }
     alert('Starting AWS SAA-C03 Practice Exam...');
-    // You can add navigation logic here
-    // window.location.href = '/exam';
   };
   
   const toggleDarkMode = (): void => {

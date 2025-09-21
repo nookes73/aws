@@ -149,7 +149,7 @@ function parseAdvancedTxt(input: string): Question[] {
 
 function App() {
   const [data, setData] = useState<LoadedData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [session, setSession] = useState<SessionState | null>(null)
   const [selectedById, setSelectedById] = useState<Record<string, number[]>>({})
@@ -224,23 +224,7 @@ function App() {
     }
   }
 
-  // Intercept alert from landing page to trigger start flow without modifying component
-  useEffect(() => {
-    if (!showLanding) return
-    const originalAlert = window.alert
-    window.alert = (message?: any) => {
-      const text = typeof message === 'string' ? message : String(message)
-      if (text && text.includes('Starting AWS SAA-C03 Practice Exam')) {
-        // Trigger the actual start logic
-        void startExamFlow()
-        return
-      }
-      originalAlert(message)
-    }
-    return () => {
-      window.alert = originalAlert
-    }
-  }, [showLanding, datasetSource, data])
+  // Removed alert interception; landing will call onStart directly
 
   useEffect(() => {
     let cancelled = false
@@ -390,14 +374,7 @@ function App() {
     return map
   }, [data])
 
-  if (loading) {
-    return (
-      <div className="container">
-        <h1>AWS Exam Simulator</h1>
-        <p>Loading questions…</p>
-      </div>
-    )
-  }
+  // Show landing even while loading to avoid flicker
   if (error) {
     return (
       <div className="container">
@@ -416,7 +393,7 @@ function App() {
   }
 
   if (showLanding) {
-    return <AWSExamLandingPage />
+    return <AWSExamLandingPage onStart={startExamFlow} />
   }
 
   const currentId = session.index < session.ids.length ? session.ids[session.index] : null
