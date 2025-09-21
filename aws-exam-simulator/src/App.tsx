@@ -170,19 +170,76 @@ function App() {
   const startExamFlow = async () => {
     try {
       let questions: Question[] = []
+      // Ensure base JSON questions are available
+      let baseQuestions: Question[] = data?.questions ?? []
+      if (baseQuestions.length === 0) {
+        // Load now if not yet loaded
+        const res = await fetch('/questions.json', { cache: 'no-store' })
+        if (res.ok) {
+          const json = await res.json()
+          const letterToIndex = (letter: string): number | null => {
+            const L = letter.trim().toUpperCase()
+            if (L.length === 0) return null
+            const code = L.charCodeAt(0) - 'A'.charCodeAt(0)
+            return code >= 0 && code < 26 ? code : null
+          }
+          const parseCorrectAnswer = (val: any, numChoices: number): number[] => {
+            if (Array.isArray(val)) return Array.from(new Set(val.map((v: any) => Number(v)).filter((n: number) => Number.isInteger(n) && n >= 0 && n < numChoices)))
+            if (typeof val === 'number') return val >= 0 && val < numChoices ? [val] : []
+            if (typeof val === 'string') {
+              const parts = val.split(/[,/\\|\s]+/).map((p: string) => p.trim()).filter(Boolean)
+              const indices = parts.map(p => letterToIndex(p)).filter((n): n is number => n !== null && n >= 0 && n < numChoices)
+              return Array.from(new Set(indices))
+            }
+            return []
+          }
+          const normalizeChoice = (choice: any): string => {
+            const s = String(choice ?? '')
+            const match = s.match(/^\s*[A-Za-z]\s*\.\s*(.*)$/)
+            return match ? match[1] : s
+          }
+          baseQuestions = (json.questions ?? [])
+            .map((q: any, idx: number) => {
+              const id = String(q.id ?? q.question_number ?? idx)
+              const text = String(q.text ?? q.question ?? '')
+              const rawChoices: any[] = Array.isArray(q.choices ?? q.options) ? (q.choices ?? q.options) : []
+              const choices: string[] = rawChoices.map(normalizeChoice)
+              let correct: number[] = []
+              if (Array.isArray(q.correctIndices)) correct = q.correctIndices
+              else if (typeof q.correctIndex === 'number') correct = [q.correctIndex]
+              else if (typeof q.answerIndex === 'number') correct = [q.answerIndex]
+              else if (Array.isArray(q.answers)) correct = q.answers
+              else if (typeof q.correct_answer !== 'undefined') correct = parseCorrectAnswer(q.correct_answer, choices.length)
+              else if (typeof q.correctAnswer !== 'undefined') correct = parseCorrectAnswer(q.correctAnswer, choices.length)
+              return { id, text, choices, correctIndices: correct, explanation: q.explanation } as Question
+            })
+            .filter((q: Question) => q.text && q.choices.length > 0 && q.correctIndices.length > 0)
+        }
+      }
       if (datasetSource === 'json') {
-        questions = data!.questions
+        questions = baseQuestions
       } else if (datasetSource === 'advancedTxt') {
-        const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
-        if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
-        const txt = await res.text()
-        questions = parseAdvancedTxt(txt)
+        try {
+          const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
+          if (res.ok) {
+            const txt = await res.text()
+            questions = parseAdvancedTxt(txt)
+          } else {
+            questions = baseQuestions
+          }
+        } catch {
+          questions = baseQuestions
+        }
       } else {
         // merged
-        const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
-        if (!res.ok) throw new Error(`Failed to load advanced-65.txt: ${res.status}`)
-        const txt = await res.text()
-        const adv = parseAdvancedTxt(txt)
+        let adv: Question[] = []
+        try {
+          const res = await fetch('/advanced-65.txt', { cache: 'no-store' })
+          if (res.ok) {
+            const txt = await res.text()
+            adv = parseAdvancedTxt(txt)
+          }
+        } catch {}
         const seen = new Set<string>()
         const makeKey = (q: Question) => {
           const text = q.text.trim().toLowerCase()
@@ -190,7 +247,7 @@ function App() {
           return `${text}\u0000${choices}`
         }
         const merged: Question[] = []
-        for (const q of data!.questions) {
+        for (const q of baseQuestions) {
           const key = makeKey(q)
           if (!seen.has(key)) {
             seen.add(key)
