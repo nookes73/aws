@@ -20,7 +20,7 @@ interface ExamInfo {
   value: string;
 }
 
-const AWSExamLandingPage: React.FC<{ onStart?: () => void }> = ({ onStart }) => {
+const AWSExamLandingPage: React.FC<{ onStart?: () => void; starting?: boolean }> = ({ onStart, starting }) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const [poolCount, setPoolCount] = useState<number | null>(null);
   
@@ -192,7 +192,7 @@ const AWSExamLandingPage: React.FC<{ onStart?: () => void }> = ({ onStart }) => 
         right: '1rem',
         zIndex: 1000
       }}>
-        <button
+          <button
           onClick={toggleDarkMode}
           style={{
             backgroundColor: currentTheme.accent,
@@ -347,7 +347,7 @@ const AWSExamLandingPage: React.FC<{ onStart?: () => void }> = ({ onStart }) => 
             onMouseEnter={handleButtonMouseEnter}
             onMouseLeave={handleButtonMouseLeave}
           >
-            Start Practice Exam
+            {starting ? 'Starting…' : 'Start Practice Exam'}
           </button>
         </section>
       </div>
