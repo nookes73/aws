@@ -64,9 +64,19 @@ const AWSExamLandingPage: React.FC = () => {
     }
   }
   const currentTheme: Theme = isDarkMode ? theme.dark : theme.light
+  // Get question count from loaded banks
+  const getQuestionCount = (): number => {
+    const largeBank = (window as any).__LARGE_BANK__
+    const examTen = (window as any).__EXAM_TEN__
+    let count = 0
+    if (largeBank?.questions) count += largeBank.questions.length
+    if (examTen?.exam?.questions) count += examTen.exam.questions.length
+    return count || 125 // fallback to known count
+  }
+
   const examInfo: ExamInfo[] = [
     { label: 'Duration:', value: '130 minutes' },
-    { label: 'Questions:', value: '65 questions (randomly selected from question bank)' },
+    { label: 'Questions:', value: `65 questions (randomly selected from ${getQuestionCount()} question bank)` },
     { label: 'Passing Score:', value: '720/1000 (72%)' },
     { label: 'Question Types:', value: 'Multiple choice' }
   ]

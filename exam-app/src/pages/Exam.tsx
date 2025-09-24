@@ -29,6 +29,7 @@ const AWSExamQuestionPage: React.FC = () => {
     isPaused: false,
     autoRead: false
   })
+  const [speechSynthesis, setSpeechSynthesis] = useState<any>(null)
   const questions: Question[] = [
     {
       id: 1,
@@ -53,6 +54,13 @@ const AWSExamQuestionPage: React.FC = () => {
     }
     return () => clearInterval(interval)
   }, [examState.isPaused, examState.timeRemaining])
+
+  // Initialize speech synthesis
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      setSpeechSynthesis(window.speechSynthesis)
+    }
+  }, [])
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
@@ -79,6 +87,22 @@ const AWSExamQuestionPage: React.FC = () => {
     if (confirmed) { navigate('/results') }
   }
   const toggleDarkMode = (): void => { setIsDarkMode(!isDarkMode) }
+
+  const speakQuestion = (): void => {
+    if (speechSynthesis && currentQ) {
+      speechSynthesis.cancel() // Stop any current speech
+      const utterance = new SpeechSynthesisUtterance(currentQ.question)
+      utterance.rate = 0.8
+      utterance.pitch = 1
+      speechSynthesis.speak(utterance)
+    }
+  }
+
+  const stopSpeech = (): void => {
+    if (speechSynthesis) {
+      speechSynthesis.cancel()
+    }
+  }
   const theme = { dark: { bg: '#1a1a1a', text: '#ffffff', cardBg: '#2d2d2d', border: '#404040', accent: '#ff9800' }, light: { bg: '#f5f5f5', text: '#1a1a1a', cardBg: '#ffffff', border: '#e0e0e0', accent: '#ff9800' } }
   const currentTheme = isDarkMode ? theme.dark : theme.light
   useEffect(() => {
@@ -107,8 +131,8 @@ const AWSExamQuestionPage: React.FC = () => {
             <span style={{ backgroundColor: '#ff9800', color: '#000000', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.8rem', fontWeight: '500' }}>{currentQ?.domain}</span>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button onClick={() => {}} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '500' }}>Speak</button>
-            <button onClick={() => {}} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '500' }}>Stop</button>
+            <button onClick={speakQuestion} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '500' }}>Speak</button>
+            <button onClick={stopSpeech} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '500' }}>Stop</button>
             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: currentTheme.text }}>
               <input type="checkbox" checked={examState.autoRead} onChange={(e) => setExamState(prev => ({ ...prev, autoRead: e.target.checked }))} />
               Auto read

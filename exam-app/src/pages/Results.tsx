@@ -134,8 +134,8 @@ const AWSExamResultsPage: React.FC = () => {
           ))}
         </section>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '3rem' }}>
-          <button onClick={() => window.location.reload()} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '1rem 2rem', fontSize: '1rem', fontWeight: '600', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.3s ease' }}>Try Again</button>
-          <button onClick={() => window.history.back()} style={{ backgroundColor: 'transparent', color: currentTheme.text, border: `2px solid ${currentTheme.border}`, padding: '1rem 2rem', fontSize: '1rem', fontWeight: '600', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.3s ease' }}>Back to Home</button>
+          <button onClick={() => window.location.href = '/'} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '1rem 2rem', fontSize: '1rem', fontWeight: '600', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.3s ease' }}>Try Again</button>
+          <button onClick={() => window.location.href = '/'} style={{ backgroundColor: 'transparent', color: currentTheme.text, border: `2px solid ${currentTheme.border}`, padding: '1rem 2rem', fontSize: '1rem', fontWeight: '600', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.3s ease' }}>Back to Home</button>
         </div>
       </div>
     </div>
