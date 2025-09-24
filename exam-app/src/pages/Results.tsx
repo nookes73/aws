@@ -51,8 +51,8 @@ const AWSExamResultsPage: React.FC = () => {
   }, [isDarkMode])
   const toggleDarkMode = (): void => { setIsDarkMode(!isDarkMode) }
   const theme: { dark: Theme; light: Theme } = {
-    dark: { bg: '#1a1a1a', text: '#ffffff', textSecondary: '#cccccc', cardBg: '#2d2d2d', border: '#404040', accent: '#ff9800', success: '#4caf50', error: '#f44336', warning: '#ff9800' },
-    light: { bg: '#f5f5f5', text: '#1a1a1a', textSecondary: '#666666', cardBg: '#ffffff', border: '#e0e0e0', accent: '#ff9800', success: '#4caf50', error: '#f44336', warning: '#ff9800' }
+    dark: { bg: '#1a1a1a', text: '#ffffff', textSecondary: '#cccccc', cardBg: '#2d2d2d', border: '#404040', accent: '#3B82F6', success: '#22c55e', error: '#ef4444', warning: '#3B82F6' },
+    light: { bg: '#f5f5f5', text: '#1a1a1a', textSecondary: '#666666', cardBg: '#ffffff', border: '#e0e0e0', accent: '#3B82F6', success: '#22c55e', error: '#ef4444', warning: '#3B82F6' }
   }
   const currentTheme: Theme = isDarkMode ? theme.dark : theme.light
   const examResult: ExamResult = { finalScore: 0, totalQuestions: 65, correctAnswers: 0, timeTaken: 0, questionsFlagged: 0, passed: false }

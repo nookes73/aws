@@ -52,7 +52,7 @@ const AWSExamLandingPage: React.FC = () => {
       textSecondary: '#cccccc',
       cardBg: '#2d2d2d',
       border: '#404040',
-      accent: '#ff9800'
+      accent: '#3B82F6'
     },
     light: {
       bg: '#f5f5f5',
@@ -60,7 +60,7 @@ const AWSExamLandingPage: React.FC = () => {
       textSecondary: '#666666',
       cardBg: '#ffffff',
       border: '#e0e0e0',
-      accent: '#ff9800'
+      accent: '#3B82F6'
     }
   }
   const currentTheme: Theme = isDarkMode ? theme.dark : theme.light
@@ -101,7 +101,7 @@ const AWSExamLandingPage: React.FC = () => {
   }
   const handleButtonMouseEnter = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const target = e.currentTarget as HTMLButtonElement
-    target.style.backgroundColor = '#e68900'
+    target.style.backgroundColor = '#2563EB'
     target.style.transform = 'translateY(-1px)'
     target.style.boxShadow = `0 4px 12px ${currentTheme.accent}50`
   }
@@ -140,7 +140,7 @@ const AWSExamLandingPage: React.FC = () => {
             transition: 'all 0.3s ease'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#e68900'
+            e.currentTarget.style.backgroundColor = '#2563EB'
             e.currentTarget.style.transform = 'translateY(-1px)'
           }}
           onMouseLeave={(e) => {

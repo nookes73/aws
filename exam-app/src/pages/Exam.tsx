@@ -145,7 +145,7 @@ const AWSExamQuestionPage: React.FC = () => {
       speechSynthesis.cancel()
     }
   }
-  const theme = { dark: { bg: '#1a1a1a', text: '#ffffff', cardBg: '#2d2d2d', border: '#404040', accent: '#ff9800' }, light: { bg: '#f5f5f5', text: '#1a1a1a', cardBg: '#ffffff', border: '#e0e0e0', accent: '#ff9800' } }
+  const theme = { dark: { bg: '#1a1a1a', text: '#ffffff', cardBg: '#2d2d2d', border: '#404040', accent: '#3B82F6' }, light: { bg: '#f5f5f5', text: '#1a1a1a', cardBg: '#ffffff', border: '#e0e0e0', accent: '#3B82F6' } }
   const currentTheme = isDarkMode ? theme.dark : theme.light
   useEffect(() => {
     document.body.style.backgroundColor = currentTheme.bg
@@ -155,7 +155,7 @@ const AWSExamQuestionPage: React.FC = () => {
   }, [isDarkMode])
   return (
     <div style={{ backgroundColor: currentTheme.bg, color: currentTheme.text, minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-      <div style={{ background: 'linear-gradient(135deg, #ff9800, #ff6b00)', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ background: 'linear-gradient(135deg, #3B82F6, #2563EB)', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ffffff', margin: '0' }}>AWS SAA-C03</h1>
           <p style={{ fontSize: '0.9rem', color: '#ffffff', margin: '0', opacity: 0.9 }}>Practice Exam Simulator</p>
@@ -163,14 +163,14 @@ const AWSExamQuestionPage: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button onClick={toggleDarkMode} style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', color: '#ffffff', border: 'none', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer', fontSize: '1rem' }}>{isDarkMode ? '☀️' : '🌙'}</button>
           <div style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', color: '#ffffff', padding: '0.5rem 1rem', borderRadius: '6px', fontSize: '1.2rem', fontWeight: '600', fontFamily: 'monospace' }}>{formatTime(examState.timeRemaining)}</div>
-          <button onClick={togglePause} style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', color: '#ff9800', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}>{examState.isPaused ? 'Resume' : 'Pause'}</button>
+          <button onClick={togglePause} style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', color: '#1D4ED8', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}>{examState.isPaused ? 'Resume' : 'Pause'}</button>
         </div>
       </div>
       <div style={{ padding: '1.5rem 2rem', borderBottom: `1px solid ${currentTheme.border}` }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <h2 style={{ fontSize: '1.3rem', fontWeight: '600', color: currentTheme.text, margin: '0' }}>Question {examState.currentQuestion} of {questions.length}</h2>
-            <span style={{ backgroundColor: '#ff9800', color: '#000000', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.8rem', fontWeight: '500' }}>{currentQ?.domain}</span>
+            <span style={{ backgroundColor: '#3B82F6', color: '#000000', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.8rem', fontWeight: '500' }}>{currentQ?.domain}</span>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <button onClick={speakQuestion} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '500' }}>Speak</button>
@@ -179,7 +179,7 @@ const AWSExamQuestionPage: React.FC = () => {
               <input type="checkbox" checked={examState.autoRead} onChange={(e) => setExamState(prev => ({ ...prev, autoRead: e.target.checked }))} />
               Auto read
             </label>
-            <button onClick={toggleFlag} style={{ backgroundColor: examState.flaggedQuestions.has(examState.currentQuestion) ? '#ff6b00' : currentTheme.accent, color: '#000000', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '500' }}>🏴 Flag</button>
+            <button onClick={toggleFlag} style={{ backgroundColor: examState.flaggedQuestions.has(examState.currentQuestion) ? '#1E40AF' : currentTheme.accent, color: '#000000', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '500' }}>🏴 Flag</button>
           </div>
         </div>
       </div>
