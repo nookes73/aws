@@ -173,7 +173,7 @@ const AWSExamQuestionPage: React.FC = () => {
           <button onClick={togglePause} style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', color: '#1E40AF', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '0.9rem' }}>{examState.isPaused ? 'Resume' : 'Pause'}</button>
         </div>
       </div>
-      <div style={{ padding: '1.5rem 2rem', borderBottom: `1px solid ${currentTheme.border}` }}>
+      <div style={{ padding: '1.5rem 2rem', borderBottom: `1px solid ${currentTheme.border}`, maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <h2 style={{ fontSize: '1.3rem', fontWeight: '600', color: currentTheme.text, margin: '0' }}>Question {examState.currentQuestion} of {questions.length}</h2>
@@ -190,7 +190,7 @@ const AWSExamQuestionPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto', flex: '1 1 auto', display: 'flex', flexDirection: 'column', minHeight: '640px', paddingBottom: '96px' }}>
+      <div style={{ padding: '2rem', width: '1100px', margin: '0 auto', flex: '1 1 auto', display: 'flex', flexDirection: 'column', minHeight: '640px', paddingBottom: '96px' }}>
         <div style={{ marginBottom: '2rem', flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
           <div style={{ marginBottom: '1.5rem', minHeight: '160px', display: 'flex', alignItems: 'flex-start' }}>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: currentTheme.text, margin: 0, wordBreak: 'break-word' }}>{currentQ?.question}</p>
