@@ -154,7 +154,7 @@ const AWSExamQuestionPage: React.FC = () => {
     return () => { document.body.style.backgroundColor = ''; document.body.style.margin = ''; document.body.style.padding = '' }
   }, [isDarkMode])
   return (
-    <div style={{ backgroundColor: currentTheme.bg, color: currentTheme.text, minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+    <div style={{ backgroundColor: currentTheme.bg, color: currentTheme.text, minHeight: '100vh', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
       <div style={{ background: 'linear-gradient(135deg, #93C5FD, #60A5FA, #1D4ED8)', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ffffff', margin: '0' }}>AWS SAA-C03</h1>
@@ -183,7 +183,7 @@ const AWSExamQuestionPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', flex: '1 1 auto', overflowY: 'auto' }}>
         <div style={{ marginBottom: '2rem' }}>
           <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: currentTheme.text, marginBottom: '2rem' }}>{currentQ?.question}</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
