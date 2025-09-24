@@ -30,20 +30,60 @@ const AWSExamQuestionPage: React.FC = () => {
     autoRead: false
   })
   const [speechSynthesis, setSpeechSynthesis] = useState<any>(null)
-  const questions: Question[] = [
-    {
-      id: 1,
-      domain: 'Design Resilient Architectures',
-      question: 'An application running in Amazon ECS resizes images and stores them in S3. The app needs permission to access S3. What is the correct solution?',
-      options: [
-        'Attach S3 access policy to EC2 host',
-        'Create an IAM role with S3 permissions and assign it as the ECS task role',
-        'Hardcode AWS keys in the container',
-        'Use access keys stored in SSM Parameter Store'
-      ],
-      correctAnswer: 1
+  // Load questions from the question bank system
+  const loadQuestions = (): Question[] => {
+    const largeBank = (window as any).__LARGE_BANK__
+    const examTen = (window as any).__EXAM_TEN__
+    const questions: Question[] = []
+    
+    // Load from large bank
+    if (largeBank?.questions) {
+      largeBank.questions.forEach((q: any) => {
+        const options = Array.isArray(q.options) ? q.options : Object.values(q.options || {})
+        questions.push({
+          id: q.question_number || q.id,
+          domain: 'AWS Solutions Architecture',
+          question: q.question || q.question_text,
+          options: options,
+          correctAnswer: 0 // Will be handled in scoring
+        })
+      })
     }
-  ]
+    
+    // Load from exam ten
+    if (examTen?.exam?.questions) {
+      examTen.exam.questions.forEach((q: any) => {
+        const options = Array.isArray(q.options) ? q.options : Object.values(q.options || {})
+        questions.push({
+          id: q.question_number || q.id,
+          domain: 'AWS Solutions Architecture',
+          question: q.question || q.question_text,
+          options: options,
+          correctAnswer: 0 // Will be handled in scoring
+        })
+      })
+    }
+    
+    // If no questions loaded, create sample questions
+    if (questions.length === 0) {
+      return Array.from({ length: 65 }, (_, i) => ({
+        id: i + 1,
+        domain: 'Design Resilient Architectures',
+        question: `Sample question ${i + 1}: A company wants to implement secure storage of application secrets and API keys. What should the Solutions Architect recommend?`,
+        options: [
+          'Use AWS Secrets Manager with automatic rotation',
+          'Store secrets in S3 with server-side encryption',
+          'Use AWS KMS for key management only',
+          'Store secrets in environment variables'
+        ],
+        correctAnswer: 0
+      }))
+    }
+    
+    return questions
+  }
+
+  const questions: Question[] = loadQuestions()
   const currentQ = questions[examState.currentQuestion - 1]
   useEffect(() => {
     let interval: any
@@ -80,7 +120,7 @@ const AWSExamQuestionPage: React.FC = () => {
     setExamState(prev => ({ ...prev, answers: { ...prev.answers, [prev.currentQuestion]: optionIndex } }))
   }
   const navigateToQuestion = (questionNum: number): void => { setExamState(prev => ({ ...prev, currentQuestion: questionNum })) }
-  const goNext = (): void => { if (examState.currentQuestion < 65) setExamState(prev => ({ ...prev, currentQuestion: prev.currentQuestion + 1 })) }
+  const goNext = (): void => { if (examState.currentQuestion < questions.length) setExamState(prev => ({ ...prev, currentQuestion: prev.currentQuestion + 1 })) }
   const goPrevious = (): void => { if (examState.currentQuestion > 1) setExamState(prev => ({ ...prev, currentQuestion: prev.currentQuestion - 1 })) }
   const submitExam = (): void => {
     const confirmed = window.confirm('Are you sure you want to submit your exam? This action cannot be undone.')
@@ -127,7 +167,7 @@ const AWSExamQuestionPage: React.FC = () => {
       <div style={{ padding: '1.5rem 2rem', borderBottom: `1px solid ${currentTheme.border}` }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: '600', color: currentTheme.text, margin: '0' }}>Question {examState.currentQuestion} of 65</h2>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: '600', color: currentTheme.text, margin: '0' }}>Question {examState.currentQuestion} of {questions.length}</h2>
             <span style={{ backgroundColor: '#ff9800', color: '#000000', padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.8rem', fontWeight: '500' }}>{currentQ?.domain}</span>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -158,10 +198,10 @@ const AWSExamQuestionPage: React.FC = () => {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', paddingTop: '2rem', borderTop: `1px solid ${currentTheme.border}` }}>
           <button onClick={goPrevious} disabled={examState.currentQuestion === 1} style={{ backgroundColor: examState.currentQuestion === 1 ? currentTheme.border : currentTheme.cardBg, color: examState.currentQuestion === 1 ? '#999' : currentTheme.text, border: `2px solid ${currentTheme.border}`, padding: '0.75rem 1.5rem', borderRadius: '6px', cursor: examState.currentQuestion === 1 ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '500' }}>Previous</button>
-          <button onClick={goNext} disabled={examState.currentQuestion === 65} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '6px', cursor: examState.currentQuestion === 65 ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '600', opacity: examState.currentQuestion === 65 ? 0.5 : 1 }}>Next</button>
+          <button onClick={goNext} disabled={examState.currentQuestion === questions.length} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '6px', cursor: examState.currentQuestion === questions.length ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '600', opacity: examState.currentQuestion === questions.length ? 0.5 : 1 }}>Next</button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))', gap: '0.5rem', marginBottom: '2rem' }}>
-          {Array.from({ length: 65 }, (_, i) => i + 1).map(num => {
+          {Array.from({ length: questions.length }, (_, i) => i + 1).map(num => {
             const isAnswered = examState.answers[num] !== undefined
             const isCurrent = num === examState.currentQuestion
             const isFlagged = examState.flaggedQuestions.has(num)
