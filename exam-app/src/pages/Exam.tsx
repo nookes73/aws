@@ -30,17 +30,17 @@ const AWSExamQuestionPage: React.FC = () => {
     autoRead: false
   })
   const [speechSynthesis, setSpeechSynthesis] = useState<any>(null)
-  // Load questions from the question bank system
+  // Load and randomly select 65 questions from the question bank
   const loadQuestions = (): Question[] => {
     const largeBank = (window as any).__LARGE_BANK__
     const examTen = (window as any).__EXAM_TEN__
-    const questions: Question[] = []
+    const allQuestions: Question[] = []
     
     // Load from large bank
     if (largeBank?.questions) {
       largeBank.questions.forEach((q: any) => {
         const options = Array.isArray(q.options) ? q.options : Object.values(q.options || {})
-        questions.push({
+        allQuestions.push({
           id: q.question_number || q.id,
           domain: 'AWS Solutions Architecture',
           question: q.question || q.question_text,
@@ -54,7 +54,7 @@ const AWSExamQuestionPage: React.FC = () => {
     if (examTen?.exam?.questions) {
       examTen.exam.questions.forEach((q: any) => {
         const options = Array.isArray(q.options) ? q.options : Object.values(q.options || {})
-        questions.push({
+        allQuestions.push({
           id: q.question_number || q.id,
           domain: 'AWS Solutions Architecture',
           question: q.question || q.question_text,
@@ -65,7 +65,7 @@ const AWSExamQuestionPage: React.FC = () => {
     }
     
     // If no questions loaded, create sample questions
-    if (questions.length === 0) {
+    if (allQuestions.length === 0) {
       return Array.from({ length: 65 }, (_, i) => ({
         id: i + 1,
         domain: 'Design Resilient Architectures',
@@ -80,7 +80,9 @@ const AWSExamQuestionPage: React.FC = () => {
       }))
     }
     
-    return questions
+    // Randomly select 65 questions from the full bank
+    const shuffled = [...allQuestions].sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, 65)
   }
 
   const questions: Question[] = loadQuestions()

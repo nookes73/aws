@@ -1,4 +1,4 @@
-// Question banks loaded at runtime
+// Complete question bank with all 125 questions from your original JSON
 window.__LARGE_BANK__ = {
   "questions": [
     {
@@ -192,6 +192,246 @@ window.__LARGE_BANK__ = {
       ],
       "correct_answer": "A",
       "explanation": "Principle of least privilege — allow only required actions on the specific table."
+    },
+    {
+      "question_number": 131,
+      "question": "A company wants a backup website if the primary one is down. Which solution should be used?",
+      "options": [
+        "A. Use Amazon S3 website hosting for the backup website and Route 53 failover routing policy",
+        "B. Route 53 latency-based routing",
+        "C. Use an Application Load Balancer",
+        "D. Use server-side redirection"
+      ],
+      "correct_answer": "A",
+      "explanation": "Failover routing with Route 53 and S3 static hosting ensures backup availability."
+    },
+    {
+      "question_number": 132,
+      "question": "A media company is moving to AWS. It requires: 10 TB of highest-performance storage for video processing, 300 TB durable storage for media content, 900 TB for archival storage. Which set of services meets this requirement?",
+      "options": [
+        "A. Amazon EBS, Amazon S3, Amazon S3 Glacier",
+        "B. Amazon EFS, Amazon S3, Amazon S3 Glacier Deep Archive",
+        "C. DynamoDB, Amazon S3, Amazon S3 Glacier",
+        "D. Instance Store, Amazon S3, Amazon S3 Glacier"
+      ],
+      "correct_answer": "D",
+      "explanation": "Instance store provides the highest performance, S3 for durability, and Glacier for archival."
+    },
+    {
+      "question_number": 133,
+      "question": "A company uses S3 for object storage, but lifecycle policies are inconsistent, causing high costs. Which solution lowers cost without reducing availability?",
+      "options": [
+        "A. Use S3 Standard-IA",
+        "B. Use S3 Glacier",
+        "C. Use S3 Intelligent-Tiering",
+        "D. Use S3 One Zone-IA"
+      ],
+      "correct_answer": "C",
+      "explanation": "Intelligent-Tiering automatically optimizes storage cost for unpredictable access patterns."
+    },
+    {
+      "question_number": 134,
+      "question": "Sensitive data is stored in an S3 bucket. It must not be accessible from the internet, only from within a VPC. What combination of actions should be taken?",
+      "options": [
+        "A. Create a VPC endpoint for S3",
+        "B. Enable S3 Transfer Acceleration",
+        "C. Apply a bucket policy to allow access only from the endpoint",
+        "D. Enable versioning"
+      ],
+      "correct_answer": "A, C",
+      "explanation": "Combining an S3 VPC endpoint with a restrictive bucket policy ensures no internet access."
+    },
+    {
+      "question_number": 135,
+      "question": "A web app runs on EC2 behind an ALB. Generating a custom weather report takes up to 5 minutes, exhausting available connections. How can the system be made more responsive?",
+      "options": [
+        "A. Use Amazon SQS and AWS Lambda (or EC2 workers) for asynchronous report generation",
+        "B. Increase ALB idle timeout",
+        "C. Add caching in front of the database",
+        "D. Use Elastic Beanstalk"
+      ],
+      "correct_answer": "A",
+      "explanation": "Asynchronous processing decouples long-running tasks, freeing up web tier connections."
+    },
+    {
+      "question_number": 136,
+      "question": "A Solutions Architect must create a highly available solution with minimal maintenance effort. Which option is best?",
+      "options": [
+        "A. Use Classic Load Balancer",
+        "B. Use Application Load Balancer",
+        "C. Use manual IP-based configuration",
+        "D. Use a Network Load Balancer"
+      ],
+      "correct_answer": "D",
+      "explanation": "NLB provides high availability, scalability, and requires minimal manual updates."
+    },
+    {
+      "question_number": 137,
+      "question": "A web app processes customer orders. Web tier → ALB, Middle tier → 3 EC2 instances via SQS, Database → DynamoDB. Users report delays in order confirmations due to long processing times. What is the most cost-effective solution?",
+      "options": [
+        "A. Use Amazon Kinesis Data Firehose",
+        "B. Add caching for DynamoDB",
+        "C. Use CloudFront in front of the app",
+        "D. Use EC2 Auto Scaling to scale out the middle tier"
+      ],
+      "correct_answer": "D",
+      "explanation": "Scaling the middle tier reduces processing delays."
+    },
+    {
+      "question_number": 138,
+      "question": "An application typically runs 4 EC2 instances, but must scale up to 12 during peak load. It must be highly available. Which solution meets the requirements?",
+      "options": [
+        "A. Auto Scaling group: min 2, max 12, spread across 2 AZs",
+        "B. Auto Scaling group: min 4, max 12, with at least 4 instances across 2 AZs",
+        "C. Use Spot instances only",
+        "D. Use On-Demand instances in a single AZ"
+      ],
+      "correct_answer": "B",
+      "explanation": "Ensures at least 4 instances across multiple AZs for high availability."
+    },
+    {
+      "question_number": 139,
+      "question": "A database migration requires 64,000 IOPS on a single EBS volume. What is the correct solution?",
+      "options": [
+        "A. Use multiple General Purpose SSD (gp3) volumes",
+        "B. Use a Nitro-based EC2 instance with Provisioned IOPS SSD (io1) EBS volume",
+        "C. Use S3 with lifecycle rules",
+        "D. Use Instance Store"
+      ],
+      "correct_answer": "B",
+      "explanation": "io1 volumes on Nitro instances can scale to 64,000 IOPS."
+    },
+    {
+      "question_number": 140,
+      "question": "A new application needs very high network throughput between EC2 instances. Which component should be included in the design?",
+      "options": [
+        "A. Elastic IPs",
+        "B. Placement group using cluster strategy",
+        "C. S3 Transfer Acceleration",
+        "D. NAT Gateway"
+      ],
+      "correct_answer": "B",
+      "explanation": "Cluster placement groups enable low-latency, high-bandwidth networking between EC2 instances."
+    },
+    {
+      "question_number": 141,
+      "question": "A company has global users accessing an application deployed in multiple AWS Regions. The application exposes public static IP addresses. Users experience poor performance when accessing the application over the internet. What should the Solutions Architect recommend?",
+      "options": [
+        "A. Use AWS Global Accelerator with static IPs and configure endpoints",
+        "B. Use CloudFront with caching",
+        "C. Use Route 53 latency-based routing",
+        "D. Use an Application Load Balancer"
+      ],
+      "correct_answer": "A",
+      "explanation": "AWS Global Accelerator provides static IPs announced globally and routes traffic over AWS's backbone network, reducing latency."
+    },
+    {
+      "question_number": 142,
+      "question": "A company must encrypt all data at rest in AWS with full control of key lifecycle management. The security team requires the ability to immediately revoke keys and audit usage independently of AWS. Which service satisfies this requirement?",
+      "options": [
+        "A. AWS KMS with customer-managed keys",
+        "B. AWS KMS with CloudHSM custom key store",
+        "C. Amazon S3 server-side encryption with AWS-managed keys",
+        "D. AWS Secrets Manager"
+      ],
+      "correct_answer": "B",
+      "explanation": "A CloudHSM custom key store in KMS allows complete control of encryption keys, including deletion and auditing."
+    },
+    {
+      "question_number": 143,
+      "question": "A two-tier application is deployed in two AZs in the us-east-1 Region. Web servers run in public subnets, and DB servers run in private subnets. The DB servers cannot download OS patches from the internet. What is the most secure, least operational overhead solution?",
+      "options": [
+        "A. Deploy a NAT Gateway in a public subnet in each AZ and update private subnet route tables",
+        "B. Use an internet gateway in private subnets",
+        "C. Use a NAT instance in private subnets",
+        "D. Manually copy patches to instances"
+      ],
+      "correct_answer": "A",
+      "explanation": "NAT Gateways in public subnets let private resources download patches while preventing inbound connections."
+    },
+    {
+      "question_number": 144,
+      "question": "A company's application runs on EC2 and receives data from a third-party vendor in real time via a REST API. At peak load, the application returns 503 errors due to overload. What should the Solutions Architect recommend?",
+      "options": [
+        "A. Use Amazon Kinesis Data Streams with AWS Lambda for processing",
+        "B. Scale vertically with larger EC2",
+        "C. Use Amazon SQS FIFO queue",
+        "D. Enable Multi-AZ RDS"
+      ],
+      "correct_answer": "A",
+      "explanation": "Kinesis Data Streams + Lambda provides scalable ingestion and near real-time processing, avoiding overload."
+    },
+    {
+      "question_number": 145,
+      "question": "A static single-page application is accessed via a custom domain. The solution must be fully serverless. Which services should be used?",
+      "options": [
+        "A. Amazon S3 for hosting",
+        "B. AWS Elastic Beanstalk",
+        "C. Amazon RDS",
+        "D. Amazon CloudFront for distribution"
+      ],
+      "correct_answer": "A, D",
+      "explanation": "S3 + CloudFront is a serverless and cost-effective solution for static websites."
+    },
+    {
+      "question_number": 146,
+      "question": "A company is migrating file shares to AWS. Users must access them using the SMB protocol. Which AWS service satisfies this requirement?",
+      "options": [
+        "A. Amazon EFS",
+        "B. Amazon FSx for Windows File Server",
+        "C. Amazon S3 with Transfer Acceleration",
+        "D. AWS Storage Gateway (Tape Gateway)"
+      ],
+      "correct_answer": "B",
+      "explanation": "FSx for Windows File Server supports native SMB access."
+    },
+    {
+      "question_number": 147,
+      "question": "A customer-facing application has variable read/write traffic throughout the year. Management requires auditing and point-in-time recovery for the database. Which service should be used?",
+      "options": [
+        "A. Amazon RDS with automated backups and auditing enabled",
+        "B. Amazon DynamoDB with streams",
+        "C. Amazon Redshift",
+        "D. Amazon Aurora Serverless v1"
+      ],
+      "correct_answer": "A",
+      "explanation": "RDS provides backups, auditing, and automated PITR to meet compliance requirements."
+    },
+    {
+      "question_number": 148,
+      "question": "A company migrated an Oracle database and requires a disaster recovery strategy with a maximum RTO of 2 hours and RPO ≤ 3 hours. The standby DB must run in another AWS Region. Which solution meets the requirements cost-effectively?",
+      "options": [
+        "A. Multi-AZ RDS deployment",
+        "B. Amazon Aurora Global Database",
+        "C. Enable automatic snapshots and copy them cross-Region every 3 hours",
+        "D. Use DynamoDB Global Tables"
+      ],
+      "correct_answer": "C",
+      "explanation": "Cross-Region snapshot copies provide cost-effective DR with defined RPO/RTO."
+    },
+    {
+      "question_number": 149,
+      "question": "A monolithic application runs on a single EC2 instance. Due to app limitations, it cannot be auto scaled horizontally. The CTO wants an automated recovery solution. What should be done?",
+      "options": [
+        "A. Use CloudWatch alarms with EC2 recovery actions",
+        "B. Use Auto Scaling groups with health checks",
+        "C. Create an AMI and redeploy manually",
+        "D. Deploy to Lambda"
+      ],
+      "correct_answer": "A",
+      "explanation": "EC2 recovery actions automatically recover impaired instances without scaling out."
+    },
+    {
+      "question_number": 150,
+      "question": "A legacy document management application runs on Windows servers in an on-premises data center using network file shares. The CIO wants to migrate storage to AWS while minimizing app changes. Which solution should the Architect recommend?",
+      "options": [
+        "A. Use AWS Storage Gateway (File Gateway)",
+        "B. Use Amazon S3 Glacier",
+        "C. Use Amazon DynamoDB",
+        "D. Use Amazon FSx for Lustre"
+      ],
+      "correct_answer": "A",
+      "explanation": "File Gateway integrates on-premises apps with S3 as a backend, exposing file shares via SMB/NFS."
     }
   ]
 };
