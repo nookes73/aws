@@ -72,6 +72,126 @@ window.__LARGE_BANK__ = {
       ],
       "correct_answer": "B",
       "explanation": "AWS WAF or CloudFront Geo/IP restrictions can enforce IP-based access control for S3 content delivered via CloudFront."
+    },
+    {
+      "question_number": 121,
+      "question": "A company uses Microsoft SQL Server with heavy read activity. Every 4 hours, the development team creates a full copy of the production database for testing, which impacts user experience. Which solution improves elasticity and availability without changing the database engine?",
+      "options": [
+        "A. Migrate to Amazon Aurora",
+        "B. Use Amazon DynamoDB",
+        "C. Use Amazon RDS Multi-AZ",
+        "D. Use Amazon RDS for SQL Server snapshots to create test databases"
+      ],
+      "correct_answer": "D",
+      "explanation": "The requirement is to stick with the current engine and improve efficiency. RDS snapshots can quickly create test databases without performance impact."
+    },
+    {
+      "question_number": 122,
+      "question": "A company enabled AWS CloudTrail to deliver logs to an Amazon S3 bucket for each developer account. The company created a central AWS account for auditing and needs all logs centralized securely. What is the optimal solution?",
+      "options": [
+        "A. Copy logs using AWS Glue",
+        "B. Use S3 cross-region replication",
+        "C. Deliver CloudTrail logs from all developer accounts into a central S3 bucket in the audit account",
+        "D. Use Amazon Kinesis Data Firehose"
+      ],
+      "correct_answer": "C",
+      "explanation": "CloudTrail can natively deliver logs from multiple accounts to a single centralized bucket."
+    },
+    {
+      "question_number": 123,
+      "question": "The business systems require file sharing via SMB that must be accessible from both on-premises and AWS. Which solution meets the requirement?",
+      "options": [
+        "A. Amazon EFS",
+        "B. Amazon S3 File Gateway",
+        "C. Amazon FSx for Windows File Server",
+        "D. AWS Storage Gateway (File Gateway)"
+      ],
+      "correct_answer": "C, D",
+      "explanation": "Both C and D are correct. FSx provides SMB access in the cloud; File Gateway provides SMB from on-premises."
+    },
+    {
+      "question_number": 124,
+      "question": "Which AWS feature allows you to automatically request the lowest price per unit of capacity, maintain target capacity for workloads like batch processing or HPC, and replace interrupted instances?",
+      "options": [
+        "A. Reserved Instances",
+        "B. Savings Plans",
+        "C. Spot Fleet",
+        "D. On-Demand Instances"
+      ],
+      "correct_answer": "C",
+      "explanation": "Spot Fleet manages target capacity automatically with lowest-cost spot instances."
+    },
+    {
+      "question_number": 125,
+      "question": "A system must attach to multiple Amazon EC2 Windows instances for shared storage. What should the Solutions Architect do?",
+      "options": [
+        "A. Use Amazon EBS volumes attached to multiple instances",
+        "B. Use Amazon EFS (Linux only)",
+        "C. Use Amazon FSx for Windows File Server",
+        "D. Use Amazon S3 File Gateway"
+      ],
+      "correct_answer": "C",
+      "explanation": "FSx for Windows File Server supports SMB and works for Windows shared storage."
+    },
+    {
+      "question_number": 126,
+      "question": "A company created an isolated backup environment. Which solution ensures automatic failover between regions?",
+      "options": [
+        "A. Use CloudWatch alarms with Lambda",
+        "B. Enable Amazon Route 53 health checks with failover routing",
+        "C. Use AWS Config",
+        "D. Enable CloudTrail integration"
+      ],
+      "correct_answer": "B",
+      "explanation": "Route 53 failover with health checks automates active-passive disaster recovery."
+    },
+    {
+      "question_number": 127,
+      "question": "A mobile chat app stores data in DynamoDB. Users want new messages to be read with the lowest latency possible. The solution must require minimal application change. What should be used?",
+      "options": [
+        "A. DynamoDB Accelerator (DAX)",
+        "B. DynamoDB Streams",
+        "C. Amazon ElastiCache for Redis",
+        "D. DynamoDB Global Tables"
+      ],
+      "correct_answer": "A",
+      "explanation": "DAX is a managed caching layer for DynamoDB that reduces latency to microseconds with minimal code changes."
+    },
+    {
+      "question_number": 128,
+      "question": "A mobile app is built with Amazon EC2 instances behind an ALB and uses Amazon RDS. The workload is read-heavy, causing performance issues. How can this be addressed?",
+      "options": [
+        "A. Enable Multi-AZ for RDS",
+        "B. Use ElastiCache in front of RDS",
+        "C. Add Read Replicas to RDS and direct traffic to them",
+        "D. Switch to DynamoDB"
+      ],
+      "correct_answer": "C",
+      "explanation": "Read replicas reduce load on the primary RDS instance for read-heavy workloads."
+    },
+    {
+      "question_number": 129,
+      "question": "A company hosts its static website on Amazon S3. To improve performance and reduce costs, what should be done?",
+      "options": [
+        "A. Use S3 Transfer Acceleration",
+        "B. Use Amazon CloudFront with S3 as the origin",
+        "C. Enable S3 replication",
+        "D. Use S3 Intelligent-Tiering"
+      ],
+      "correct_answer": "B",
+      "explanation": "CloudFront improves distribution speed and reduces cost for global access."
+    },
+    {
+      "question_number": 130,
+      "question": "A Solutions Architect must design an IAM policy for a Lambda function that allows only PutItem, UpdateItem, and DeleteItem actions on a DynamoDB table named \"Books\". Which policy fulfills this requirement?",
+      "options": [
+        "A. An IAM policy allowing only PutItem, UpdateItem, and DeleteItem actions on the \"Books\" table",
+        "B. A policy granting full access to DynamoDB",
+        "C. A policy allowing all actions on all tables",
+        "D. A policy with inline permissions for all DynamoDB resources"
+      ],
+      "correct_answer": "A",
+      "explanation": "Principle of least privilege — allow only required actions on the specific table."
     }
   ]
 };
@@ -195,4 +315,3 @@ window.__EXAM_TEN__ = {
     ]
   }
 };
-
