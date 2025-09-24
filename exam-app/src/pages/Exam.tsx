@@ -154,8 +154,8 @@ const AWSExamQuestionPage: React.FC = () => {
     return () => { document.body.style.backgroundColor = ''; document.body.style.margin = ''; document.body.style.padding = '' }
   }, [isDarkMode])
   return (
-    <div style={{ backgroundColor: currentTheme.bg, color: currentTheme.text, minHeight: '100vh', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-      <div style={{ background: 'linear-gradient(135deg, #93C5FD, #60A5FA, #1D4ED8)', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div style={{ backgroundColor: currentTheme.bg, color: currentTheme.text, minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+      <div style={{ background: 'linear-gradient(135deg, #93C5FD, #60A5FA, #1D4ED8)', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, zIndex: 10 }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ffffff', margin: '0' }}>AWS SAA-C03</h1>
           <p style={{ fontSize: '0.9rem', color: '#ffffff', margin: '0', opacity: 0.9 }}>Practice Exam Simulator</p>
@@ -183,7 +183,7 @@ const AWSExamQuestionPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', flex: '1 1 auto', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
         <div style={{ marginBottom: '2rem', flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
           <div style={{ marginBottom: '1.5rem', minHeight: '160px', display: 'flex', alignItems: 'flex-start' }}>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: currentTheme.text, margin: 0, wordBreak: 'break-word' }}>{currentQ?.question}</p>
@@ -200,7 +200,7 @@ const AWSExamQuestionPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', paddingTop: '1rem', borderTop: `1px solid ${currentTheme.border}`, minHeight: '64px', flex: '0 0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 0, padding: '0.75rem 0', borderTop: `1px solid ${currentTheme.border}`, minHeight: '64px', flex: '0 0 auto', position: 'sticky', bottom: 0, backgroundColor: currentTheme.bg, zIndex: 5 }}>
           <button onClick={goPrevious} disabled={examState.currentQuestion === 1} style={{ backgroundColor: examState.currentQuestion === 1 ? currentTheme.border : currentTheme.cardBg, color: examState.currentQuestion === 1 ? '#999' : currentTheme.text, border: `2px solid ${currentTheme.border}`, padding: '0.75rem 1.5rem', borderRadius: '6px', cursor: examState.currentQuestion === 1 ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '500' }}>Previous</button>
           <button onClick={goNext} disabled={examState.currentQuestion === questions.length} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '6px', cursor: examState.currentQuestion === questions.length ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '600', opacity: examState.currentQuestion === questions.length ? 0.5 : 1 }}>Next</button>
         </div>
