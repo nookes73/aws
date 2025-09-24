@@ -185,7 +185,9 @@ const AWSExamQuestionPage: React.FC = () => {
       </div>
       <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', flex: '1 1 auto', overflowY: 'auto' }}>
         <div style={{ marginBottom: '2rem' }}>
-          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: currentTheme.text, marginBottom: '2rem' }}>{currentQ?.question}</p>
+          <div style={{ marginBottom: '2rem', minHeight: '120px', display: 'flex', alignItems: 'flex-start' }}>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: currentTheme.text, margin: 0 }}>{currentQ?.question}</p>
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {currentQ?.options.map((option, index) => (
               <label key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', padding: '1rem', backgroundColor: currentTheme.cardBg, border: `2px solid ${examState.answers[examState.currentQuestion] === index ? currentTheme.accent : currentTheme.border}`, borderRadius: '8px', cursor: 'pointer', transition: 'all 0.3s ease' }}
@@ -198,7 +200,7 @@ const AWSExamQuestionPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', paddingTop: '2rem', borderTop: `1px solid ${currentTheme.border}` }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', paddingTop: '2rem', borderTop: `1px solid ${currentTheme.border}`, minHeight: '64px' }}>
           <button onClick={goPrevious} disabled={examState.currentQuestion === 1} style={{ backgroundColor: examState.currentQuestion === 1 ? currentTheme.border : currentTheme.cardBg, color: examState.currentQuestion === 1 ? '#999' : currentTheme.text, border: `2px solid ${currentTheme.border}`, padding: '0.75rem 1.5rem', borderRadius: '6px', cursor: examState.currentQuestion === 1 ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '500' }}>Previous</button>
           <button onClick={goNext} disabled={examState.currentQuestion === questions.length} style={{ backgroundColor: currentTheme.accent, color: '#000000', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '6px', cursor: examState.currentQuestion === questions.length ? 'not-allowed' : 'pointer', fontSize: '1rem', fontWeight: '600', opacity: examState.currentQuestion === questions.length ? 0.5 : 1 }}>Next</button>
         </div>
