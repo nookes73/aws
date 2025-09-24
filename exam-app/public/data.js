@@ -552,6 +552,174 @@ window.__LARGE_BANK__ = {
       ],
       "correct_answer": "B",
       "explanation": "Best practice: don't use root for daily ops, enforce MFA, and delegate tasks via IAM users."
+    },
+    {
+      "question_number": 161,
+      "question": "A company wants to implement a hybrid cloud solution where on-premises applications can access AWS services securely. Which AWS service provides the most cost-effective solution?",
+      "options": [
+        "A. AWS Direct Connect",
+        "B. AWS VPN CloudHub",
+        "C. AWS Site-to-Site VPN",
+        "D. AWS Transit Gateway"
+      ],
+      "correct_answer": "C",
+      "explanation": "Site-to-Site VPN provides secure, cost-effective connectivity between on-premises and AWS without dedicated infrastructure."
+    },
+    {
+      "question_number": 162,
+      "question": "An application needs to process large amounts of data in parallel across multiple EC2 instances. Which service should be used for job scheduling and resource management?",
+      "options": [
+        "A. AWS Batch",
+        "B. Amazon ECS",
+        "C. AWS Lambda",
+        "D. Amazon EKS"
+      ],
+      "correct_answer": "A",
+      "explanation": "AWS Batch is designed for batch computing workloads and automatically provisions compute resources for parallel processing."
+    },
+    {
+      "question_number": 163,
+      "question": "A company needs to store and analyze log data from multiple sources with real-time processing capabilities. Which combination of services is most appropriate?",
+      "options": [
+        "A. Amazon Kinesis Data Streams + Amazon Elasticsearch Service",
+        "B. Amazon S3 + Amazon Athena",
+        "C. Amazon CloudWatch Logs + Amazon QuickSight",
+        "D. Amazon DynamoDB + Amazon Redshift"
+      ],
+      "correct_answer": "A",
+      "explanation": "Kinesis Data Streams provides real-time data ingestion, and Elasticsearch enables real-time search and analytics on log data."
+    },
+    {
+      "question_number": 164,
+      "question": "A company wants to implement a serverless web application with user authentication and authorization. Which services should be used?",
+      "options": [
+        "A. Amazon Cognito + API Gateway + Lambda",
+        "B. Amazon RDS + Application Load Balancer + EC2",
+        "C. Amazon DynamoDB + Amazon ECS + Fargate",
+        "D. Amazon Aurora + Amazon EKS + Lambda"
+      ],
+      "correct_answer": "A",
+      "explanation": "Cognito provides user authentication, API Gateway handles API requests, and Lambda provides serverless compute for the application logic."
+    },
+    {
+      "question_number": 165,
+      "question": "A company needs to implement a disaster recovery solution with an RTO of 4 hours and RPO of 1 hour. The primary database is Amazon RDS MySQL. Which solution is most cost-effective?",
+      "options": [
+        "A. Multi-AZ RDS deployment",
+        "B. Cross-region read replicas with automated failover",
+        "C. RDS snapshots with cross-region replication",
+        "D. Amazon Aurora Global Database"
+      ],
+      "correct_answer": "C",
+      "explanation": "Cross-region snapshot replication provides cost-effective disaster recovery with defined RPO/RTO without the complexity of active replication."
+    },
+    {
+      "question_number": 166,
+      "question": "An application needs to store user session data with sub-millisecond latency and automatic scaling. Which service is most appropriate?",
+      "options": [
+        "A. Amazon ElastiCache for Redis",
+        "B. Amazon DynamoDB",
+        "C. Amazon RDS with read replicas",
+        "D. Amazon S3 with CloudFront"
+      ],
+      "correct_answer": "A",
+      "explanation": "ElastiCache for Redis provides in-memory storage with sub-millisecond latency and automatic scaling for session data."
+    },
+    {
+      "question_number": 167,
+      "question": "A company wants to implement a content delivery network for a global web application. Which AWS service provides the best performance and cost optimization?",
+      "options": [
+        "A. Amazon CloudFront with S3 origin",
+        "B. Application Load Balancer with multiple regions",
+        "C. Amazon Route 53 with health checks",
+        "D. AWS Global Accelerator"
+      ],
+      "correct_answer": "A",
+      "explanation": "CloudFront provides global content delivery with edge caching, reducing latency and costs for static and dynamic content."
+    },
+    {
+      "question_number": 168,
+      "question": "A company needs to implement a secure file sharing solution for employees working remotely. The solution must integrate with existing Active Directory. Which service is most appropriate?",
+      "options": [
+        "A. Amazon WorkDocs",
+        "B. Amazon S3 with IAM policies",
+        "C. Amazon FSx for Windows File Server",
+        "D. Amazon EFS with access points"
+      ],
+      "correct_answer": "C",
+      "explanation": "FSx for Windows File Server provides native SMB file sharing with Active Directory integration for secure remote access."
+    },
+    {
+      "question_number": 169,
+      "question": "An application needs to process streaming data from IoT devices with real-time analytics. Which combination of services is most appropriate?",
+      "options": [
+        "A. Amazon Kinesis Data Streams + Kinesis Analytics + Lambda",
+        "B. Amazon SQS + Lambda + DynamoDB",
+        "C. Amazon MQ + ECS + RDS",
+        "D. Amazon EventBridge + Step Functions + S3"
+      ],
+      "correct_answer": "A",
+      "explanation": "Kinesis Data Streams handles real-time data ingestion, Kinesis Analytics provides real-time processing, and Lambda enables custom processing logic."
+    },
+    {
+      "question_number": 170,
+      "question": "A company needs to implement a backup solution for EC2 instances with automated lifecycle management. Which service provides the most cost-effective solution?",
+      "options": [
+        "A. Amazon EBS snapshots with lifecycle policies",
+        "B. Amazon S3 with Intelligent-Tiering",
+        "C. AWS Backup service",
+        "D. Amazon Glacier with lifecycle rules"
+      ],
+      "correct_answer": "C",
+      "explanation": "AWS Backup provides centralized backup management with automated lifecycle policies and cost optimization for EC2 instances."
+    },
+    {
+      "question_number": 171,
+      "question": "An application needs to store and query time-series data from sensors with high write throughput. Which service is most appropriate?",
+      "options": [
+        "A. Amazon Timestream",
+        "B. Amazon DynamoDB with TTL",
+        "C. Amazon RDS with partitioning",
+        "D. Amazon Redshift with time-series tables"
+      ],
+      "correct_answer": "A",
+      "explanation": "Amazon Timestream is purpose-built for time-series data with automatic scaling and cost optimization for IoT and sensor data."
+    },
+    {
+      "question_number": 172,
+      "question": "A company needs to implement a secure API with rate limiting and authentication. Which combination of services is most appropriate?",
+      "options": [
+        "A. API Gateway + Amazon Cognito + Usage Plans",
+        "B. Application Load Balancer + Lambda + DynamoDB",
+        "C. Amazon CloudFront + S3 + IAM",
+        "D. Amazon ECS + RDS + ElastiCache"
+      ],
+      "correct_answer": "A",
+      "explanation": "API Gateway provides built-in authentication, rate limiting, and usage plans, while Cognito handles user authentication and authorization."
+    },
+    {
+      "question_number": 173,
+      "question": "A company needs to implement a data lake for analytics with support for multiple data formats. Which combination of services is most appropriate?",
+      "options": [
+        "A. Amazon S3 + AWS Glue + Amazon Athena",
+        "B. Amazon RDS + Amazon Redshift + QuickSight",
+        "C. Amazon DynamoDB + Amazon Kinesis + Lambda",
+        "D. Amazon EMR + Amazon S3 + Amazon SageMaker"
+      ],
+      "correct_answer": "A",
+      "explanation": "S3 provides scalable storage, Glue handles data cataloging and ETL, and Athena enables SQL queries on the data lake."
+    },
+    {
+      "question_number": 174,
+      "question": "A company needs to implement a machine learning pipeline for image classification with automatic model retraining. Which combination of services is most appropriate?",
+      "options": [
+        "A. Amazon SageMaker + S3 + Lambda",
+        "B. Amazon Rekognition + API Gateway",
+        "C. Amazon Comprehend + Kinesis",
+        "D. Amazon Textract + DynamoDB"
+      ],
+      "correct_answer": "A",
+      "explanation": "SageMaker provides end-to-end ML capabilities including model training, deployment, and automatic retraining with S3 for data storage and Lambda for orchestration."
     }
   ]
 };

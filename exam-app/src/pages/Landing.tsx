@@ -71,7 +71,7 @@ const AWSExamLandingPage: React.FC = () => {
     let count = 0
     if (largeBank?.questions) count += largeBank.questions.length
     if (examTen?.exam?.questions) count += examTen.exam.questions.length
-    return count || 125 // fallback to known count
+    return count || 70 // fallback to known count
   }
 
   const examInfo: ExamInfo[] = [
