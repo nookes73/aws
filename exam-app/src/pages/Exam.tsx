@@ -85,7 +85,7 @@ const AWSExamQuestionPage: React.FC = () => {
     return shuffled.slice(0, 65)
   }
 
-  const questions: Question[] = loadQuestions()
+  const [questions] = useState<Question[]>(loadQuestions())
   const currentQ = questions[examState.currentQuestion - 1]
   useEffect(() => {
     let interval: any
