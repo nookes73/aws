@@ -103,6 +103,13 @@ const AWSExamQuestionPage: React.FC = () => {
       setSpeechSynthesis(window.speechSynthesis)
     }
   }, [])
+  // Ensure persistent vertical scrollbar to avoid layout width shifts
+  useEffect(() => {
+    const htmlEl = document.documentElement
+    const previousOverflowY = htmlEl.style.overflowY
+    htmlEl.style.overflowY = 'scroll'
+    return () => { htmlEl.style.overflowY = previousOverflowY }
+  }, [])
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600)
     const minutes = Math.floor((seconds % 3600) / 60)
@@ -183,7 +190,7 @@ const AWSExamQuestionPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', flex: '1 1 auto', display: 'flex', flexDirection: 'column', minHeight: '640px', paddingBottom: '96px' }}>
         <div style={{ marginBottom: '2rem', flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
           <div style={{ marginBottom: '1.5rem', minHeight: '160px', display: 'flex', alignItems: 'flex-start' }}>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: currentTheme.text, margin: 0, wordBreak: 'break-word' }}>{currentQ?.question}</p>
