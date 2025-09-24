@@ -1,4 +1,4 @@
-// Complete question bank - Part 1 (Questions 1-50)
+// Complete question bank with all questions consolidated
 window.__LARGE_BANK__ = {
   "questions": [
     {
@@ -432,13 +432,7 @@ window.__LARGE_BANK__ = {
       ],
       "correct_answer": "A",
       "explanation": "File Gateway integrates on-premises apps with S3 as a backend, exposing file shares via SMB/NFS."
-    }
-  ]
-};
-
-// Additional question bank - Part 2 (Questions 151-200)
-window.__LARGE_BANK_PART2__ = {
-  "questions": [
+    },
     {
       "question_number": 151,
       "question": "A company is designing a hybrid application using AWS Cloud. The network between the on-premises data center and AWS must use AWS Direct Connect. The application connectivity must be highly resilient. Which DX configuration should be implemented?",

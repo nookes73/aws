@@ -33,27 +33,12 @@ const AWSExamQuestionPage: React.FC = () => {
   // Load and randomly select 65 questions from the complete question bank
   const loadQuestions = (): Question[] => {
     const largeBank = (window as any).__LARGE_BANK__
-    const largeBankPart2 = (window as any).__LARGE_BANK_PART2__
     const examTen = (window as any).__EXAM_TEN__
     const allQuestions: Question[] = []
     
-    // Load from large bank part 1
+    // Load from large bank
     if (largeBank?.questions) {
       largeBank.questions.forEach((q: any) => {
-        const options = Array.isArray(q.options) ? q.options : Object.values(q.options || {})
-        allQuestions.push({
-          id: q.question_number || q.id,
-          domain: 'AWS Solutions Architecture',
-          question: q.question || q.question_text,
-          options: options,
-          correctAnswer: 0 // Will be handled in scoring
-        })
-      })
-    }
-    
-    // Load from large bank part 2
-    if (largeBankPart2?.questions) {
-      largeBankPart2.questions.forEach((q: any) => {
         const options = Array.isArray(q.options) ? q.options : Object.values(q.options || {})
         allQuestions.push({
           id: q.question_number || q.id,
