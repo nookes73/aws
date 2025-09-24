@@ -155,7 +155,7 @@ const AWSExamQuestionPage: React.FC = () => {
   }, [isDarkMode])
   return (
     <div style={{ backgroundColor: currentTheme.bg, color: currentTheme.text, minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-      <div style={{ background: 'linear-gradient(135deg, #3B82F6, #2563EB)', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ background: 'linear-gradient(135deg, #2563EB, #0EA5A4)', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#ffffff', margin: '0' }}>AWS SAA-C03</h1>
           <p style={{ fontSize: '0.9rem', color: '#ffffff', margin: '0', opacity: 0.9 }}>Practice Exam Simulator</p>
