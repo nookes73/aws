@@ -66,7 +66,7 @@ const AWSExamLandingPage: React.FC = () => {
   const currentTheme: Theme = isDarkMode ? theme.dark : theme.light
   const examInfo: ExamInfo[] = [
     { label: 'Duration:', value: '130 minutes' },
-    { label: 'Questions:', value: '65 questions (randomly selected from 372 question bank)' },
+    { label: 'Questions:', value: '65 questions (randomly selected from question bank)' },
     { label: 'Passing Score:', value: '720/1000 (72%)' },
     { label: 'Question Types:', value: 'Multiple choice' }
   ]

@@ -56,9 +56,21 @@ const AWSExamResultsPage: React.FC = () => {
   }
   const currentTheme: Theme = isDarkMode ? theme.dark : theme.light
   const examResult: ExamResult = { finalScore: 0, totalQuestions: 65, correctAnswers: 0, timeTaken: 0, questionsFlagged: 0, passed: false }
-  const questionResults: QuestionResult[] = [
-    { id: 1, question: 'A company wants to implement secure storage of application secrets and API keys. What should the Solutions Architect recommend?', options: ['Use AWS Secrets Manager with automatic rotation', 'Store secrets in S3 with server-side encryption', 'Use AWS KMS for key management only', 'Store secrets in environment variables'], correctAnswer: 0, userAnswer: null, explanation: 'AWS Secrets Manager provides secure storage of secrets with automatic rotation capabilities, ensuring secrets are regularly updated and securely managed.', isCorrect: false }
-  ]
+  // Sample question results - in real app, this would come from exam state
+  const questionResults: QuestionResult[] = Array.from({ length: 65 }, (_, i) => ({
+    id: i + 1,
+    question: `Sample question ${i + 1}: A company wants to implement secure storage of application secrets and API keys. What should the Solutions Architect recommend?`,
+    options: [
+      'Use AWS Secrets Manager with automatic rotation',
+      'Store secrets in S3 with server-side encryption', 
+      'Use AWS KMS for key management only',
+      'Store secrets in environment variables'
+    ],
+    correctAnswer: 0,
+    userAnswer: Math.random() > 0.5 ? Math.floor(Math.random() * 4) : null,
+    explanation: 'AWS Secrets Manager provides secure storage of secrets with automatic rotation capabilities, ensuring secrets are regularly updated and securely managed.',
+    isCorrect: Math.random() > 0.3
+  }))
   const getScoreColor = (score: number): string => { if (score >= 72) return currentTheme.success; if (score >= 50) return currentTheme.warning; return currentTheme.error }
   const getScoreMessage = (passed: boolean): { title: string; subtitle: string; color: string } => passed ? { title: 'Congratulations! You Passed', subtitle: 'Great job! You have successfully passed the AWS SAA-C03 exam.', color: currentTheme.success } : { title: 'Unfortunately, You Did Not Pass', subtitle: 'You need 72% to pass. Keep studying and try again!', color: currentTheme.error }
   const scoreMessage = getScoreMessage(examResult.passed)
