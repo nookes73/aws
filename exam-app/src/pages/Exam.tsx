@@ -190,19 +190,19 @@ const AWSExamQuestionPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', flex: '1 1 auto', display: 'flex', flexDirection: 'column', minHeight: '640px', paddingBottom: '96px' }}>
+      <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto', flex: '1 1 auto', display: 'flex', flexDirection: 'column', minHeight: '640px', paddingBottom: '96px' }}>
         <div style={{ marginBottom: '2rem', flex: '1 1 auto', display: 'flex', flexDirection: 'column' }}>
           <div style={{ marginBottom: '1.5rem', minHeight: '160px', display: 'flex', alignItems: 'flex-start' }}>
             <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: currentTheme.text, margin: 0, wordBreak: 'break-word' }}>{currentQ?.question}</p>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
             {currentQ?.options.map((option, index) => (
-              <label key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', padding: '1rem', backgroundColor: currentTheme.cardBg, border: `2px solid ${examState.answers[examState.currentQuestion] === index ? currentTheme.accent : currentTheme.border}`, borderRadius: '8px', cursor: 'pointer', transition: 'all 0.3s ease' }}
+              <label key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', padding: '1rem', backgroundColor: currentTheme.cardBg, border: `2px solid ${examState.answers[examState.currentQuestion] === index ? currentTheme.accent : currentTheme.border}`, borderRadius: '8px', cursor: 'pointer', transition: 'all 0.3s ease', width: '100%' }}
                 onMouseEnter={(e) => { if (examState.answers[examState.currentQuestion] !== index) { e.currentTarget.style.borderColor = `${currentTheme.accent}80` } }}
                 onMouseLeave={(e) => { if (examState.answers[examState.currentQuestion] !== index) { e.currentTarget.style.borderColor = currentTheme.border } }}
               >
                 <input type="radio" name={`question-${examState.currentQuestion}`} value={index} checked={examState.answers[examState.currentQuestion] === index} onChange={() => selectAnswer(index)} style={{ marginTop: '0.25rem', accentColor: currentTheme.accent }} />
-                <span style={{ fontSize: '1rem', lineHeight: '1.5', color: currentTheme.text, wordBreak: 'break-word' }}>{option}</span>
+                <span style={{ fontSize: '1rem', lineHeight: '1.5', color: currentTheme.text, wordBreak: 'break-word', flex: 1 }}>{option}</span>
               </label>
             ))}
           </div>
