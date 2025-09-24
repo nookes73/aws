@@ -1,4 +1,4 @@
-// Complete question bank with all 125 questions from your original JSON
+// Complete question bank - Part 1 (Questions 1-50)
 window.__LARGE_BANK__ = {
   "questions": [
     {
@@ -432,6 +432,132 @@ window.__LARGE_BANK__ = {
       ],
       "correct_answer": "A",
       "explanation": "File Gateway integrates on-premises apps with S3 as a backend, exposing file shares via SMB/NFS."
+    }
+  ]
+};
+
+// Additional question bank - Part 2 (Questions 151-200)
+window.__LARGE_BANK_PART2__ = {
+  "questions": [
+    {
+      "question_number": 151,
+      "question": "A company is designing a hybrid application using AWS Cloud. The network between the on-premises data center and AWS must use AWS Direct Connect. The application connectivity must be highly resilient. Which DX configuration should be implemented?",
+      "options": [
+        "A. Configure a single DX connection at one location",
+        "B. Configure DX connections at multiple DX locations",
+        "C. Configure VPN over DX for backup",
+        "D. Configure multiple VPN connections only"
+      ],
+      "correct_answer": "B",
+      "explanation": "Multiple DX locations provide redundancy and high availability for hybrid connectivity."
+    },
+    {
+      "question_number": 152,
+      "question": "A company runs an application on Amazon EC2 instances in private subnets across three Availability Zones in a region. The instances must connect to the internet to download files. The design must be highly available. What should be implemented?",
+      "options": [
+        "A. Use one NAT instance in a single AZ",
+        "B. Deploy a NAT gateway in a public subnet of each AZ",
+        "C. Attach an Internet Gateway directly to private subnets",
+        "D. Use VPC endpoints"
+      ],
+      "correct_answer": "B",
+      "explanation": "NAT Gateways in each AZ provide highly available internet access for private subnets."
+    },
+    {
+      "question_number": 153,
+      "question": "Application developers noticed the production application is slow when business users run reporting queries against the Amazon RDS database. CPU and memory metrics never exceed 60%, but reporting affects performance. How can this requirement be met?",
+      "options": [
+        "A. Scale RDS instance vertically",
+        "B. Use Amazon Redshift",
+        "C. Run reporting queries against RDS read replicas",
+        "D. Use ElastiCache for reporting"
+      ],
+      "correct_answer": "C",
+      "explanation": "Read replicas offload reporting queries, reducing load on the primary DB."
+    },
+    {
+      "question_number": 154,
+      "question": "A company runs a two-tier e-commerce website using a public-facing ELB that sends traffic to EC2 instances in private subnets. Static content is on EC2, dynamic content from MySQL. Users in Europe and Australia report poor experience. What is the most cost-effective solution?",
+      "options": [
+        "A. Deploy additional ELBs and EC2 in EU and AU",
+        "B. Use Amazon CloudFront and S3 for static content",
+        "C. Move database to Aurora Global Database",
+        "D. Replicate full stack in EU and AU"
+      ],
+      "correct_answer": "B",
+      "explanation": "CloudFront caches and accelerates global content delivery at low cost."
+    },
+    {
+      "question_number": 155,
+      "question": "A company website provides downloadable performance reports. The solution must scale to meet global demand, minimize provisioning of infrastructure, and provide the fastest response time. What should the Solutions Architect recommend?",
+      "options": [
+        "A. Use Amazon CloudFront with Amazon S3",
+        "B. Use EC2 Auto Scaling in each region",
+        "C. Use API Gateway + Lambda + DynamoDB",
+        "D. Use on-premises CDN"
+      ],
+      "correct_answer": "A",
+      "explanation": "S3 + CloudFront is serverless, scales automatically, and provides global low-latency delivery."
+    },
+    {
+      "question_number": 156,
+      "question": "A company wants a shared file system for .NET application servers and SQL Server DBs on EC2 Windows Server 2016. It must integrate with Active Directory, be highly available, and provide high throughput. Which solution meets this?",
+      "options": [
+        "A. Use Amazon FSx for Windows File Server",
+        "B. Use EFS",
+        "C. Use S3",
+        "D. Use Storage Gateway"
+      ],
+      "correct_answer": "A",
+      "explanation": "FSx for Windows File Server supports SMB, integrates with AD, and scales performance."
+    },
+    {
+      "question_number": 157,
+      "question": "A company with 100s of applications behind load balancers in multiple regions wants to allowlist LB IPs in its firewall with a highly available solution that reduces the number of IPs. What should the architect recommend?",
+      "options": [
+        "A. Use Route 53 latency-based routing",
+        "B. Use CloudFront",
+        "C. Use AWS Global Accelerator and configure endpoints",
+        "D. Use NAT gateways per region"
+      ],
+      "correct_answer": "C",
+      "explanation": "Global Accelerator provides static IPs while routing traffic to ALBs globally, reducing firewall rule management."
+    },
+    {
+      "question_number": 158,
+      "question": "An application running in Amazon ECS resizes images and stores them in S3. The app needs permission to access S3. What is the correct solution?",
+      "options": [
+        "A. Attach S3 access policy to EC2 host",
+        "B. Create an IAM role with S3 permissions and assign it as the ECS task role",
+        "C. Hardcode AWS keys in the container",
+        "D. Use access keys stored in SSM Parameter Store"
+      ],
+      "correct_answer": "B",
+      "explanation": "ECS task roles provide least-privilege IAM permissions securely without storing credentials."
+    },
+    {
+      "question_number": 159,
+      "question": "A company is migrating virtual server workloads to AWS. It has an internet-facing load balancer backed by application servers. The servers need to download OS patches from internet repositories. Which services are needed?",
+      "options": [
+        "A. VPC endpoints + ALB",
+        "B. NAT Gateway + ALB",
+        "C. Direct Connect + NAT instance",
+        "D. VPN + ALB"
+      ],
+      "correct_answer": "B",
+      "explanation": "ALB distributes traffic to EC2, and NAT Gateway lets private instances fetch updates."
+    },
+    {
+      "question_number": 160,
+      "question": "A new AWS account is provisioned. The company is concerned about the security of the root user. What should be done?",
+      "options": [
+        "A. Delete the root user",
+        "B. Create IAM users for daily tasks and enable MFA on the root user",
+        "C. Rotate root password every 30 days",
+        "D. Share root credentials securely with admins"
+      ],
+      "correct_answer": "B",
+      "explanation": "Best practice: don't use root for daily ops, enforce MFA, and delegate tasks via IAM users."
     }
   ]
 };
