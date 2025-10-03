@@ -109,11 +109,11 @@ export default function App() {
     return (
       <div style={{ minHeight:'100vh', padding:'0', margin:0 }}>
         <div style={{ position:'fixed', top:'1rem', right:'1rem', zIndex:1000 }}>
-          <button onClick={start} style={{ background:'#ff9800', border:'none', color:'#000', padding:'0.5rem 1rem', borderRadius:6 }}>{starting?'Starting…':'Start Practice Exam'}</button>
+          <button onClick={start} style={{ background:'#ff9800', border:'none', color:'#000', padding:'0.6rem 1rem', borderRadius:8, fontSize:'clamp(0.9rem, 1.2vw + 0.35rem, 1rem)' }}>{starting?'Starting…':'Start Practice Exam'}</button>
         </div>
         <div style={{ maxWidth:1200, margin:'0 auto', padding:'2rem 1rem', textAlign:'center' }}>
-          <h1 style={{ fontSize:'2.5rem', margin:'0 0 0.5rem 0' }}>AWS Solutions Architect Associate SAA-C03</h1>
-          <h2 style={{ fontSize:'1.3rem', color:'#ff9800', margin:0 }}>Practice Exam Simulator</h2>
+          <h1 style={{ fontSize:'clamp(1.6rem, 3.2vw + 0.8rem, 2.5rem)', margin:'0 0 0.5rem 0', lineHeight:1.15 }}>AWS Solutions Architect Associate SAA-C03</h1>
+          <h2 style={{ fontSize:'clamp(1rem, 2vw + 0.4rem, 1.3rem)', color:'#ff9800', margin:0 }}>Practice Exam Simulator</h2>
           <p style={{ marginTop:'1.5rem', opacity:0.8 }}>65 questions • 130 minutes</p>
           {err && <p style={{ color:'#f44336' }}>{err}</p>}
         </div>
@@ -137,28 +137,30 @@ export default function App() {
     const prev = () => setIndex(i => Math.max(0, i-1))
     const finish = () => setPhase('results')
     return (
-      <div style={{ padding:20 }}>
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
+      <div style={{ padding:'clamp(12px, 2vw, 20px)' }}>
+        <div style={{ display:'flex', flexWrap:'wrap', rowGap:8, justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
           <div>
             <strong>Question {index+1} / {sessionIds.length}</strong>
           </div>
-          <div style={{ display:'flex', gap:8, alignItems:'center' }}>
-            <div style={{ background:'#00000022', color:'#fff', padding:'6px 10px', borderRadius:6, fontFamily:'monospace' }}>{Math.floor(remaining/60).toString().padStart(2,'0')}:{(remaining%60).toString().padStart(2,'0')}</div>
+          <div style={{ display:'flex', flexWrap:'wrap', gap:8, alignItems:'center' }}>
+            <div style={{ background:'#00000022', color:'#fff', padding:'6px 10px', borderRadius:6, fontFamily:'monospace', minWidth:72, textAlign:'center' }}>{Math.floor(remaining/60).toString().padStart(2,'0')}:{(remaining%60).toString().padStart(2,'0')}</div>
             <button onClick={()=>setPaused(p=>!p)}>{paused?'Resume':'Pause'}</button>
             <button onClick={()=>setFlagged(prev=>({ ...prev, [q.id]: !prev[q.id] }))} style={{ borderColor: flagged[q.id]?'#ff9800':undefined }}>Flag</button>
           </div>
         </div>
-        <div style={{ marginBottom:16, fontSize:'1.1rem', lineHeight:1.6 }}>{q.text}</div>
+        <div style={{ marginBottom:16, fontSize:'clamp(1rem, 1.2vw + 0.6rem, 1.1rem)', lineHeight:1.6 }}>{q.text}</div>
         <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
           {q.choices.map((c, i) => (
-            <label key={i} style={{ display:'flex', gap:10, alignItems:'flex-start', padding:12, border:'2px solid #404040', borderRadius:8, background:'#2d2d2d' }}>
+            <label key={i} style={{ display:'flex', gap:10, alignItems:'flex-start', padding:'clamp(10px, 2vw, 12px)', border:'2px solid #404040', borderRadius:8, background:'#2d2d2d' }}>
               <input type={isMulti?'checkbox':'radio'} name={`q-${q.id}`} checked={selected.includes(i)} onChange={()=>toggle(i)} />
               <span>{c}</span>
             </label>
           ))}
         </div>
-        <div style={{ display:'flex', gap:8, justifyContent:'space-between', marginTop:16 }}>
-          <button onClick={prev} disabled={index===0}>Previous</button>
+        <div style={{ display:'flex', gap:8, justifyContent:'space-between', marginTop:16, flexWrap:'wrap' }}>
+          <button onClick={prev} disabled={index===0}>
+            Previous
+          </button>
           <div />
           {index < sessionIds.length-1 ? (
             <button onClick={next}>Next</button>
