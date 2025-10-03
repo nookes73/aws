@@ -171,16 +171,16 @@ const AWSExamLandingPage: React.FC = () => {
         {/* Header */}
         <header style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h1 style={{
-            fontSize: '2.5rem',
+            fontSize: 'clamp(1.6rem, 3.2vw + 0.8rem, 2.5rem)',
             fontWeight: '700',
             color: currentTheme.text,
             marginBottom: '0.5rem',
-            lineHeight: '1.1'
+            lineHeight: '1.15'
           }}>
             AWS Solutions Architect Associate SAA-C03
           </h1>
           <h2 style={{
-            fontSize: '1.3rem',
+            fontSize: 'clamp(1rem, 2vw + 0.4rem, 1.3rem)',
             fontWeight: '400',
             color: currentTheme.accent,
             margin: '0'
@@ -192,7 +192,7 @@ const AWSExamLandingPage: React.FC = () => {
         {/* Exam Information Section */}
         <section style={{ marginBottom: '2rem' }}>
           <h3 style={{
-            fontSize: '1.5rem',
+            fontSize: 'clamp(1.1rem, 2.2vw + 0.4rem, 1.5rem)',
             fontWeight: '600',
             textAlign: 'center',
             marginBottom: '1.5rem',
@@ -204,13 +204,16 @@ const AWSExamLandingPage: React.FC = () => {
           {/* Simple text layout */}
           <div style={{
             textAlign: 'left',
-            maxWidth: '600px',
-            margin: '0 auto'
+            maxWidth: '700px',
+            margin: '0 auto',
+            padding: '0 0.25rem'
           }}>
             {examInfo.map((info, index) => (
               <p key={index} style={{ 
                 margin: index === examInfo.length - 1 ? '0.5rem 0 2rem 0' : '0.5rem 0', 
-                color: currentTheme.text 
+                color: currentTheme.text,
+                fontSize: 'clamp(0.95rem, 1.2vw + 0.45rem, 1.05rem)',
+                lineHeight: 1.6
               }}>
                 <strong>{info.label}</strong> {info.value}
               </p>
@@ -218,14 +221,15 @@ const AWSExamLandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Domain Cards - Single horizontal line */}
+        {/* Domain Cards - Responsive grid */}
         <section style={{ marginBottom: '2rem' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(5, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: '1rem',
             maxWidth: '1200px',
-            margin: '0 auto'
+            margin: '0 auto',
+            width: '100%'
           }}>
             {domains.map((domain, index) => (
               <div
@@ -234,7 +238,7 @@ const AWSExamLandingPage: React.FC = () => {
                   backgroundColor: currentTheme.cardBg,
                   border: `1px solid ${currentTheme.border}`,
                   borderLeft: `4px solid ${currentTheme.accent}`,
-                  borderRadius: '4px',
+                  borderRadius: '6px',
                   padding: '1rem',
                   transition: 'all 0.3s ease',
                   cursor: 'default'
@@ -243,7 +247,7 @@ const AWSExamLandingPage: React.FC = () => {
                 onMouseLeave={handleCardMouseLeave}
               >
                 <h4 style={{
-                  fontSize: '0.85rem',
+                  fontSize: 'clamp(0.9rem, 1.2vw + 0.35rem, 1rem)',
                   fontWeight: '600',
                   color: currentTheme.text,
                   marginBottom: '0.5rem',
@@ -256,7 +260,7 @@ const AWSExamLandingPage: React.FC = () => {
                   {domain.title}
                 </h4>
                 <p style={{
-                  fontSize: '0.8rem',
+                  fontSize: 'clamp(0.85rem, 1vw + 0.3rem, 0.95rem)',
                   color: currentTheme.accent,
                   fontWeight: '500',
                   margin: '0'
@@ -276,10 +280,10 @@ const AWSExamLandingPage: React.FC = () => {
               backgroundColor: currentTheme.accent,
               color: '#000000',
               border: 'none',
-              padding: '1rem 2rem',
-              fontSize: '1rem',
+              padding: '0.9rem 1.25rem',
+              fontSize: 'clamp(0.95rem, 1.2vw + 0.4rem, 1rem)',
               fontWeight: '600',
-              borderRadius: '6px',
+              borderRadius: '8px',
               cursor: 'pointer',
               transition: 'all 0.3s ease'
             }}
